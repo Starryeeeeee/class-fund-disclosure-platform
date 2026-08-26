@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>高二(1)班 班费公示平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ===== 设计令牌：柔和暖调 + 精致排版 ===== */
+  :root{
+	--bg:#FAF8F3; --card:#FFFFFF; --card-soft:#F5F1E9;
+	--orange:#C1633E; --orange-dark:#A34F30; --orange-soft:#F3E4DA;
+	--blue:#5C7C93; --blue-soft:#EAF0F3;
+	--yellow:#CC9C3F; --yellow-soft:#F8F0DC;
+	--ink:#2B2A27; --ink-soft:#938D80; --ink-faint:#C9C2B4; --line:#EAE3D6;
+	--income:#5E8F71; --income-soft:#E8F1EA;
+	--expense:#B5694A; --expense-soft:#F5E7DE;
+	--red:#B85347; --red-soft:#F7E7E4;
+	--radius:18px; --radius-sm:12px;
+	--font-sans:'Inter',-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
+	--shadow-card:0 1px 2px rgba(43,36,24,.04), 0 12px 28px -16px rgba(43,36,24,.14);
+	--shadow-btn:0 1px 2px rgba(43,36,24,.06);
+	--shadow-modal:0 30px 70px -20px rgba(30,24,14,.35);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+	font-family:var(--font-sans);
+	font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;
+	font-feature-settings:"tnum" 1;letter-spacing:.005em}
+  .app{max-width:460px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative}
+
+  /* 顶部导航 */
+  .navbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;height:56px;padding:0 16px;
+	background:rgba(250,248,243,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+	border-bottom:1px solid var(--line)}
+  .nav-back{display:flex;align-items:center;gap:4px;color:var(--blue);font-size:15px;font-weight:500;background:none;border:none;padding:6px 8px 6px 0;cursor:pointer;font-family:inherit;transition:opacity .15s}
+  .nav-back:active{opacity:.6}
+  .nav-back svg{width:18px;height:18px}
+  .nav-title{flex:1;text-align:center;font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-.01em;margin-right:40px}
+  .nav-right{position:absolute;right:16px;display:flex;align-items:center;gap:12px}
+  .env-icon{position:relative;cursor:pointer;color:var(--blue);transition:opacity .15s}
+  .env-icon:active{opacity:.6}
+  .env-icon svg{width:21px;height:21px}
+  .dot{position:absolute;top:-4px;right:-6px;min-width:16px;height:16px;border-radius:9px;background:var(--red);color:#fff;font-size:10px;font-weight:600;line-height:16px;text-align:center;padding:0 4px;box-shadow:0 0 0 2px rgba(250,248,243,.9)}
+  .logout{font-size:12.5px;color:var(--ink-soft);cursor:pointer;font-weight:500;transition:color .15s}
+  .logout:active{color:var(--ink)}
+
+  #content{padding:22px 16px 56px;min-height:calc(100vh - 56px)}
+  .mt{font-size:18px;font-weight:700;text-align:center;margin:6px 0 4px;letter-spacing:-.01em}
+  .mt .cls{color:var(--orange)}
+  .sub{font-size:13px;color:var(--ink-soft);text-align:center}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px;box-shadow:var(--shadow-card)}
+
+  /* 首页 */
+  .home-wrap{padding-top:44px}
+  .logo{width:60px;height:60px;margin:0 auto 20px;border-radius:18px;background:var(--yellow-soft);display:flex;align-items:center;justify-content:center;border:1px solid var(--line)}
+  .logo svg{width:30px;height:30px}
+  .home-title{text-align:center;font-size:21px;font-weight:700;letter-spacing:-.02em}
+  .home-desc{text-align:center;color:var(--ink-soft);font-size:13.5px;margin:8px 0 32px}
+  .entry-row{display:flex;gap:12px}
+  .entry{flex:1;cursor:pointer;text-align:center;padding:28px 12px;border-radius:var(--radius);border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow-card);transition:transform .15s,box-shadow .15s}
+  .entry:active{transform:scale(.97);box-shadow:var(--shadow-btn)}
+  .entry .ico{width:44px;height:44px;margin:0 auto 14px;border-radius:13px;display:flex;align-items:center;justify-content:center}
+  .entry.admin .ico{background:var(--orange)}
+  .entry.browse .ico{background:var(--blue)}
+  .entry .ico svg{width:22px;height:22px}
+  .entry .t{font-size:15.5px;font-weight:600;letter-spacing:-.005em}
+  .foot{text-align:center;color:var(--ink-faint);font-size:11.5px;margin-top:34px;letter-spacing:.01em}
+
+  /* 按钮 */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:13px;cursor:pointer;font-family:inherit;font-size:15px;font-weight:600;padding:13px 18px;transition:background .15s,transform .15s,box-shadow .15s}
+  .btn-primary{background:var(--orange);color:#fff;box-shadow:0 1px 2px rgba(163,79,48,.15),0 6px 16px -8px rgba(163,79,48,.55)}
+  .btn-primary:active{background:var(--orange-dark);transform:scale(.98)}
+  .btn-blue{background:var(--blue);color:#fff;box-shadow:var(--shadow-btn)}
+  .btn-blue:active{transform:scale(.98)}
+  .btn-ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+  .btn-ghost:active{background:var(--card-soft)}
+  .btn-red{background:var(--red-soft);color:var(--red);border:1px solid transparent}
+  .btn-red:active{background:#F0D9D5}
+  .btn-block{width:100%}
+  .btn-sm{padding:9px 14px;font-size:13px;border-radius:11px}
+  .btn-xs{padding:6px 11px;font-size:12px;border-radius:9px;font-weight:500}
+
+  /* 通知 */
+  .notice{background:var(--yellow-soft);border:1px solid #EDDFB3;border-radius:var(--radius);padding:16px 17px;margin-bottom:18px}
+  .notice .label{display:inline-block;font-size:11.5px;font-weight:700;color:#8A6A22;background:rgba(255,255,255,.55);padding:3px 10px;border-radius:20px;margin-bottom:9px;letter-spacing:.02em}
+  .notice .text{font-size:14px;color:#6B5A30;line-height:1.6}
+
+  /* 统计（合并为一张卡，内部以竖线分隔） */
+  .stats{display:flex;gap:0;margin-bottom:16px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:20px 6px}
+  .stat{flex:1;background:none;border:none;border-radius:0;padding:2px 12px;text-align:center}
+  .stat:not(:first-child){border-left:1px solid var(--line)}
+  .stat .k{font-size:12px;color:var(--ink-soft);letter-spacing:.01em}
+  .stat .v{font-size:19px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .stat.balance .v{color:var(--orange)}
+  .stat.income .v{color:var(--income)}
+  .stat.expense .v{color:var(--expense)}
+  .history{text-align:center;font-size:12px;color:var(--ink-soft);margin:-2px 0 20px}
+
+  /* 学期切换 */
+  .sem-switch{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .sem-switch label{font-size:13px;color:var(--ink-soft);white-space:nowrap}
+  select.sem{flex:1;font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 11px;transition:border-color .15s}
+  select.sem:focus{outline:none;border-color:var(--blue)}
+
+  /* 功能区（按角色显示） */
+  .func{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+  .func .btn{flex:1;min-width:130px}
+
+  /* 流水 */
+  .section-title{font-size:15px;font-weight:700;margin:2px 0 12px;display:flex;align-items:center;justify-content:space-between;letter-spacing:-.005em}
+  .section-title .link{font-size:13px;color:var(--blue);font-weight:500;cursor:pointer}
+  .flow-list{display:flex;flex-direction:column}
+  .flow{display:flex;align-items:center;gap:12px;padding:15px 6px;border-bottom:1px solid var(--line);transition:background .15s}
+  .flow:active{background:var(--card-soft)}
+  .flow:last-child{border-bottom:none}
+  .flow .date{width:44px;text-align:center;flex-shrink:0;font-size:11.5px;color:var(--ink-soft)}
+  .flow .date .d{font-size:18px;font-weight:700;color:var(--ink);display:block;line-height:1.15;font-variant-numeric:tabular-nums}
+  .flow .body{flex:1;min-width:0}
+  .flow .purpose{font-size:14.5px;font-weight:600;letter-spacing:-.005em}
+  .flow .meta{font-size:12px;color:var(--ink-soft);margin-top:3px}
+  .flow .meta .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;margin-right:6px;font-weight:500}
+  .tag.income{background:var(--income-soft);color:var(--income)}
+  .tag.expense{background:var(--expense-soft);color:var(--expense)}
+  .tag.inv{background:var(--blue-soft);color:var(--blue)}
+  .tag.pending{background:var(--yellow-soft);color:#8A6A22}
+  .flow .amt{font-size:15.5px;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .flow .amt.income{color:var(--income)}
+  .flow .amt.expense{color:var(--expense)}
+  .flow .ops{display:flex;gap:6px;flex-shrink:0}
+  .empty{text-align:center;color:var(--ink-faint);padding:44px 0;font-size:13.5px}
+
+  /* 筛选 */
+  .filters{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+  .filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .chip{padding:7px 14px;border-radius:20px;font-size:12.5px;font-weight:500;cursor:pointer;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);transition:background .15s,color .15s,border-color .15s}
+  .chip.on{background:var(--orange);color:#fff;border-color:var(--orange)}
+  .field{flex:1;min-width:120px;font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 11px;transition:border-color .15s,box-shadow .15s}
+  .field:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+  .search-wrap{position:relative}
+  .search-wrap svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-soft)}
+  .search-wrap .field{padding-left:38px}
+
+  /* 管理列表 */
+  .menu{display:flex;flex-direction:column;gap:10px}
+  .menu-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;cursor:pointer;box-shadow:var(--shadow-card);transition:background .15s}
+  .menu-item:active{background:var(--card-soft)}
+  .menu-item .mi-ico{width:40px;height:40px;border-radius:12px;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .menu-item .mi-ico svg{width:19px;height:19px;color:var(--blue)}
+  .menu-item .mi-t{font-weight:600;font-size:14.5px;letter-spacing:-.005em}
+  .menu-item .mi-d{font-size:12px;color:var(--ink-soft);margin-top:2px}
+  .menu-item .arrow{margin-left:auto;color:var(--ink-faint)}
+
+  .kv{display:flex;align-items:center;gap:10px;padding:13px 4px;border-bottom:1px solid var(--line)}
+  .kv:last-child{border-bottom:none}
+  .kv .k{flex:1}
+  .kv .k .n{font-weight:600;font-size:14.5px}
+  .kv .k .s{font-size:12px;color:var(--ink-soft);margin-top:2px}
+
+  .form-line{margin-bottom:16px}
+  .form-line label{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:7px;font-weight:500}
+  .form-line .field{width:100%}
+  textarea.field{height:90px;resize:vertical;line-height:1.6}
+  .radio-row{display:flex;gap:10px}
+  .radio-row label{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--ink);cursor:pointer}
+
+  /* 模态框 */
+  .mask{position:fixed;inset:0;background:rgba(30,26,18,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:24px}
+  .mask.show{display:flex}
+  .modal{background:var(--card);border-radius:22px;padding:22px;width:100%;max-width:380px;border:1px solid var(--line);max-height:88vh;overflow:auto;box-shadow:var(--shadow-modal)}
+  .modal h3{margin:0 0 16px;font-size:16px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;justify-content:space-between}
+  .modal .x{float:right;cursor:pointer;color:var(--ink-soft);font-size:22px;line-height:1}
+  .modal img{max-width:100%;border-radius:14px;border:1px solid var(--line)}
+  .appr{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+  .appr .top{display:flex;justify-content:space-between;font-size:13px;font-variant-numeric:tabular-nums}
+  .appr .st{font-weight:700}
+  .st.pending{color:#8A6A22}.st.approved{color:var(--income)}.st.rejected{color:var(--red)}
+  .appr .reason{font-size:13px;color:var(--ink-soft);margin:7px 0;line-height:1.6}
+  .appr .reply{font-size:13px;color:var(--ink-soft);margin:7px 0;line-height:1.6}
+  .appr .ops{display:flex;gap:8px;margin-top:9px}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav class="navbar">
+	<button class="nav-back hidden" id="navBack" onclick="back()">
+	  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>返回
+	</button>
+	<div class="nav-title" id="navTitle">班费公示平台</div>
+	<div class="nav-right" id="navRight"></div>
+  </nav>
+  <div id="content"></div>
+</div>
+
+<!-- 通用模态框 -->
+<div class="mask" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalBody"></div>
+</div>
+<!-- 图片模态框 -->
+<div class="mask" id="imgMask" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="imgBody"></div>
+</div>
+
+<script>
+/* ================================================================
+   1. Supabase 云端配置
+   ================================================================ */
+const SUPABASE_URL = 'https://ejvzxlslfdweqavturmi.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdnp4bHNsZmR3ZXFhdnR1cm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTU2MzYsImV4cCI6MjEwMzIzMTYzNn0.4UUWXysA20Bi-pwBfcfKMi50Op22530443zKgBxlZwo';
+
+// ----- 通用请求方法（支持自定义主键字段） -----
+async function apiGet(table) {
+	const url = `${SUPABASE_URL}/rest/v1/${table}?select=*&apikey=${SUPABASE_KEY}`;
+	const r = await fetch(url, {
+		headers: {
+			'apikey': SUPABASE_KEY,
+			'Authorization': `Bearer ${SUPABASE_KEY}`
+		}
+	});
+	if (!r.ok) {
+		const text = await r.text();
+		throw new Error(`GET ${table} 失败(${r.status}): ${text}`);
+	}
+	return r.json();
+}
+
+async function apiPost(table, data) {
+	const url = `${SUPABASE_URL}/rest/v1/${table}?apikey=${SUPABASE_KEY}`;
+	const r = await fetch(url, {
+		method: 'POST',
+		headers: {
+			'apikey': SUPABASE_KEY,
+			'Authorization': `Bearer ${SUPABASE_KEY}`,
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	});
+	if (!r.ok) {
+		const text = await r.text();
+		throw new Error(`POST ${table} 失败(${r.status}): ${text}`);
+	}
+	try { return await r.json(); } catch { return null; }
+}
+
+async function apiPatch(table, id, data, keyField = 'id') {
+	const url = `${SUPABASE_URL}/rest/v1/${table}?${keyField}=eq.${id}&apikey=${SUPABASE_KEY}`;
+	const r = await fetch(url, {
+		method: 'PATCH',
+		headers: {
+			'apikey': SUPABASE_KEY,
+			'Authorization': `Bearer ${SUPABASE_KEY}`,
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
+	});
+	if (!r.ok) {
+		const text = await r.text();
+		throw new Error(`PATCH ${table} 失败(${r.status}): ${text}`);
+	}
+	try { return await r.json(); } catch { return null; }
+}
+
+async function apiDelete(table, id, keyField = 'id') {
+	const url = `${SUPABASE_URL}/rest/v1/${table}?${keyField}=eq.${id}&apikey=${SUPABASE_KEY}`;
+	const r = await fetch(url, {
+		method: 'DELETE',
+		headers: {
+			'apikey': SUPABASE_KEY,
+			'Authorization': `Bearer ${SUPABASE_KEY}`
+		}
+	});
+	if (!r.ok) {
+		const text = await r.text();
+		throw new Error(`DELETE ${table} 失败(${r.status}): ${text}`);
+	}
+	try { return await r.json(); } catch { return null; }
+}
+
+async function apiDeleteByFilter(table, field, value) {
+	const url = `${SUPABASE_URL}/rest/v1/${table}?${field}=eq.${value}&apikey=${SUPABASE_KEY}`;
+	const r = await fetch(url, {
+		method: 'DELETE',
+		headers: {
+			'apikey': SUPABASE_KEY,
+			'Authorization': `Bearer ${SUPABASE_KEY}`
+		}
+	});
+	if (!r.ok) {
+		const text = await r.text();
+		throw new Error(`DELETE ${table} 失败(${r.status}): ${text}`);
+	}
+	try { return await r.json(); } catch { return null; }
+}
+
+/* ================================================================
+   2. 全局数据 & 状态
+   ================================================================ */
+const ROLE_ADMIN = '总管理员';
+const ROLE_KEEPER = '生活委员';
+const ROLE_COMMITTEE = '班委';
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
+let DB = { semesters: [], accounts: [], records: [], applications: [], logs: [], oplogs: [], settings: { class_name: '高二(1)班', notice: '' } };
+let state = {
+	view: 'home',
+	semester: null,
+	currentSemesterId: null,
+	noticeAck: false,
+	user: null,
+	editingId: null,
+	applyingId: null,
+	filters: { type: 'all', month: 'all', keyword: '', start: '', end: '' },
+	history: ['home']
+};
+
+/* 角色判定 */
+const isVisitor = () => !state.user;
+const isKeeper = () => state.user && state.user.role === ROLE_KEEPER;
+const isAdmin = () => state.user && state.user.role === ROLE_ADMIN;
+const isCommittee = () => state.user && state.user.role === ROLE_COMMITTEE;
+const canManageFlow = () => state.user && (isKeeper() || isCommittee() || isAdmin());
+
+/* 数据读取工具 - 使用本地 currentSemesterId */
+const curSem = () => {
+	if (state.currentSemesterId) {
+		const found = DB.semesters.find(s => s.id === state.currentSemesterId);
+		if (found) return found;
+	}
+	return DB.semesters[0] || null;
+};
+
+function stats(semId) {
+	const recs = DB.records.filter(r => r.semester_id === semId);
+	const income = recs.filter(r => r.type === 'income' && !r.pending_delete).reduce((s, r) => s + r.amount, 0);
+	const expense = recs.filter(r => r.type === 'expense' && !r.pending_delete).reduce((s, r) => s + r.amount, 0);
+	const sem = DB.semesters.find(s => s.id === semId);
+	return { income, expense, balance: (sem ? sem.start_balance : 0) + income - expense };
+}
+const historyTotal = () => DB.semesters.reduce((s, sem) => s + stats(sem.id).balance, 0);
+const recordsOf = semId => DB.records.filter(r => r.semester_id === semId);
+const monthOf = d => d.slice(0, 7);
+
+/* ================================================================
+   3. 操作日志
+   ================================================================ */
+async function addOpLog(action, detail) {
+	if (!state.user) return;
+	try {
+		const logEntry = {
+			time: Date.now(),
+			operator: state.user.name + '(' + state.user.studentId + ')',
+			action: action,
+			detail: detail
+		};
+		await apiPost('oplogs', logEntry);
+		DB.oplogs.push(logEntry);
+		console.log('✅ 日志写入成功:', logEntry);
+	} catch (e) {
+		console.error('❌ 日志写入失败:', e);
+		alert('⚠️ 日志写入失败，请检查控制台或联系管理员。错误：' + e.message);
+		DB.oplogs.push({
+			time: Date.now(),
+			operator: '系统',
+			action: '日志写入失败',
+			detail: e.message
+		});
+	}
+}
+
+/* ================================================================
+   4. 访问日志
+   ================================================================ */
+async function logVisit(nick) {
+	const ua = navigator.userAgent;
+	const dev = /iPhone/.test(ua) ? 'iPhone' : /Android/.test(ua) ? 'Android' : /iPad/.test(ua) ? 'iPad' : '其他设备';
+	const role = state.user ? state.user.role : '访客';
+	const logEntry = {
+		nickname: nick,
+		role: role,
+		device: dev,
+		ip: '本地（静态托管）',
+		time: Date.now(),
+		semester: state.semester || (curSem() ? curSem().id : null)
+	};
+	try {
+		await apiPost('logs', logEntry);
+		DB.logs.push(logEntry);
+	} catch (e) {
+		console.warn('访问日志记录失败（不影响主功能）:', e);
+	}
+}
+
+/* ================================================================
+   5. 数据加载
+   ================================================================ */
+async function loadAllData() {
+	try {
+		const [sems, accs, recs, apps, logs, oplogs, set] = await Promise.all([
+			apiGet('semesters'),
+			apiGet('accounts'),
+			apiGet('records'),
+			apiGet('applications'),
+			apiGet('logs'),
+			apiGet('oplogs'),
+			apiGet('settings')
+		]);
+		DB.semesters = sems || [];
+		DB.accounts = accs || [];
+		DB.records = recs || [];
+		DB.applications = apps || [];
+		DB.logs = logs || [];
+		DB.oplogs = oplogs || [];
+		if (set && set.length) DB.settings = set[0];
+
+		// 初始化当前学期
+		if (DB.semesters.length > 0) {
+			const saved = localStorage.getItem('currentSemesterId');
+			if (saved && DB.semesters.some(s => s.id === saved)) {
+				state.currentSemesterId = saved;
+			} else {
+				state.currentSemesterId = DB.semesters[0].id;
+			}
+		}
+
+		console.log('✅ 数据加载成功', { 学期: DB.semesters.length, 记录: DB.records.length, 账号: DB.accounts.length });
+		return true;
+	} catch (e) {
+		console.error('❌ 加载数据失败:', e);
+		document.getElementById('content').innerHTML = `
+			<div class="card" style="background:#fee;border-color:#fcc;">
+				<h3>⚠️ 连接云端失败</h3>
+				<p style="color:#b00;font-size:14px;">${esc(e.message)}</p>
+				<p style="font-size:13px;color:#938d80;">请检查网络或刷新重试</p>
+				<button class="btn btn-primary" onclick="location.reload()">重新加载</button>
+			</div>`;
+		return false;
+	}
+}
+
+/* ================================================================
+   6. 导航
+   ================================================================ */
+function go(view, push = true) {
+	if (push) state.history.push(state.view);
+	state.view = view;
+	if (view === 'records' || view === 'main') {
+		const c = curSem();
+		state.semester = c ? c.id : null;
+	}
+	render();
+}
+
+function back() {
+	if (state.history.length > 1) {
+		const prev = state.history.pop();
+		state.view = prev;
+		render();
+	} else {
+		go('home', false);
+	}
+}
+
+function render() {
+	const showBack = state.view !== 'home';
+	document.getElementById('navBack').classList.toggle('hidden', !showBack);
+	let title = '班费公示平台';
+	if (state.view === 'home') title = '班费公示平台';
+	else if (state.view === 'main') {
+		if (isVisitor()) title = '浏览主页';
+		else if (isAdmin()) title = '总管理员主页';
+		else if (isKeeper()) title = '生活委员主页';
+		else if (isCommittee()) title = '班委主页';
+		else title = '浏览主页';
+	} else if (state.view === 'records') title = '全部流水';
+	else if (state.view === 'edit') title = state.editingId ? '修改记录' : '新增记录';
+	else if (state.view === 'admin') title = '管理后台';
+	else if (state.view === 'semester') title = '学期管理';
+	else if (state.view === 'account') title = '账号管理';
+	else if (state.view === 'notice') title = '公告与班级名';
+	else if (state.view === 'log') title = '日志';
+	else if (state.view === 'inbox') title = isAdmin() ? '删除申请审批' : '我的申请';
+	document.getElementById('navTitle').textContent = title;
+
+	let right = '';
+	if (isVisitor()) {
+		right += `<span class="logout" onclick="backHome()">返回首页</span>`;
+	} else {
+		const showEnvelope = isAdmin() || isKeeper() || isCommittee();
+		if (showEnvelope) {
+			const pending = DB.applications.filter(a => isAdmin() ? a.status === 'pending' : (a.applicant_student_id === state.user.studentId && a.status === 'pending'));
+			const cnt = pending.length;
+			right += `<div class="env-icon" onclick="go('inbox')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9 6 9-6"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>${cnt ? `<span class="dot">${cnt}</span>` : ''}</div>`;
+		}
+		right += `<span class="logout" onclick="logout()">退出</span>`;
+	}
+	document.getElementById('navRight').innerHTML = right;
+
+	const V = { home: vwHome, main: vwMain, records: vwRecords, edit: vwEdit, admin: vwAdmin, semester: vwSemester, account: vwAccount, notice: vwNotice, log: vwLog, inbox: vwInbox };
+	document.getElementById('content').innerHTML = (V[state.view] || vwHome)();
+	window.scrollTo(0, 0);
+}
+
+function logout() { state.user = null; state.semester = null; state.history = ['home']; go('home', false); }
+function backHome() { state.user = null; state.noticeAck = false; state.history = ['home']; go('home', false); }
+
+/* ================================================================
+   7. 各视图
+   ================================================================ */
+function vwHome() {
+	return `
+	<div class="home-wrap">
+		<div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#E0A92A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v12H3z"/><path d="M3 7l9 6 9-6"/><path d="M7 11h.01M12 13h.01M17 11h.01"/></svg></div>
+		<div class="home-title">${esc(DB.settings.class_name)} 班费公示平台</div>
+		<div class="home-desc">随时查看班费流向📋🤩公开透明</div>
+		<div class="entry-row">
+			<div class="entry admin" onclick="openLogin()">
+				<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></div>
+				<div class="t">管理员登录</div>
+			</div>
+			<div class="entry browse" onclick="enterBrowse()">
+				<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+				<div class="t">浏览模式</div>
+			</div>
+		</div>
+	</div>
+	<div class="foot">如发现bug或安全问题欢迎指出🤓不胜感激😘</div>`;
+}
+
+function noticeCard() {
+	if (state.noticeAck || !DB.settings.notice) return '';
+	return `<div class="notice"><span class="label">通知</span><div class="text">${esc(DB.settings.notice)}</div>
+	<div style="text-align:right;margin-top:12px"><button class="btn btn-primary btn-sm" onclick="state.noticeAck=true;render()">我已知悉</button></div></div>`;
+}
+
+function statsHTML(semId) {
+	const s = stats(semId);
+	return `<div class="stats">
+	<div class="stat balance"><div class="k">当前总余额</div><div class="v">¥${s.balance.toLocaleString('zh-CN')}</div></div>
+	<div class="stat income"><div class="k">本学期总收入</div><div class="v">¥${s.income.toLocaleString('zh-CN')}</div></div>
+	<div class="stat expense"><div class="k">本学期总支出</div><div class="v">¥${s.expense.toLocaleString('zh-CN')}</div></div>
+	</div><div class="history">历史总账（全部学期累计）：¥${historyTotal().toLocaleString('zh-CN')}</div>`;
+}
+
+function semSelect() {
+	const opts = DB.semesters.map(s => `<option value="${s.id}" ${s.id === state.currentSemesterId ? 'selected' : ''}>${esc(s.name)}</option>`).join('');
+	return `<div class="sem-switch"><label>当前学期</label><select class="sem" onchange="switchSem(this.value)">${opts}</select></div>`;
+}
+
+function flowHTML(r) {
+	const d = r.date.slice(8), m = r.date.slice(5, 7);
+	const sign = r.type === 'income' ? '+' : '-';
+	const invTag = r.invoice ? `<span class="tag inv">发票</span>` : '';
+	const pend = r.pending_delete ? `<span class="tag pending">⏳ 待删除</span>` : '';
+	let ops = '';
+	// 只有未删除的记录才允许操作
+	if (!r.pending_delete && canManageFlow()) {
+		ops += `<button class="btn btn-ghost btn-xs" onclick="editRecord('${r.id}')">改</button>`;
+		if (isAdmin()) {
+			ops += `<button class="btn btn-red btn-xs" onclick="adminDelete('${r.id}', event)">删</button>`;
+		} else if (isKeeper() || isCommittee()) {
+			ops += `<button class="btn btn-red btn-xs" onclick="applyDelete('${r.id}')">申请删除</button>`;
+		}
+	}
+	const tap = r.invoice ? `onclick="openImg('${r.id}')"` : (isVisitor() ? '' : `onclick="editRecord('${r.id}')"`);
+	return `<div class="flow" ${tap}>
+	<div class="date">${m}月<span class="d">${d}</span></div>
+	<div class="body"><div class="purpose">${esc(r.purpose)}</div>
+		<div class="meta"><span class="tag ${r.type}">${r.type === 'income' ? '收入' : '支出'}</span>${invTag}${pend}经手：${esc(r.handler)}</div></div>
+	<div class="amt ${r.type}">${sign}¥${r.amount.toLocaleString('zh-CN')}</div>
+	${ops ? `<div class="ops">${ops}</div>` : ''}
+	</div>`;
+}
+
+function vwMain() {
+	const sem = curSem();
+	if (!sem) {
+		return `<div class="mt">请管理员在后台添加学期</div>`;
+	}
+	state.semester = sem.id;
+	let func = '';
+	if (canManageFlow()) {
+		const pending = DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length;
+		func = `<div class="func">
+		<button class="btn btn-primary" onclick="newRecord()">➕ 新增记录</button>
+		<button class="btn btn-ghost" onclick="go('inbox')">我的申请${pending ? `(${pending})` : ''}</button>
+		</div>`;
+		if (isAdmin()) {
+			func += `<div class="func" style="margin-top:8px">
+			<button class="btn btn-blue" onclick="go('admin')">⚙ 管理后台</button>
+			</div>`;
+		}
+	}
+	const recent = recordsOf(sem.id).filter(r => !r.pending_delete).slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
+	return `
+	<div class="mt">欢迎来到 <span class="cls">${esc(DB.settings.class_name)}</span> 班费公示平台</div>
+	<div style="text-align:center;font-size:14px;color:var(--blue);margin:-4px 0 12px;">📚 当前学期：<strong>${esc(sem.name)}</strong></div>
+	${noticeCard()}
+	${func}
+	${semSelect()}
+	${statsHTML(sem.id)}
+	<div class="section-title"><span>最近流水</span><span class="link" onclick="go('records')">查看全部 ›</span></div>
+	<div class="card" style="padding:8px 16px"><div class="flow-list">${(recent.length ? recent.map(flowHTML).join('') : '<div class="empty">本学期暂无记录</div>')}</div></div>`;
+}
+
+function vwRecords() {
+	const sem = curSem();
+	if (!sem) return `<div class="empty">暂无学期</div>`;
+	state.semester = sem.id;
+	const months = Array.from(new Set(recordsOf(sem.id).map(r => monthOf(r.date)))).sort();
+	const f = state.filters;
+	let recs = recordsOf(sem.id);
+	if (f.type !== 'all') recs = recs.filter(r => r.type === f.type);
+	if (f.month !== 'all') recs = recs.filter(r => monthOf(r.date) === f.month);
+	if (f.keyword) recs = recs.filter(r => r.purpose.includes(f.keyword));
+	if (f.start) recs = recs.filter(r => r.date >= f.start);
+	if (f.end) recs = recs.filter(r => r.date <= f.end);
+	recs = recs.slice().sort((a, b) => b.date.localeCompare(a.date));
+	const monthChips = `<span class="chip ${f.month === 'all' ? 'on' : ''}" onclick="setMonth('all')">全部月份</span>` +
+		months.map(m => `<span class="chip ${f.month === m ? 'on' : ''}" onclick="setMonth('${m}')">${m.slice(5)}月</span>`).join('');
+	return `
+	<div class="mt" style="font-size:16px">全部流水明细</div>
+	<div style="text-align:center;font-size:14px;color:var(--blue);margin:-4px 0 12px;">📚 当前学期：<strong>${esc(sem.name)}</strong></div>
+	${semSelect()}
+	${statsHTML(sem.id)}
+	<div class="filters">
+		<div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+		<input class="field" id="kw" placeholder="搜索用途关键词…" value="${esc(f.keyword)}" oninput="f_keyword(this.value)"></div>
+		<div class="filter-row"><span class="chip ${f.type === 'all' ? 'on' : ''}" onclick="setType('all')">全部</span><span class="chip ${f.type === 'income' ? 'on' : ''}" onclick="setType('income')">仅收入</span><span class="chip ${f.type === 'expense' ? 'on' : ''}" onclick="setType('expense')">仅支出</span></div>
+		<div class="filter-row">${monthChips}</div>
+		<div class="filter-row"><input class="field" type="date" id="ds" value="${f.start}" onchange="f_start(this.value)"><span style="color:var(--ink-soft)">至</span><input class="field" type="date" id="de" value="${f.end}" onchange="f_end(this.value)"><button class="btn btn-ghost btn-sm" onclick="resetDate()">清除</button></div>
+	</div>
+	<div class="card" style="padding:8px 16px"><div class="flow-list">${(recs.length ? recs.map(flowHTML).join('') : '')}</div>${recs.length ? '' : '<div class="empty">没有符合条件的记录</div>'}</div>`;
+}
+
+function f_keyword(v) { state.filters.keyword = v; refreshRecords(); }
+function f_start(v) { state.filters.start = v; refreshRecords(); }
+function f_end(v) { state.filters.end = v; refreshRecords(); }
+function setType(t) { state.filters.type = t; refreshRecords(); }
+function setMonth(m) { state.filters.month = m; refreshRecords(); }
+function resetDate() { state.filters.start = ''; state.filters.end = ''; refreshRecords(); }
+function refreshRecords() { if (state.view === 'records') { document.getElementById('content').innerHTML = vwRecords(); } }
+
+/* ===== 学期切换（只修改本地状态） ===== */
+function switchSem(id) {
+	state.currentSemesterId = id;
+	localStorage.setItem('currentSemesterId', id);
+	render();
+}
+
+/* ---------- 记录新增/修改 ---------- */
+function newRecord() { state.editingId = null; state._inv = null; go('edit'); }
+function editRecord(id) { state.editingId = id; const r = recordsOf(state.semester).find(x => x.id === id); state._inv = r ? r.invoice : null; go('edit'); }
+
+function vwEdit() {
+	if (!canManageFlow()) { alert('当前身份无权限操作'); back(); return ''; }
+	const editing = !!state.editingId;
+	const r = editing ? recordsOf(state.semester).find(x => x.id === state.editingId) : null;
+	const today = new Date().toISOString().slice(0, 10);
+	const invPrev = state._inv ? `<img src="${state._inv}" style="max-width:100%;border-radius:10px;margin-top:8px">` : '';
+	return `
+	<div class="mt" style="font-size:16px">${editing ? '修改记录' : '新增记录'}</div>
+	<div class="card" style="margin-top:14px">
+		<div class="form-line"><label>交易日期</label><input class="field" id="f_date" type="date" value="${r ? r.date : today}"></div>
+		<div class="form-line"><label>收支类型</label>
+		<div class="radio-row">
+			<label><input type="radio" name="tp" value="income" ${r ? (r.type === 'income' ? 'checked' : '') : 'checked'}> 收入</label>
+			<label><input type="radio" name="tp" value="expense" ${r ? (r.type === 'expense' ? 'checked' : '') : ''}> 支出</label>
+		</div></div>
+		<div class="form-line"><label>用途或事由（必填）</label><input class="field" id="f_purpose" value="${r ? esc(r.purpose) : ''}" placeholder="如：班级活动物料"></div>
+		<div class="form-line"><label>金额（正数）</label><input class="field" id="f_amount" type="number" min="0" step="0.01" value="${r ? r.amount : ''}" placeholder="0.00"></div>
+		<div class="form-line"><label>经手人</label><input class="field" id="f_handler" value="${r ? esc(r.handler) : ''}" placeholder="填写经手人"></div>
+		<div style="display:flex;gap:10px;margin-top:6px">
+		<button class="btn btn-ghost btn-block" onclick="back()">取消</button>
+		<button class="btn btn-primary btn-block" onclick="saveRecord()">保存</button>
+		</div>
+	</div>`;
+}
+
+async function saveRecord() {
+	const purpose = document.getElementById('f_purpose').value.trim();
+	const amount = parseFloat(document.getElementById('f_amount').value);
+	const handler = document.getElementById('f_handler').value.trim();
+	const date = document.getElementById('f_date').value;
+	const type = document.querySelector('input[name=tp]:checked').value;
+	if (!purpose) { alert('请填写用途或事由'); return; }
+	if (isNaN(amount) || amount <= 0) { alert('请填写正确的金额'); return; }
+
+	const sem = curSem();
+	if (!sem) {
+		alert('没有可用的学期，请先添加学期');
+		return;
+	}
+	const semester_id = sem.id;
+
+	try {
+		if (state.editingId) {
+			const old = DB.records.find(r => r.id === state.editingId);
+			if (!old) throw new Error('记录不存在');
+			const updated = { ...old, date, type, purpose, amount, handler, invoice: null, updated_at: Date.now() };
+			await apiPatch('records', state.editingId, updated);
+			const idx = DB.records.findIndex(r => r.id === state.editingId);
+			if (idx >= 0) DB.records[idx] = updated;
+			await addOpLog('修改记录', `修改了记录 "${old.purpose}" 金额 ¥${old.amount} → ¥${amount}`);
+		} else {
+			const newRec = {
+				id: uid(),
+				semester_id: semester_id,
+				date,
+				type,
+				purpose,
+				amount,
+				handler,
+				invoice: null,
+				pending_delete: false,
+				created_at: Date.now(),
+				updated_at: Date.now()
+			};
+			await apiPost('records', newRec);
+			DB.records.push(newRec);
+			await addOpLog('添加记录', `添加记录 "${purpose}" 金额 ¥${amount}`);
+		}
+		state.editingId = null;
+		alert('已保存');
+		go('main', false);
+	} catch (e) {
+		alert('保存失败: ' + e.message);
+		console.error(e);
+	}
+}
+
+/* ---------- 删除申请 / 审批 ---------- */
+function applyDelete(id) {
+	if (!canManageFlow()) { alert('当前身份无权限操作'); return; }
+	state.applyingId = id;
+	const r = recordsOf(state.semester).find(x => x.id === id);
+	if (!r) { alert('该记录已不存在'); return; }
+	openModal('申请删除记录', `
+	<p style="font-size:13px;color:var(--ink-soft)">记录：${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${r.amount}</p>
+	<div class="form-line"><label>删除原因</label><textarea class="field" id="appReason" placeholder="请填写删除原因"></textarea></div>
+	<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-red btn-block" onclick="submitApply()">提交申请</button></div>
+	`);
+}
+
+async function submitApply() {
+	const reason = document.getElementById('appReason').value.trim();
+	if (!reason) { alert('请填写删除原因'); return; }
+	const r = recordsOf(state.semester).find(x => x.id === state.applyingId);
+	if (!r) return;
+	try {
+		const app = {
+			id: uid(),
+			record_id: r.id,
+			record: r,
+			applicant_student_id: state.user.studentId,
+			applicant_name: state.user.name,
+			reason: reason,
+			status: 'pending',
+			reply: '',
+			time: Date.now()
+		};
+		await apiPost('applications', app);
+		DB.applications.push(app);
+		// 标记待删除，但保留显示
+		const idx = DB.records.findIndex(x => x.id === r.id);
+		if (idx >= 0) { DB.records[idx].pending_delete = true; await apiPatch('records', r.id, { pending_delete: true }); }
+		await addOpLog('申请删除', `申请删除记录 "${r.purpose}" 金额 ¥${r.amount}，原因：${reason}`);
+		closeModal();
+		alert('已提交，等待总管理员审批');
+		go('main', false);
+	} catch (e) {
+		alert('提交失败: ' + e.message);
+	}
+}
+
+function adminDelete(id, e) {
+	if (e) e.stopPropagation();
+	if (!isAdmin()) { alert('当前身份无权限操作'); return; }
+	if (!confirm('确定直接删除该记录？')) return;
+	const r = recordsOf(state.semester).find(x => x.id === id);
+	if (r) addOpLog('直接删除', `直接删除了记录 "${r.purpose}" 金额 ¥${r.amount}`);
+	DB.records = DB.records.filter(x => x.id !== id);
+	apiDelete('records', id);
+	render();
+}
+
+function vwInbox() {
+	const apps = DB.applications.slice().sort((a, b) => b.time - a.time);
+	let list;
+	if (isAdmin()) {
+		list = apps;
+	} else {
+		list = apps.filter(a => a.applicant_student_id === state.user.studentId);
+	}
+	if (!list.length) return `<div class="empty">暂无申请</div>`;
+	return `<div class="mt" style="font-size:16px">${isAdmin() ? '删除申请审批' : '我的申请'}</div><div style="margin-top:14px">${list.map(a => {
+		const r = a.record || { purpose: '记录已变动', amount: '', type: 'expense' };
+		let ops = '';
+		if (isAdmin() && a.status === 'pending') {
+			ops = `<div class="ops" style="margin-top:8px;display:flex;gap:8px;">
+				<button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">✅ 批准删除</button>
+				<button class="btn btn-red btn-xs" onclick="rejectApp('${a.id}')">❌ 拒绝</button>
+			</div>`;
+		}
+		if (isAdmin() && a.status === 'rejected') {
+			ops = `<div class="ops" style="margin-top:8px;"><button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">改为批准</button></div>`;
+		}
+		return `<div class="appr">
+		<div class="top"><span>${esc(r.purpose || '')} · ${r.type === 'income' ? '+' : '-'}¥${r.amount}</span><span class="st ${a.status}">${a.status === 'pending' ? '⏳ 待审批' : a.status === 'approved' ? '✅ 已批准' : '❌ 已拒绝'}</span></div>
+		<div class="reason">申请人：${esc(a.applicant_name || a.applicant_student_id)}　原因：${esc(a.reason)}</div>
+		${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
+		${ops}
+		</div>`;
+	}).join('')}</div>`;
+}
+
+async function approveApp(id) {
+	if (!isAdmin()) { alert('当前身份无权限操作'); return; }
+	const a = DB.applications.find(x => x.id === id);
+	if (!a) return;
+	try {
+		await apiPatch('applications', id, { status: 'approved' });
+		a.status = 'approved';
+		// 物理删除记录
+		await apiDelete('records', a.record_id);
+		DB.records = DB.records.filter(x => x.id !== a.record_id);
+		await addOpLog('批准删除', `批准删除了记录 "${a.record ? a.record.purpose : ''}"`);
+		render();
+	} catch (e) { alert('操作失败: ' + e.message); }
+}
+
+function rejectApp(id) {
+	if (!isAdmin()) { alert('当前身份无权限操作'); return; }
+	openModal('拒绝申请', `
+	<div class="form-line"><label>拒绝理由（将通知申请人）</label><textarea class="field" id="rejReply" placeholder="如：单据齐全，无需删除"></textarea></div>
+	<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-red btn-block" onclick="doReject('${id}')">确认拒绝</button></div>
+	`);
+}
+
+async function doReject(id) {
+	const reply = document.getElementById('rejReply').value.trim() || '未说明原因';
+	const a = DB.applications.find(x => x.id === id);
+	if (!a) return;
+	try {
+		await apiPatch('applications', id, { status: 'rejected', reply });
+		a.status = 'rejected';
+		a.reply = reply;
+		// 恢复记录（取消待删除标记）
+		const idx = DB.records.findIndex(x => x.id === a.record_id);
+		if (idx >= 0) { DB.records[idx].pending_delete = false; await apiPatch('records', a.record_id, { pending_delete: false }); }
+		closeModal();
+		render();
+	} catch (e) { alert('操作失败: ' + e.message); }
+}
+
+/* ---------- 管理后台 ---------- */
+function vwAdmin() {
+	if (!isAdmin()) { alert('当前身份无权限操作'); go('main', false); return ''; }
+	const recCnt = DB.records.filter(r => !r.pending_delete).length;
+	const accCnt = DB.accounts.length;
+	const pend = DB.applications.filter(a => a.status === 'pending').length;
+	const item = (ico, t, d, fn) => `<div class="menu-item" onclick="${fn}"><div class="mi-ico">${ico}</div><div><div class="mi-t">${t}</div><div class="mi-d">${d}</div></div><div class="arrow">›</div></div>`;
+	const I = {
+		sem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>',
+		acc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><path d="M16 11l2 2 4-4"/></svg>',
+		note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>',
+		log: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 6 4-12 2 6h6"/></svg>',
+		data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
+		export: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+	};
+	return `
+	<div class="mt" style="font-size:16px">管理后台</div>
+	<div class="menu" style="margin-top:14px">
+	${item(I.sem, '学期管理', '添加/切换/删除学期 · 结转余额', "go('semester')")}
+	${item(I.acc, '账号管理', '添加/修改账号与密码 · ' + accCnt + ' 个', "go('account')")}
+	${item(I.note, '公告与班级名', '编辑通知与班级名称', "go('notice')")}
+	${item(I.log, '日志查看', '查看访问与操作日志', "go('log')")}
+	${item(I.export, '数据导出', '一键导出HTML，双击即可查看', "exportData()")}
+	${item(I.data, '数据管理', '清空记录 / 恢复示例数据 · ' + recCnt + ' 条', "openDataMgr()")}
+	${pend ? item(I.note, '删除申请审批', '待处理 ' + pend + ' 条', "go('inbox')") : ''}
+	</div>`;
+}
+
+/* ===== 导出功能 ===== */
+function exportData() {
+	const now = new Date();
+	const dateStr = now.getFullYear() + '-' +
+		String(now.getMonth() + 1).padStart(2, '0') + '-' +
+		String(now.getDate()).padStart(2, '0');
+	const fileName = `班费数据_${dateStr}.html`;
+
+	const className = esc(DB.settings.class_name);
+	const exportTime = now.toLocaleString('zh-CN');
+
+	let semStatsHtml = '';
+	let allRecordsHtml = '';
+	let totalBalance = 0;
+	let totalIncome = 0;
+	let totalExpense = 0;
+
+	DB.semesters.forEach(sem => {
+		const s = stats(sem.id);
+		totalBalance += s.balance;
+		totalIncome += s.income;
+		totalExpense += s.expense;
+		semStatsHtml += `
+			<tr>
+				<td>${esc(sem.name)}</td>
+				<td style="text-align:right;">¥${s.income.toLocaleString()}</td>
+				<td style="text-align:right;">¥${s.expense.toLocaleString()}</td>
+				<td style="text-align:right;font-weight:700;color:#C1633E;">¥${s.balance.toLocaleString()}</td>
+			</tr>
+		`;
+	});
+
+	const allRecs = DB.records.filter(r => !r.pending_delete).sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id));
+	if (allRecs.length) {
+		allRecordsHtml = `
+			<h3 style="margin:20px 0 12px;font-size:16px;">📋 全部流水明细</h3>
+			<table style="width:100%;border-collapse:collapse;font-size:13px;">
+				<thead>
+					<tr style="background:#f5f1e9;border-bottom:2px solid #eae3d6;">
+						<th style="padding:8px 6px;text-align:left;">日期</th>
+						<th style="padding:8px 6px;text-align:left;">用途</th>
+						<th style="padding:8px 6px;text-align:left;">类型</th>
+						<th style="padding:8px 6px;text-align:right;">金额</th>
+						<th style="padding:8px 6px;text-align:left;">经手人</th>
+					</tr>
+				</thead>
+				<tbody>
+					${allRecs.map(r => `
+						<tr style="border-bottom:1px solid #f0ebe2;">
+							<td style="padding:6px 6px;">${r.date}</td>
+							<td style="padding:6px 6px;">${esc(r.purpose)}</td>
+							<td style="padding:6px 6px;"><span style="color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '收入' : '支出'}</span></td>
+							<td style="padding:6px 6px;text-align:right;font-weight:600;color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '+' : '-'}¥${r.amount.toLocaleString()}</td>
+							<td style="padding:6px 6px;">${esc(r.handler)}</td>
+						</tr>
+					`).join('')}
+				</tbody>
+			</table>
+			<div style="margin-top:12px;text-align:right;font-weight:600;color:var(--orange);font-size:15px;">
+				总余额：¥${totalBalance.toLocaleString()} &nbsp;|&nbsp; 总收入：¥${totalIncome.toLocaleString()} &nbsp;|&nbsp; 总支出：¥${totalExpense.toLocaleString()}
+			</div>
+		`;
+	} else {
+		allRecordsHtml = `<p style="color:#c9c2b4;text-align:center;padding:20px 0;">暂无流水记录</p>`;
+	}
+
+	const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${className} 班费数据导出</title>
+<style>
+	body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif; background: #faf8f3; padding: 30px 20px; max-width: 900px; margin: 0 auto; color: #2b2a27; }
+	h1 { font-size: 22px; margin-bottom: 4px; color: #C1633E; }
+	.sub { color: #938d80; font-size: 14px; margin-bottom: 20px; border-bottom: 1px solid #eae3d6; padding-bottom: 12px; }
+	table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+	th { background: #f5f1e9; font-weight: 600; font-size: 13px; }
+	th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0ebe2; }
+	.total-box { background: #fff; border-radius: 12px; padding: 16px 20px; margin: 16px 0; border: 1px solid #eae3d6; display: flex; justify-content: space-around; text-align: center; }
+	.total-box .item .label { font-size: 12px; color: #938d80; }
+	.total-box .item .value { font-size: 20px; font-weight: 700; }
+	.total-box .item.balance .value { color: #C1633E; }
+	.total-box .item.income .value { color: #5E8F71; }
+	.total-box .item.expense .value { color: #B5694A; }
+	.footer { text-align: center; color: #c9c2b4; font-size: 12px; margin-top: 30px; border-top: 1px solid #eae3d6; padding-top: 16px; }
+	@media print { body { background: #fff; padding: 10px; } .total-box { border-color: #ddd; } }
+</style>
+</head>
+<body>
+	<h1>📚 ${className}</h1>
+	<div class="sub">📅 导出时间：${exportTime}</div>
+
+	<div class="total-box">
+		<div class="item balance"><div class="label">总余额</div><div class="value">¥${totalBalance.toLocaleString()}</div></div>
+		<div class="item income"><div class="label">总收入</div><div class="value">¥${totalIncome.toLocaleString()}</div></div>
+		<div class="item expense"><div class="label">总支出</div><div class="value">¥${totalExpense.toLocaleString()}</div></div>
+	</div>
+
+	<h3 style="margin:20px 0 10px;font-size:16px;">📊 各学期汇总</h3>
+	<table>
+		<thead><tr><th>学期</th><th style="text-align:right;">收入</th><th style="text-align:right;">支出</th><th style="text-align:right;">余额</th></tr></thead>
+		<tbody>${semStatsHtml}</tbody>
+	</table>
+
+	${allRecordsHtml}
+
+	<div class="footer">由班费公示平台导出 · 数据来源于云端</div>
+</body>
+</html>`;
+
+	const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement('a');
+	a.href = url;
+	a.download = fileName;
+	document.body.appendChild(a);
+	a.click();
+	document.body.removeChild(a);
+
+	setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+	openModal('✅ 数据导出成功', `
+		<div style="text-align:left;font-size:14px;line-height:1.8;">
+			<p style="margin:4px 0;"><strong>📄 文件名：</strong>${fileName}</p>
+			<p style="margin:4px 0;color:#938d80;font-size:13px;">
+				📂 文件已自动下载到您的设备。<br>
+				点击下方「立即打开」可在浏览器中查看内容。
+			</p>
+			<p style="margin:8px 0 4px;font-size:13px;color:#8A6A22;background:#f8f0dc;padding:8px 12px;border-radius:10px;">
+				💡 如需保存到指定位置，请在下载时选择保存路径。
+			</p>
+		</div>
+		<div style="display:flex;gap:10px;margin-top:16px;">
+			<button class="btn btn-primary" onclick="openExportedFile()" style="flex:1;">📖 立即打开</button>
+			<button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">确定</button>
+		</div>
+	`);
+
+	window._exportedBlobUrl = url;
+}
+
+function openExportedFile() {
+	if (window._exportedBlobUrl) {
+		window.open(window._exportedBlobUrl, '_blank');
+	} else {
+		alert('文件链接已失效，请重新导出。');
+	}
+	closeModal();
+}
+
+/* ---------- 数据管理 ---------- */
+function openDataMgr() {
+	openModal('数据管理', `
+	<p style="font-size:13px;color:var(--ink-soft)">清空后所有流水记录将被删除，操作不可撤销。学期、账号、设置将保留。</p>
+	<div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
+		<button class="btn btn-red btn-block" onclick="clearRecords()">清空全部流水记录</button>
+		<button class="btn btn-ghost btn-block" onclick="restoreSample()">恢复示例数据</button>
+		<button class="btn btn-ghost btn-block" onclick="closeModal()">关闭</button>
+	</div>`);
+}
+
+async function clearRecords() {
+	if (!confirm('确定清空全部流水记录？此操作不可撤销。')) return;
+	DB.records = [];
+	await apiDeleteByFilter('records', 'id', '');
+	closeModal();
+	alert('已清空');
+	render();
+}
+
+async function restoreSample() {
+	if (!confirm('将用示例数据覆盖当前记录，确定？')) return;
+	await apiDeleteByFilter('records', 'id', '');
+	const sample = [
+		{ id: uid(), semester_id: 's1', date: '2025-09-05', type: 'income', purpose: '上学期结余结转', amount: 5000, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
+		{ id: uid(), semester_id: 's1', date: '2025-09-12', type: 'income', purpose: '班费收缴（每人50元×45人）', amount: 2250, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
+		{ id: uid(), semester_id: 's1', date: '2025-09-20', type: 'expense', purpose: '班级绿植采购', amount: 168, handler: '王小明', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
+		{ id: uid(), semester_id: 's1', date: '2025-10-08', type: 'expense', purpose: '运动会班级横幅', amount: 96, handler: '李华', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
+		{ id: uid(), semester_id: 's1', date: '2025-10-22', type: 'expense', purpose: '期中奖品与文具', amount: 240, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
+		{ id: uid(), semester_id: 's1', date: '2025-11-15', type: 'income', purpose: '校园义卖班级分成', amount: 530, handler: '张伟', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
+		{ id: uid(), semester_id: 's1', date: '2025-12-03', type: 'expense', purpose: '班级联欢会零食', amount: 388, handler: '赵敏', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
+		{ id: uid(), semester_id: 's1', date: '2025-12-20', type: 'expense', purpose: '期末复习资料打印', amount: 152, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
+		{ id: uid(), semester_id: 's2', date: '2026-02-18', type: 'income', purpose: '上学期结余结转', amount: 8200, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
+		{ id: uid(), semester_id: 's2', date: '2026-02-25', type: 'income', purpose: '班费收缴（补交）', amount: 300, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
+		{ id: uid(), semester_id: 's2', date: '2026-03-10', type: 'expense', purpose: '春游班级门票', amount: 1200, handler: '陈强', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
+		{ id: uid(), semester_id: 's2', date: '2026-04-02', type: 'expense', purpose: '图书角新书采购', amount: 460, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
+		{ id: uid(), semester_id: 's2', date: '2026-05-14', type: 'expense', purpose: '五四青年节活动物料', amount: 320, handler: '刘洋', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
+		{ id: uid(), semester_id: 's2', date: '2026-06-08', type: 'income', purpose: '废品回收班费返还', amount: 180, handler: '周婷', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() }
+	];
+	for (const rec of sample) {
+		await apiPost('records', rec);
+		DB.records.push(rec);
+	}
+	closeModal();
+	alert('已恢复示例数据');
+	render();
+}
+
+/* ---------- 学期管理 ---------- */
+function vwSemester() {
+	if (!isAdmin()) { alert('当前身份无权限操作'); go('main', false); return ''; }
+	return `<div class="mt" style="font-size:16px">学期管理</div>
+	<div class="card" style="margin-top:14px">
+	${DB.semesters.map(s => `
+		<div class="kv">
+		<div class="k"><div class="n">${esc(s.name)} ${s.is_current ? '<span class="tag income">当前</span>' : ''}</div><div class="s">起始余额 ¥${s.start_balance.toLocaleString('zh-CN')} · ${recordsOf(s.id).length} 条记录</div></div>
+		<button class="btn btn-ghost btn-xs" onclick="editSem('${s.id}')">编辑</button>
+		<button class="btn btn-ghost btn-xs" onclick="setCurSem('${s.id}')">设为当前</button>
+		<button class="btn btn-red btn-xs" onclick="delSem('${s.id}')">删除</button>
+		</div>`).join('')}
+	<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addSem()">+ 新增学期</button>
+	</div>`;
+}
+
+function addSem() {
+	openModal('新增学期', `
+	<div class="form-line"><label>学期名称</label><input class="field" id="sn" placeholder="如：高二下"></div>
+	<div class="form-line"><label>起始余额（结转金额）</label><input class="field" id="sb" type="number" min="0" placeholder="0"></div>
+	<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem(null)">创建</button></div>`);
+}
+
+function editSem(id) {
+	const s = DB.semesters.find(x => x.id === id);
+	if (!s) return;
+	openModal('编辑学期', `
+	<div class="form-line"><label>学期名称</label><input class="field" id="sn" value="${esc(s.name)}"></div>
+	<div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" min="0" value="${s.start_balance}"></div>
+	<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem('${id}')">保存</button></div>`);
+}
+
+async function saveSem(id) {
+	const name = document.getElementById('sn').value.trim();
+	const bal = parseFloat(document.getElementById('sb').value) || 0;
+	if (!name) { alert('请填写学期名称'); return; }
+	try {
+		if (id) {
+			const sem = DB.semesters.find(s => s.id === id);
+			if (sem) { sem.name = name; sem.start_balance = bal; await apiPatch('semesters', id, { name, start_balance: bal }); }
+		} else {
+			const newSem = { id: uid(), name, start_balance: bal, is_current: false };
+			await apiPost('semesters', newSem);
+			DB.semesters.push(newSem);
+		}
+		closeModal();
+		render();
+	} catch (e) { alert('操作失败: ' + e.message); }
+}
+
+async function setCurSem(id) {
+	switchSem(id);
+	DB.semesters = DB.semesters.map(s => ({ ...s, is_current: s.id === id }));
+	render();
+}
+
+async function delSem(id) {
+	const s = DB.semesters.find(x => x.id === id);
+	if (!s) return;
+	const cnt = recordsOf(id).length;
+	if (!confirm(`删除学期「${s.name}」？该学期下 ${cnt} 条记录将一并删除，且不可恢复。`)) return;
+	try {
+		await apiDelete('semesters', id);
+		await apiDeleteByFilter('records', 'semester_id', id);
+		DB.semesters = DB.semesters.filter(x => x.id !== id);
+		DB.records = DB.records.filter(r => r.semester_id !== id);
+		if (state.currentSemesterId === id) {
+			state.currentSemesterId = DB.semesters[0]?.id || null;
+			if (state.currentSemesterId) localStorage.setItem('currentSemesterId', state.currentSemesterId);
+		}
+		render();
+	} catch (e) { alert('删除失败: ' + e.message); }
+}
+
+/* ---------- 账号管理 ---------- */
+function vwAccount() {
+	if (!isAdmin()) { alert('当前身份无权限操作'); go('main', false); return ''; }
+	return `<div class="mt" style="font-size:16px">账号管理</div>
+	<div class="card" style="margin-top:14px">
+	${DB.accounts.map(a => `
+		<div class="kv">
+		<div class="k"><div class="n">${esc(a.name)}</div><div class="s">学号 ${esc(a.student_id)} · ${a.role}</div></div>
+		<button class="btn btn-ghost btn-xs" onclick="editAcc('${a.student_id}')">编辑</button>
+		<button class="btn btn-red btn-xs" onclick="delAcc('${a.student_id}')">删除</button>
+		</div>`).join('')}
+	<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addAcc()">+ 新增账号</button>
+	</div>`;
+}
+
+function addAcc() { if (!isAdmin()) { return; } accForm(null); }
+function editAcc(sid) { if (!isAdmin()) { return; } accForm(sid); }
+
+function accForm(sid) {
+	if (!isAdmin()) { return; }
+	const a = sid ? DB.accounts.find(x => x.student_id === sid) : null;
+	const roleOpts = (sel) => ['总管理员', '生活委员', '班委', '普通同学'].map(r => `<option ${r === sel ? 'selected' : ''}>${r}</option>`).join('');
+	openModal(a ? '编辑账号' : '新增账号', `
+	<div class="form-line"><label>姓名</label><input class="field" id="an" value="${a ? esc(a.name) : ''}"></div>
+	<div class="form-line"><label>学号</label><input class="field" id="as" value="${a ? esc(a.student_id) : ''}" ${a ? 'readonly' : ''} placeholder="如：20"></div>
+	<div class="form-line"><label>角色</label><select class="field" id="ar">${roleOpts(a ? a.role : '')}</select></div>
+	<div class="form-line"><label>密码${a ? '（留空则不修改）' : ''}</label><input class="field" id="ap" type="password" placeholder="登录密码"></div>
+	<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveAcc('${sid || ''}')">保存</button></div>`);
+}
+
+async function saveAcc(sid) {
+	if (!isAdmin()) { return; }
+	const name = document.getElementById('an').value.trim();
+	const sidv = document.getElementById('as').value.trim();
+	const role = document.getElementById('ar').value;
+	const pw = document.getElementById('ap').value;
+	if (!name || !sidv) { alert('请填写姓名与学号'); return; }
+	try {
+		if (sid) {
+			const acc = DB.accounts.find(x => x.student_id === sid);
+			if (acc) {
+				acc.name = name;
+				acc.role = role;
+				if (pw) acc.password = pw;
+				await apiPatch('accounts', sid, { name, role, password: pw || acc.password }, 'student_id');
+			}
+		} else {
+			if (DB.accounts.some(x => x.student_id === sidv)) { alert('该学号已存在'); return; }
+			const newAcc = { student_id: sidv, password: pw || '123456', role, name };
+			await apiPost('accounts', newAcc);
+			DB.accounts.push(newAcc);
+		}
+		closeModal();
+		render();
+	} catch (e) { alert('操作失败: ' + e.message); }
+}
+
+async function delAcc(sid) {
+	if (!isAdmin()) { return; }
+	if (!confirm('删除该账号？')) return;
+	try {
+		await apiDelete('accounts', sid, 'student_id');
+		DB.accounts = DB.accounts.filter(x => x.student_id !== sid);
+		render();
+	} catch (e) { alert('删除失败: ' + e.message); }
+}
+
+/* ---------- 公告管理 ---------- */
+function vwNotice() {
+	if (!isAdmin()) { go('main', false); return ''; }
+	return `<div class="mt" style="font-size:16px">公告与班级名</div>
+	<div class="card" style="margin-top:14px">
+		<div class="form-line"><label>班级名称</label><input class="field" id="cn" value="${esc(DB.settings.class_name)}"></div>
+		<div class="form-line"><label>通知内容</label><textarea class="field" id="nt">${esc(DB.settings.notice || '')}</textarea></div>
+		<button class="btn btn-primary btn-block" onclick="saveNotice()">保存</button>
+	</div>`;
+}
+
+async function saveNotice() {
+	const className = document.getElementById('cn').value.trim();
+	const notice = document.getElementById('nt').value.trim();
+	try {
+		await apiPatch('settings', 1, { class_name: className, notice: notice });
+		DB.settings.class_name = className;
+		DB.settings.notice = notice;
+		alert('已保存');
+		render();
+	} catch (e) { alert('保存失败: ' + e.message); }
+}
+
+/* ---------- 日志查看 ---------- */
+function vwLog() {
+	if (!isAdmin()) { go('main', false); return ''; }
+	const visitLogs = DB.logs.map(l => ({ ...l, type: '访问', action: '访问了平台' }));
+	const opLogs = DB.oplogs.map(l => ({ ...l, type: '操作', action: l.action || '' }));
+	const allLogs = [...visitLogs, ...opLogs].sort((a, b) => b.time - a.time).slice(0, 200);
+
+	return `<div class="mt" style="font-size:16px">📋 全部日志（访问 + 操作）</div>
+	<div class="card" style="margin-top:14px">
+		${allLogs.length ? allLogs.map(l => `
+			<div class="kv">
+				<div class="k">
+					<div class="n">${esc(l.type)} ${esc(l.action)}</div>
+					<div class="s">${esc(l.operator || l.nickname || '系统')} · ${l.detail ? esc(l.detail) : ''} · ${new Date(l.time).toLocaleString('zh-CN')}</div>
+				</div>
+			</div>`).join('') : '<div class="empty">暂无日志</div>'}
+	</div>`;
+}
+
+/* ---------- 登录 / 浏览 / 图片 ---------- */
+function openLogin() {
+	openModal('管理员登录', `
+	<div class="form-line"><label>学号</label><input class="field" id="lgId" placeholder="如 20"></div>
+	<div class="form-line"><label>密码</label><input class="field" id="lgPw" type="password" placeholder="请输入密码"></div>
+	<button class="btn btn-primary btn-block" onclick="doLogin()">登录</button>
+	<div style="font-size:12px;color:var(--ink-soft);text-align:center;margin-top:10px">演示账号：总管理员 20 / 生活委员 32</div>`);
+}
+
+function doLogin() {
+	const id = document.getElementById('lgId').value.trim();
+	const pw = document.getElementById('lgPw').value.trim();
+	const acc = DB.accounts.find(a => a.student_id === id && a.password === pw);
+	if (!acc) { alert('学号或密码错误'); return; }
+	state.user = { studentId: acc.student_id, role: acc.role, name: acc.name };
+	closeModal();
+	logVisit(acc.name);
+	state.history = ['home'];
+	go('main', false);
+}
+
+function enterBrowse() {
+	state.user = null;
+	logVisit('访客');
+	state.noticeAck = false;
+	state.history = ['home'];
+	go('main', false);
+}
+
+function openImg(id) {
+	const r = recordsOf(state.semester).find(x => x.id === id);
+	if (!r || !r.invoice) {
+		alert('该记录无发票图片');
+		return;
+	}
+	document.getElementById('imgBody').innerHTML = `<span class="x" onclick="closeModal()">×</span><h3>发票 / 收据</h3><img src="${r.invoice}"><p style="font-size:12px;color:var(--ink-soft);text-align:center;margin:10px 0 0">${r.date} · 经手：${esc(r.handler)}</p>`;
+	openMask('imgMask');
+}
+
+/* ---------- 模态框 ---------- */
+function openModal(title, body) { document.getElementById('modalBody').innerHTML = `<span class="x" onclick="closeModal()">×</span><h3>${title}</h3>${body}`; openMask('modal'); }
+function openMask(id) { document.getElementById(id).classList.add('show'); }
+function closeModal() { document.getElementById('modal').classList.remove('show'); document.getElementById('imgMask').classList.remove('show'); }
+
+/* ================================================================
+   启动！
+   ================================================================ */
+window.onload = async function() {
+	document.getElementById('content').innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--ink-soft)">⏳ 正在连接云端数据库...</div>';
+	const ok = await loadAllData();
+	if (ok) {
+		go('home', false);
+		console.log('🚀 班费平台启动成功！');
+	}
+};
+</script>
+</body>
+</html>
