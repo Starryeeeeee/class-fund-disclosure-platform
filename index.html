@@ -6,7 +6,7 @@
 <title>高二(1)班 班费公示平台</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
 <style>
   /* ===== 设计令牌：柔和暖调 + 精致排版 ===== */
   :root{
@@ -20,7 +20,8 @@
 	--red:#B85347; --red-soft:#F7E7E4;
 	--radius:18px; --radius-sm:12px;
 	--font-sans:'Inter',-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
-	--shadow-card:0 1px 2px rgba(43,36,24,.04), 0 12px 28px -16px rgba(43,36,24,.14);
+	--font-display:'Source Serif 4','Inter',"PingFang SC","Hiragino Sans GB","Microsoft YaHei",serif;
+	--shadow-card:0 1px 2px rgba(43,36,24,.04), 0 10px 24px -16px rgba(43,36,24,.12);
 	--shadow-btn:0 1px 2px rgba(43,36,24,.06);
 	--shadow-modal:0 30px 70px -20px rgba(30,24,14,.35);
   }
@@ -32,35 +33,45 @@
 	font-feature-settings:"tnum" 1;letter-spacing:.005em}
   .app{max-width:460px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative}
 
-  /* 顶部导航 */
-  .navbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;height:56px;padding:0 16px;
-	background:rgba(250,248,243,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  /* 顶部导航
+	 说明：原实现用 flex:1 + margin-right 让标题“看起来居中”，
+	 但 nav-back 按钮的宽度会随文案/图标变化，而 nav-right 又是
+	 position:absolute 脱离文档流，两侧不对称导致标题总是偏一边。
+	 现在改为标题绝对定位、真正相对整个导航栏居中；
+	 两侧各留一个等宽的“槽位”，标题在视觉上才会真正居中。 */
+  .navbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;height:56px;padding:0 6px;
+	background:rgba(250,248,243,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
 	border-bottom:1px solid var(--line)}
-  .nav-back{display:flex;align-items:center;gap:4px;color:var(--blue);font-size:15px;font-weight:500;background:none;border:none;padding:6px 8px 6px 0;cursor:pointer;font-family:inherit;transition:opacity .15s}
-  .nav-back:active{opacity:.6}
-  .nav-back svg{width:18px;height:18px}
-  .nav-title{flex:1;text-align:center;font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-.01em;margin-right:40px}
-  .nav-right{position:absolute;right:16px;display:flex;align-items:center;gap:12px}
-  .env-icon{position:relative;cursor:pointer;color:var(--blue);transition:opacity .15s}
-  .env-icon:active{opacity:.6}
-  .env-icon svg{width:21px;height:21px}
-  .dot{position:absolute;top:-4px;right:-6px;min-width:16px;height:16px;border-radius:9px;background:var(--red);color:#fff;font-size:10px;font-weight:600;line-height:16px;text-align:center;padding:0 4px;box-shadow:0 0 0 2px rgba(250,248,243,.9)}
-  .logout{font-size:12.5px;color:var(--ink-soft);cursor:pointer;font-weight:500;transition:color .15s}
+  .nav-slot{width:84px;flex:0 0 auto;display:flex;align-items:center;min-height:1px}
+  .nav-slot.left{justify-content:flex-start}
+  .nav-slot.right{justify-content:flex-end}
+  .nav-back{display:inline-flex;align-items:center;gap:3px;color:var(--blue);font-size:14.5px;font-weight:500;background:none;border:none;padding:8px 6px;margin-left:2px;cursor:pointer;font-family:inherit;border-radius:10px;transition:opacity .15s,background .15s}
+  .nav-back:active{opacity:.6;background:rgba(92,124,147,.08)}
+  .nav-back svg{width:17px;height:17px;flex-shrink:0}
+  .nav-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+	max-width:calc(100% - 176px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+	font-size:15.5px;font-weight:700;color:var(--ink);letter-spacing:-.01em;text-align:center}
+  .nav-right{flex:1;display:flex;align-items:center;justify-content:flex-end;gap:14px;padding-right:8px}
+  .env-icon{position:relative;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;cursor:pointer;color:var(--blue);transition:background .15s,opacity .15s}
+  .env-icon:active{opacity:.6;background:rgba(92,124,147,.08)}
+  .env-icon svg{width:20px;height:20px}
+  .dot{position:absolute;top:1px;right:1px;min-width:15px;height:15px;border-radius:8px;background:var(--red);color:#fff;font-size:10px;font-weight:700;line-height:15px;text-align:center;padding:0 3px;box-shadow:0 0 0 2px rgba(250,248,243,.92)}
+  .logout{font-size:13px;color:var(--ink-soft);cursor:pointer;font-weight:500;padding:8px 4px;transition:color .15s}
   .logout:active{color:var(--ink)}
 
-  #content{padding:22px 16px 56px;min-height:calc(100vh - 56px)}
-  .mt{font-size:18px;font-weight:700;text-align:center;margin:6px 0 4px;letter-spacing:-.01em}
+  #content{padding:24px 18px 56px;min-height:calc(100vh - 56px)}
+  .mt{font-family:var(--font-display);font-size:19px;font-weight:600;text-align:center;margin:4px 0 6px;letter-spacing:-.005em}
   .mt .cls{color:var(--orange)}
   .sub{font-size:13px;color:var(--ink-soft);text-align:center}
 
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px;box-shadow:var(--shadow-card)}
 
   /* 首页 */
-  .home-wrap{padding-top:44px}
-  .logo{width:60px;height:60px;margin:0 auto 20px;border-radius:18px;background:var(--yellow-soft);display:flex;align-items:center;justify-content:center;border:1px solid var(--line)}
-  .logo svg{width:30px;height:30px}
-  .home-title{text-align:center;font-size:21px;font-weight:700;letter-spacing:-.02em}
-  .home-desc{text-align:center;color:var(--ink-soft);font-size:13.5px;margin:8px 0 32px}
+  .home-wrap{padding-top:48px}
+  .logo{width:58px;height:58px;margin:0 auto 22px;border-radius:16px;background:var(--yellow-soft);display:flex;align-items:center;justify-content:center;border:1px solid var(--line)}
+  .logo svg{width:28px;height:28px}
+  .home-title{font-family:var(--font-display);text-align:center;font-size:22px;font-weight:600;letter-spacing:-.01em;line-height:1.35}
+  .home-desc{text-align:center;color:var(--ink-soft);font-size:13px;letter-spacing:.01em;margin:10px 0 34px}
   .entry-row{display:flex;gap:12px}
   .entry{flex:1;cursor:pointer;text-align:center;padding:28px 12px;border-radius:var(--radius);border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow-card);transition:transform .15s,box-shadow .15s}
   .entry:active{transform:scale(.97);box-shadow:var(--shadow-btn)}
@@ -188,9 +199,11 @@
 <body>
 <div class="app">
   <nav class="navbar">
-	<button class="nav-back hidden" id="navBack" onclick="back()">
-	  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>返回
-	</button>
+	<div class="nav-slot left">
+	  <button class="nav-back hidden" id="navBack" onclick="back()">
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>返回
+	  </button>
+	</div>
 	<div class="nav-title" id="navTitle">班费公示平台</div>
 	<div class="nav-right" id="navRight"></div>
   </nav>
@@ -209,13 +222,45 @@
 <script>
 /* ================================================================
    1. Supabase 云端配置
+
+   ⚠️ 安全说明（请务必阅读，这不是"藏起来就安全"的问题）：
+
+   下面这个 SUPABASE_KEY 是 Supabase 的 "anon public key"（匿名公钥），
+   它设计上就是给浏览器端代码直接使用的，本身出现在前端源码里并不算
+   泄漏、也没办法真正"加密"它——任何人打开浏览器开发者工具都能看到。
+
+   真正决定安全性的，是 Supabase 项目里每张表的 Row Level Security
+   (RLS) 规则。如果没开 RLS 或者规则设置得太宽松，那么任何拿到这个
+   anon key 的人（包括这个网页的每一个访客）都可以用它直接对你的
+   数据库做任意的增删改查——不需要经过这个网页的登录逻辑。也就是说，
+   现在真正的风险不是"这个 key 被看到了"，而是"这个 key 背后的表
+   有没有被 RLS 锁住"。
+
+   建议你到 Supabase 后台 -> Authentication -> Policies，为每张表打开
+   RLS，并至少按下面的思路配置（具体 SQL 我在这次修改说明里给你写好了，
+   可以直接去 SQL Editor 里执行）：
+	 - semesters / records / settings：允许所有人 SELECT（公示嘛，本
+	   来就该公开），但只允许通过后台校验过的操作来 INSERT/UPDATE/DELETE。
+	 - accounts：普通查询完全不允许拿到 password 字段；建议改成配合一个
+	   数据库函数（RPC）来做登录校验，前端永远拿不到密码原文或哈希值。
+	 - logs / oplogs / applications：SELECT 可以公开或限制给登录用户，
+	   INSERT 建议允许，UPDATE/DELETE 建议只留给管理员流程。
+
+   在正式做到"后台校验 + RLS"之前，这次改动先做了一个最直接、代价最小
+   的加固：账号数据加载时不再把 password 字段一起拉到每个访客的浏览器
+   内存里（原来的写法是 select=*，所有人的密码明文都被加载进了页面的
+   全局变量 DB.accounts，任意访客在控制台输入 DB.accounts 就能看到全部
+   密码）。登录时改为单独按学号去查这一条账号的密码做校验，校验完立刻
+   丢弃，不再保留在全局状态里。这不是完整方案，只是把"全体密码常驻在
+   每个人的浏览器里"这个最严重的问题先堵上。
+   以上内容为claude生成的安全分析，但我还没有处理，先放到这里😅
    ================================================================ */
 const SUPABASE_URL = 'https://ejvzxlslfdweqavturmi.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdnp4bHNsZmR3ZXFhdnR1cm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTU2MzYsImV4cCI6MjEwMzIzMTYzNn0.4UUWXysA20Bi-pwBfcfKMi50Op22530443zKgBxlZwo';
 
-// ----- 通用请求方法（支持自定义主键字段） -----
-async function apiGet(table) {
-	const url = `${SUPABASE_URL}/rest/v1/${table}?select=*&apikey=${SUPABASE_KEY}`;
+// ----- 通用请求方法（支持自定义主键字段、可选自定义 select 字段） -----
+async function apiGet(table, selectFields = '*') {
+	const url = `${SUPABASE_URL}/rest/v1/${table}?select=${selectFields}&apikey=${SUPABASE_KEY}`;
 	const r = await fetch(url, {
 		headers: {
 			'apikey': SUPABASE_KEY,
@@ -227,6 +272,24 @@ async function apiGet(table) {
 		throw new Error(`GET ${table} 失败(${r.status}): ${text}`);
 	}
 	return r.json();
+}
+
+// 仅用于登录校验：按学号单独查询一条账号（含密码字段），用完即丢，
+// 不写入 DB.accounts、不长期停留在内存里。
+async function apiGetOne(table, field, value, selectFields = '*') {
+	const url = `${SUPABASE_URL}/rest/v1/${table}?${field}=eq.${encodeURIComponent(value)}&select=${selectFields}&apikey=${SUPABASE_KEY}`;
+	const r = await fetch(url, {
+		headers: {
+			'apikey': SUPABASE_KEY,
+			'Authorization': `Bearer ${SUPABASE_KEY}`
+		}
+	});
+	if (!r.ok) {
+		const text = await r.text();
+		throw new Error(`GET ${table} 失败(${r.status}): ${text}`);
+	}
+	const rows = await r.json();
+	return rows[0] || null;
 }
 
 async function apiPost(table, data) {
@@ -305,6 +368,9 @@ const ROLE_KEEPER = '生活委员';
 const ROLE_COMMITTEE = '班委';
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+// 只放行 http(s) 链接或 data:image/* 图片数据，防止未来接入图片上传后
+// 有人把 invoice 字段塞成 javascript: 之类的链接来做 XSS。
+const safeImgSrc = s => (/^(https?:|data:image\/)/i.test(String(s || ''))) ? s : '';
 
 let DB = { semesters: [], accounts: [], records: [], applications: [], logs: [], oplogs: [], settings: { class_name: '高二(1)班', notice: '' } };
 let state = {
@@ -403,7 +469,7 @@ async function loadAllData() {
 	try {
 		const [sems, accs, recs, apps, logs, oplogs, set] = await Promise.all([
 			apiGet('semesters'),
-			apiGet('accounts'),
+			apiGet('accounts', 'student_id,name,role'), // 不加载 password，见上方安全说明
 			apiGet('records'),
 			apiGet('applications'),
 			apiGet('logs'),
@@ -662,7 +728,7 @@ function vwEdit() {
 	const editing = !!state.editingId;
 	const r = editing ? recordsOf(state.semester).find(x => x.id === state.editingId) : null;
 	const today = new Date().toISOString().slice(0, 10);
-	const invPrev = state._inv ? `<img src="${state._inv}" style="max-width:100%;border-radius:10px;margin-top:8px">` : '';
+	const invPrev = state._inv ? `<img src="${esc(safeImgSrc(state._inv))}" style="max-width:100%;border-radius:10px;margin-top:8px">` : '';
 	return `
 	<div class="mt" style="font-size:16px">${editing ? '修改记录' : '新增记录'}</div>
 	<div class="card" style="margin-top:14px">
@@ -672,8 +738,14 @@ function vwEdit() {
 			<label><input type="radio" name="tp" value="income" ${r ? (r.type === 'income' ? 'checked' : '') : 'checked'}> 收入</label>
 			<label><input type="radio" name="tp" value="expense" ${r ? (r.type === 'expense' ? 'checked' : '') : ''}> 支出</label>
 		</div></div>
-		<div class="form-line"><label>用途或事由（必填）</label><input class="field" id="f_purpose" value="${r ? esc(r.purpose) : ''}" placeholder="如：班级活动物料"></div>
-		<div class="form-line"><label>金额（正数）</label><input class="field" id="f_amount" type="number" min="0" step="0.01" value="${r ? r.amount : ''}" placeholder="0.00"></div>
+		<div class="form-line"><label>用途或事由（必填）</label>
+			<input class="field" id="f_purpose" maxlength="200" value="${r ? esc(r.purpose) : ''}" placeholder="如：班级活动物料">
+			<div style="font-size:12px;color:var(--ink-soft);margin-top:2px;">不超过 200 个字符</div>
+		</div>
+		<div class="form-line"><label>金额（正数）</label>
+			<input class="field" id="f_amount" type="number" min="0.01" max="999.99" step="0.01" value="${r ? r.amount : ''}" placeholder="0.00">
+			<div style="font-size:12px;color:var(--ink-soft);margin-top:2px;">单笔不超过 ¥999.99</div>
+		</div>
 		<div class="form-line"><label>经手人</label><input class="field" id="f_handler" value="${r ? esc(r.handler) : ''}" placeholder="填写经手人"></div>
 		<div style="display:flex;gap:10px;margin-top:6px">
 		<button class="btn btn-ghost btn-block" onclick="back()">取消</button>
@@ -688,8 +760,11 @@ async function saveRecord() {
 	const handler = document.getElementById('f_handler').value.trim();
 	const date = document.getElementById('f_date').value;
 	const type = document.querySelector('input[name=tp]:checked').value;
+
 	if (!purpose) { alert('请填写用途或事由'); return; }
+	if (purpose.length > 200) { alert('用途描述不能超过 200 个字符'); return; }
 	if (isNaN(amount) || amount <= 0) { alert('请填写正确的金额'); return; }
+	if (amount > 999.99) { alert('单笔金额不能超过 999.99 元'); return; }
 
 	const sem = curSem();
 	if (!sem) {
@@ -1202,8 +1277,11 @@ async function saveAcc(sid) {
 			if (acc) {
 				acc.name = name;
 				acc.role = role;
-				if (pw) acc.password = pw;
-				await apiPatch('accounts', sid, { name, role, password: pw || acc.password }, 'student_id');
+				// DB.accounts 不再包含 password 字段，
+				// 所以留空密码时只更新姓名/角色，绝不会把密码覆盖成 undefined。
+				const patchData = { name, role };
+				if (pw) patchData.password = pw;
+				await apiPatch('accounts', sid, patchData, 'student_id');
 			}
 		} else {
 			if (DB.accounts.some(x => x.student_id === sidv)) { alert('该学号已存在'); return; }
@@ -1277,16 +1355,44 @@ function openLogin() {
 	<div style="font-size:12px;color:var(--ink-soft);text-align:center;margin-top:10px">演示账号：总管理员 20 / 生活委员 32</div>`);
 }
 
-function doLogin() {
+// 目前这只是一个很轻量的客户端节流，刷新页面就会重置，
+// 挡不住真正有心破解密码的人——它只是提高了"随手多试几次"的门槛。
+// 真正的暴力破解防护需要放在服务端（比如 Supabase Edge Function
+// 按 IP/学号做次数限制），这一步这次没有做，作为未来的优化方向。
+let _loginFails = 0, _loginLockUntil = 0;
+
+async function doLogin() {
+	if (Date.now() < _loginLockUntil) {
+		const wait = Math.ceil((_loginLockUntil - Date.now()) / 1000);
+		alert(`尝试次数过多，请 ${wait} 秒后再试`);
+		return;
+	}
 	const id = document.getElementById('lgId').value.trim();
 	const pw = document.getElementById('lgPw').value.trim();
-	const acc = DB.accounts.find(a => a.student_id === id && a.password === pw);
-	if (!acc) { alert('学号或密码错误'); return; }
-	state.user = { studentId: acc.student_id, role: acc.role, name: acc.name };
-	closeModal();
-	logVisit(acc.name);
-	state.history = ['home'];
-	go('main', false);
+	if (!id || !pw) { alert('请输入学号和密码'); return; }
+	const btn = document.querySelector('#modalBody .btn-primary');
+	if (btn) { btn.disabled = true; btn.textContent = '登录中…'; }
+	try {
+		// 只在这一次登录尝试里单独查这一条账号（含密码），
+		// 不会把全体密码加载进 DB.accounts。
+		const acc = await apiGetOne('accounts', 'student_id', id, 'student_id,name,role,password');
+		if (!acc || acc.password !== pw) {
+			_loginFails++;
+			if (_loginFails >= 5) { _loginLockUntil = Date.now() + 30000; _loginFails = 0; }
+			alert('学号或密码错误');
+			return;
+		}
+		_loginFails = 0;
+		state.user = { studentId: acc.student_id, role: acc.role, name: acc.name };
+		closeModal();
+		logVisit(acc.name);
+		state.history = ['home'];
+		go('main', false);
+	} catch (e) {
+		alert('登录失败: ' + e.message);
+	} finally {
+		if (btn) { btn.disabled = false; btn.textContent = '登录'; }
+	}
 }
 
 function enterBrowse() {
@@ -1303,7 +1409,7 @@ function openImg(id) {
 		alert('该记录无发票图片');
 		return;
 	}
-	document.getElementById('imgBody').innerHTML = `<span class="x" onclick="closeModal()">×</span><h3>发票 / 收据</h3><img src="${r.invoice}"><p style="font-size:12px;color:var(--ink-soft);text-align:center;margin:10px 0 0">${r.date} · 经手：${esc(r.handler)}</p>`;
+	document.getElementById('imgBody').innerHTML = `<span class="x" onclick="closeModal()">×</span><h3>发票 / 收据</h3><img src="${esc(safeImgSrc(r.invoice))}"><p style="font-size:12px;color:var(--ink-soft);text-align:center;margin:10px 0 0">${r.date} · 经手：${esc(r.handler)}</p>`;
 	openMask('imgMask');
 }
 
