@@ -600,7 +600,7 @@ function vwHome() {
 
 function noticeCard() {
 	if (state.noticeAck || !DB.settings.notice) return '';
-	return `<div class="notice"><span class="label">通知</span><div class="text">${esc(DB.settings.notice)}</div>
+	return `<div class="notice"><span class="label">通知</span><div class="text">${esc(DB.settings.notice).replace(/\n/g, '<br>')}</div>
 	<div style="text-align:right;margin-top:12px"><button class="btn btn-primary btn-sm" onclick="state.noticeAck=true;render()">我已知悉</button></div></div>`;
 }
 
