@@ -33,13 +33,8 @@
 	font-feature-settings:"tnum" 1;letter-spacing:.005em}
   .app{max-width:460px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative}
 
-  /* 顶部导航
-	 说明：原实现用 flex:1 + margin-right 让标题“看起来居中”，
-	 但 nav-back 按钮的宽度会随文案/图标变化，而 nav-right 又是
-	 position:absolute 脱离文档流，两侧不对称导致标题总是偏一边。
-	 现在改为标题绝对定位、真正相对整个导航栏居中；
-	 两侧各留一个等宽的“槽位”，标题在视觉上才会真正居中。 */
-  .navbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;height:56px;padding:0 6px;
+  /* 顶部导航 */
+  .navbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;height:60px;padding:0 6px;
 	background:rgba(250,248,243,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
 	border-bottom:1px solid var(--line)}
   .nav-slot{width:84px;flex:0 0 auto;display:flex;align-items:center;min-height:1px}
@@ -50,7 +45,7 @@
   .nav-back svg{width:17px;height:17px;flex-shrink:0}
   .nav-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
 	max-width:calc(100% - 176px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-	font-size:15.5px;font-weight:700;color:var(--ink);letter-spacing:-.01em;text-align:center}
+	font-size:18px;font-weight:700;color:var(--ink);letter-spacing:-.01em;text-align:center}
   .nav-right{flex:1;display:flex;align-items:center;justify-content:flex-end;gap:14px;padding-right:8px}
   .env-icon{position:relative;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:9px;cursor:pointer;color:var(--blue);transition:background .15s,opacity .15s}
   .env-icon:active{opacity:.6;background:rgba(92,124,147,.08)}
@@ -59,7 +54,7 @@
   .logout{font-size:13px;color:var(--ink-soft);cursor:pointer;font-weight:500;padding:8px 4px;transition:color .15s}
   .logout:active{color:var(--ink)}
 
-  #content{padding:24px 18px 56px;min-height:calc(100vh - 56px)}
+  #content{padding:24px 18px 56px;min-height:calc(100vh - 60px)}
   .mt{font-family:var(--font-display);font-size:19px;font-weight:600;text-align:center;margin:4px 0 6px;letter-spacing:-.005em}
   .mt .cls{color:var(--orange)}
   .sub{font-size:13px;color:var(--ink-soft);text-align:center}
@@ -94,14 +89,17 @@
   .btn-red:active{background:#F0D9D5}
   .btn-block{width:100%}
   .btn-sm{padding:9px 14px;font-size:13px;border-radius:11px}
-  .btn-xs{padding:6px 11px;font-size:12px;border-radius:9px;font-weight:500}
+  .btn-xs{padding:4px 8px;font-size:11px;border-radius:8px;font-weight:500}
+  .btn-feedback{background:var(--blue);color:#fff;border-radius:20px;padding:10px 18px;font-size:14px;box-shadow:0 2px 8px rgba(92,124,147,.25)}
+  .btn-feedback:active{background:var(--blue);opacity:.7;transform:scale(.97)}
+  .btn-outline{background:transparent;border:1px solid var(--line);color:var(--ink)}
 
   /* 通知 */
   .notice{background:var(--yellow-soft);border:1px solid #EDDFB3;border-radius:var(--radius);padding:16px 17px;margin-bottom:18px}
   .notice .label{display:inline-block;font-size:11.5px;font-weight:700;color:#8A6A22;background:rgba(255,255,255,.55);padding:3px 10px;border-radius:20px;margin-bottom:9px;letter-spacing:.02em}
-  .notice .text{font-size:14px;color:#6B5A30;line-height:1.6}
+  .notice .text{font-size:14px;color:#6B5A30;line-height:1.6;white-space:pre-wrap}
 
-  /* 统计（合并为一张卡，内部以竖线分隔） */
+  /* 统计 */
   .stats{display:flex;gap:0;margin-bottom:16px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:20px 6px}
   .stat{flex:1;background:none;border:none;border-radius:0;padding:2px 12px;text-align:center}
   .stat:not(:first-child){border-left:1px solid var(--line)}
@@ -118,7 +116,7 @@
   select.sem{flex:1;font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 11px;transition:border-color .15s}
   select.sem:focus{outline:none;border-color:var(--blue)}
 
-  /* 功能区（按角色显示） */
+  /* 功能区 */
   .func{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
   .func .btn{flex:1;min-width:130px}
 
@@ -126,23 +124,23 @@
   .section-title{font-size:15px;font-weight:700;margin:2px 0 12px;display:flex;align-items:center;justify-content:space-between;letter-spacing:-.005em}
   .section-title .link{font-size:13px;color:var(--blue);font-weight:500;cursor:pointer}
   .flow-list{display:flex;flex-direction:column}
-  .flow{display:flex;align-items:center;gap:12px;padding:15px 6px;border-bottom:1px solid var(--line);transition:background .15s}
+  .flow{display:flex;align-items:center;gap:10px;padding:14px 4px;border-bottom:1px solid var(--line);transition:background .15s}
   .flow:active{background:var(--card-soft)}
   .flow:last-child{border-bottom:none}
-  .flow .date{width:44px;text-align:center;flex-shrink:0;font-size:11.5px;color:var(--ink-soft)}
-  .flow .date .d{font-size:18px;font-weight:700;color:var(--ink);display:block;line-height:1.15;font-variant-numeric:tabular-nums}
+  .flow .date{width:36px;text-align:center;flex-shrink:0;font-size:11px;color:var(--ink-soft)}
+  .flow .date .d{font-size:17px;font-weight:700;color:var(--ink);display:block;line-height:1.15;font-variant-numeric:tabular-nums}
   .flow .body{flex:1;min-width:0}
-  .flow .purpose{font-size:14.5px;font-weight:600;letter-spacing:-.005em}
-  .flow .meta{font-size:12px;color:var(--ink-soft);margin-top:3px}
-  .flow .meta .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;margin-right:6px;font-weight:500}
+  .flow .purpose{font-size:14px;font-weight:600;letter-spacing:-.005em;word-break:break-word}
+  .flow .meta{font-size:12px;color:var(--ink-soft);margin-top:2px}
+  .flow .meta .tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:20px;margin-right:4px;font-weight:500}
   .tag.income{background:var(--income-soft);color:var(--income)}
   .tag.expense{background:var(--expense-soft);color:var(--expense)}
   .tag.inv{background:var(--blue-soft);color:var(--blue)}
   .tag.pending{background:var(--yellow-soft);color:#8A6A22}
-  .flow .amt{font-size:15.5px;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .flow .amt{font-size:14px;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
   .flow .amt.income{color:var(--income)}
   .flow .amt.expense{color:var(--expense)}
-  .flow .ops{display:flex;gap:6px;flex-shrink:0}
+  .flow .ops{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
   .empty{text-align:center;color:var(--ink-faint);padding:44px 0;font-size:13.5px}
 
   /* 筛选 */
@@ -179,21 +177,39 @@
   .radio-row{display:flex;gap:10px}
   .radio-row label{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--ink);cursor:pointer}
 
+  /* 反馈 */
+  .feedback-item{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+  .feedback-item .header{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-soft);margin-bottom:6px}
+  .feedback-item .content{font-size:15px;line-height:1.6}
+  .feedback-item .reply{background:var(--blue-soft);border-radius:10px;padding:12px 14px;margin-top:10px;font-size:14px;color:var(--blue)}
+  .feedback-item .status-badge{display:inline-block;font-size:11px;padding:2px 10px;border-radius:20px;font-weight:500}
+  .status-badge.pending{background:var(--yellow-soft);color:#8A6A22}
+  .status-badge.read{background:var(--income-soft);color:var(--income)}
+  .status-badge.public{background:var(--blue-soft);color:var(--blue)}
+  .feedback-empty{text-align:center;color:var(--ink-faint);padding:30px 0}
+
   /* 模态框 */
   .mask{position:fixed;inset:0;background:rgba(30,26,18,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:24px}
   .mask.show{display:flex}
   .modal{background:var(--card);border-radius:22px;padding:22px;width:100%;max-width:380px;border:1px solid var(--line);max-height:88vh;overflow:auto;box-shadow:var(--shadow-modal)}
-  .modal h3{margin:0 0 16px;font-size:16px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;justify-content:space-between}
+  .modal h3{margin:0 0 16px;font-size:18px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;justify-content:space-between}
   .modal .x{float:right;cursor:pointer;color:var(--ink-soft);font-size:22px;line-height:1}
   .modal img{max-width:100%;border-radius:14px;border:1px solid var(--line)}
+  .modal .char-count{text-align:right;font-size:12px;color:var(--ink-soft);margin-top:4px}
+
   .appr{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
   .appr .top{display:flex;justify-content:space-between;font-size:13px;font-variant-numeric:tabular-nums}
   .appr .st{font-weight:700}
   .st.pending{color:#8A6A22}.st.approved{color:var(--income)}.st.rejected{color:var(--red)}
   .appr .reason{font-size:13px;color:var(--ink-soft);margin:7px 0;line-height:1.6}
   .appr .reply{font-size:13px;color:var(--ink-soft);margin:7px 0;line-height:1.6}
-  .appr .ops{display:flex;gap:8px;margin-top:9px}
+  .appr .ops{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
   .hidden{display:none!important}
+
+  .tab-bar{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  .tab{font-size:14px;font-weight:500;padding:6px 14px;border-radius:20px;cursor:pointer;color:var(--ink-soft);transition:all .15s;flex:1;text-align:center}
+  .tab.active{background:var(--orange);color:#fff}
+  .tab:active{opacity:.6}
 </style>
 </head>
 <body>
@@ -222,50 +238,14 @@
 <script>
 /* ================================================================
    1. Supabase 云端配置
-
-   ⚠️ 安全说明（请务必阅读，这不是"藏起来就安全"的问题）：
-
-   下面这个 SUPABASE_KEY 是 Supabase 的 "anon public key"（匿名公钥），
-   它设计上就是给浏览器端代码直接使用的，本身出现在前端源码里并不算
-   泄漏、也没办法真正"加密"它——任何人打开浏览器开发者工具都能看到。
-
-   真正决定安全性的，是 Supabase 项目里每张表的 Row Level Security
-   (RLS) 规则。如果没开 RLS 或者规则设置得太宽松，那么任何拿到这个
-   anon key 的人（包括这个网页的每一个访客）都可以用它直接对你的
-   数据库做任意的增删改查——不需要经过这个网页的登录逻辑。也就是说，
-   现在真正的风险不是"这个 key 被看到了"，而是"这个 key 背后的表
-   有没有被 RLS 锁住"。
-
-   建议你到 Supabase 后台 -> Authentication -> Policies，为每张表打开
-   RLS，并至少按下面的思路配置（具体 SQL 我在这次修改说明里给你写好了，
-   可以直接去 SQL Editor 里执行）：
-	 - semesters / records / settings：允许所有人 SELECT（公示嘛，本
-	   来就该公开），但只允许通过后台校验过的操作来 INSERT/UPDATE/DELETE。
-	 - accounts：普通查询完全不允许拿到 password 字段；建议改成配合一个
-	   数据库函数（RPC）来做登录校验，前端永远拿不到密码原文或哈希值。
-	 - logs / oplogs / applications：SELECT 可以公开或限制给登录用户，
-	   INSERT 建议允许，UPDATE/DELETE 建议只留给管理员流程。
-
-   在正式做到"后台校验 + RLS"之前，这次改动先做了一个最直接、代价最小
-   的加固：账号数据加载时不再把 password 字段一起拉到每个访客的浏览器
-   内存里（原来的写法是 select=*，所有人的密码明文都被加载进了页面的
-   全局变量 DB.accounts，任意访客在控制台输入 DB.accounts 就能看到全部
-   密码）。登录时改为单独按学号去查这一条账号的密码做校验，校验完立刻
-   丢弃，不再保留在全局状态里。这不是完整方案，只是把"全体密码常驻在
-   每个人的浏览器里"这个最严重的问题先堵上。
-   以上内容为claude生成的安全分析，但我还没有处理，先放到这里😅
    ================================================================ */
 const SUPABASE_URL = 'https://ejvzxlslfdweqavturmi.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdnp4bHNsZmR3ZXFhdnR1cm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTU2MzYsImV4cCI6MjEwMzIzMTYzNn0.4UUWXysA20Bi-pwBfcfKMi50Op22530443zKgBxlZwo';
 
-// ----- 通用请求方法（支持自定义主键字段、可选自定义 select 字段） -----
 async function apiGet(table, selectFields = '*') {
 	const url = `${SUPABASE_URL}/rest/v1/${table}?select=${selectFields}&apikey=${SUPABASE_KEY}`;
 	const r = await fetch(url, {
-		headers: {
-			'apikey': SUPABASE_KEY,
-			'Authorization': `Bearer ${SUPABASE_KEY}`
-		}
+		headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
 	});
 	if (!r.ok) {
 		const text = await r.text();
@@ -274,15 +254,10 @@ async function apiGet(table, selectFields = '*') {
 	return r.json();
 }
 
-// 仅用于登录校验：按学号单独查询一条账号（含密码字段），用完即丢，
-// 不写入 DB.accounts、不长期停留在内存里。
 async function apiGetOne(table, field, value, selectFields = '*') {
 	const url = `${SUPABASE_URL}/rest/v1/${table}?${field}=eq.${encodeURIComponent(value)}&select=${selectFields}&apikey=${SUPABASE_KEY}`;
 	const r = await fetch(url, {
-		headers: {
-			'apikey': SUPABASE_KEY,
-			'Authorization': `Bearer ${SUPABASE_KEY}`
-		}
+		headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
 	});
 	if (!r.ok) {
 		const text = await r.text();
@@ -368,11 +343,9 @@ const ROLE_KEEPER = '生活委员';
 const ROLE_COMMITTEE = '班委';
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
-// 只放行 http(s) 链接或 data:image/* 图片数据，防止未来接入图片上传后
-// 有人把 invoice 字段塞成 javascript: 之类的链接来做 XSS。
 const safeImgSrc = s => (/^(https?:|data:image\/)/i.test(String(s || ''))) ? s : '';
 
-let DB = { semesters: [], accounts: [], records: [], applications: [], logs: [], oplogs: [], settings: { class_name: '高二(1)班', notice: '' } };
+let DB = { semesters: [], accounts: [], records: [], applications: [], feedbacks: [], logs: [], oplogs: [], settings: { class_name: '高二(1)班', notice: '' } };
 let state = {
 	view: 'home',
 	semester: null,
@@ -382,17 +355,17 @@ let state = {
 	editingId: null,
 	applyingId: null,
 	filters: { type: 'all', month: 'all', keyword: '', start: '', end: '' },
-	history: ['home']
+	history: ['home'],
+	inboxTab: 'applications'
 };
 
-/* 角色判定 */
 const isVisitor = () => !state.user;
 const isKeeper = () => state.user && state.user.role === ROLE_KEEPER;
 const isAdmin = () => state.user && state.user.role === ROLE_ADMIN;
 const isCommittee = () => state.user && state.user.role === ROLE_COMMITTEE;
 const canManageFlow = () => state.user && (isKeeper() || isCommittee() || isAdmin());
+const isLoggedIn = () => !!state.user;
 
-/* 数据读取工具 - 使用本地 currentSemesterId */
 const curSem = () => {
 	if (state.currentSemesterId) {
 		const found = DB.semesters.find(s => s.id === state.currentSemesterId);
@@ -412,9 +385,6 @@ const historyTotal = () => DB.semesters.reduce((s, sem) => s + stats(sem.id).bal
 const recordsOf = semId => DB.records.filter(r => r.semester_id === semId);
 const monthOf = d => d.slice(0, 7);
 
-/* ================================================================
-   3. 操作日志
-   ================================================================ */
 async function addOpLog(action, detail) {
 	if (!state.user) return;
 	try {
@@ -426,22 +396,11 @@ async function addOpLog(action, detail) {
 		};
 		await apiPost('oplogs', logEntry);
 		DB.oplogs.push(logEntry);
-		console.log('✅ 日志写入成功:', logEntry);
 	} catch (e) {
-		console.error('❌ 日志写入失败:', e);
-		alert('⚠️ 日志写入失败，请检查控制台或联系管理员。错误：' + e.message);
-		DB.oplogs.push({
-			time: Date.now(),
-			operator: '系统',
-			action: '日志写入失败',
-			detail: e.message
-		});
+		console.warn('日志记录失败:', e);
 	}
 }
 
-/* ================================================================
-   4. 访问日志
-   ================================================================ */
 async function logVisit(nick) {
 	const ua = navigator.userAgent;
 	const dev = /iPhone/.test(ua) ? 'iPhone' : /Android/.test(ua) ? 'Android' : /iPad/.test(ua) ? 'iPad' : '其他设备';
@@ -457,21 +416,17 @@ async function logVisit(nick) {
 	try {
 		await apiPost('logs', logEntry);
 		DB.logs.push(logEntry);
-	} catch (e) {
-		console.warn('访问日志记录失败（不影响主功能）:', e);
-	}
+	} catch (e) { console.warn('访问日志记录失败:', e); }
 }
 
-/* ================================================================
-   5. 数据加载
-   ================================================================ */
 async function loadAllData() {
 	try {
-		const [sems, accs, recs, apps, logs, oplogs, set] = await Promise.all([
+		const [sems, accs, recs, apps, fbs, logs, oplogs, set] = await Promise.all([
 			apiGet('semesters'),
-			apiGet('accounts', 'student_id,name,role'), // 不加载 password，见上方安全说明
+			apiGet('accounts', 'student_id,name,role'),
 			apiGet('records'),
 			apiGet('applications'),
+			apiGet('feedbacks'),
 			apiGet('logs'),
 			apiGet('oplogs'),
 			apiGet('settings')
@@ -480,11 +435,11 @@ async function loadAllData() {
 		DB.accounts = accs || [];
 		DB.records = recs || [];
 		DB.applications = apps || [];
+		DB.feedbacks = fbs || [];
 		DB.logs = logs || [];
 		DB.oplogs = oplogs || [];
 		if (set && set.length) DB.settings = set[0];
 
-		// 初始化当前学期
 		if (DB.semesters.length > 0) {
 			const saved = localStorage.getItem('currentSemesterId');
 			if (saved && DB.semesters.some(s => s.id === saved)) {
@@ -493,8 +448,6 @@ async function loadAllData() {
 				state.currentSemesterId = DB.semesters[0].id;
 			}
 		}
-
-		console.log('✅ 数据加载成功', { 学期: DB.semesters.length, 记录: DB.records.length, 账号: DB.accounts.length });
 		return true;
 	} catch (e) {
 		console.error('❌ 加载数据失败:', e);
@@ -502,16 +455,12 @@ async function loadAllData() {
 			<div class="card" style="background:#fee;border-color:#fcc;">
 				<h3>⚠️ 连接云端失败</h3>
 				<p style="color:#b00;font-size:14px;">${esc(e.message)}</p>
-				<p style="font-size:13px;color:#938d80;">请检查网络或刷新重试</p>
 				<button class="btn btn-primary" onclick="location.reload()">重新加载</button>
 			</div>`;
 		return false;
 	}
 }
 
-/* ================================================================
-   6. 导航
-   ================================================================ */
 function go(view, push = true) {
 	if (push) state.history.push(state.view);
 	state.view = view;
@@ -550,7 +499,8 @@ function render() {
 	else if (state.view === 'account') title = '账号管理';
 	else if (state.view === 'notice') title = '公告与班级名';
 	else if (state.view === 'log') title = '日志';
-	else if (state.view === 'inbox') title = isAdmin() ? '删除申请审批' : '我的申请';
+	else if (state.view === 'inbox') title = isAdmin() ? '审批中心' : '我的信箱';
+	else if (state.view === 'feedback') title = '我要反馈';
 	document.getElementById('navTitle').textContent = title;
 
 	let right = '';
@@ -559,15 +509,16 @@ function render() {
 	} else {
 		const showEnvelope = isAdmin() || isKeeper() || isCommittee();
 		if (showEnvelope) {
-			const pending = DB.applications.filter(a => isAdmin() ? a.status === 'pending' : (a.applicant_student_id === state.user.studentId && a.status === 'pending'));
-			const cnt = pending.length;
+			const appPending = DB.applications.filter(a => isAdmin() ? a.status === 'pending' : (a.applicant_student_id === state.user.studentId && a.status === 'pending'));
+			const fbPending = isAdmin() ? DB.feedbacks.filter(f => f.status === 'pending').length : 0;
+			const cnt = appPending.length + fbPending;
 			right += `<div class="env-icon" onclick="go('inbox')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9 6 9-6"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>${cnt ? `<span class="dot">${cnt}</span>` : ''}</div>`;
 		}
 		right += `<span class="logout" onclick="logout()">退出</span>`;
 	}
 	document.getElementById('navRight').innerHTML = right;
 
-	const V = { home: vwHome, main: vwMain, records: vwRecords, edit: vwEdit, admin: vwAdmin, semester: vwSemester, account: vwAccount, notice: vwNotice, log: vwLog, inbox: vwInbox };
+	const V = { home: vwHome, main: vwMain, records: vwRecords, edit: vwEdit, admin: vwAdmin, semester: vwSemester, account: vwAccount, notice: vwNotice, log: vwLog, inbox: vwInbox, feedback: vwFeedback };
 	document.getElementById('content').innerHTML = (V[state.view] || vwHome)();
 	window.scrollTo(0, 0);
 }
@@ -624,23 +575,42 @@ function flowHTML(r) {
 	const invTag = r.invoice ? `<span class="tag inv">发票</span>` : '';
 	const pend = r.pending_delete ? `<span class="tag pending">⏳ 待删除</span>` : '';
 	let ops = '';
-	// 只有未删除的记录才允许操作
 	if (!r.pending_delete && canManageFlow()) {
 		ops += `<button class="btn btn-ghost btn-xs" onclick="editRecord('${r.id}')">改</button>`;
 		if (isAdmin()) {
 			ops += `<button class="btn btn-red btn-xs" onclick="adminDelete('${r.id}', event)">删</button>`;
 		} else if (isKeeper() || isCommittee()) {
-			ops += `<button class="btn btn-red btn-xs" onclick="applyDelete('${r.id}')">申请删除</button>`;
+			ops += `<button class="btn btn-red btn-xs" onclick="applyDelete('${r.id}')">申请删</button>`;
 		}
 	}
 	const tap = r.invoice ? `onclick="openImg('${r.id}')"` : (isVisitor() ? '' : `onclick="editRecord('${r.id}')"`);
 	return `<div class="flow" ${tap}>
-	<div class="date">${m}月<span class="d">${d}</span></div>
+	<div class="date"><span class="d">${d}</span><span style="font-size:9px;display:block;color:var(--ink-soft)">${m}月</span></div>
 	<div class="body"><div class="purpose">${esc(r.purpose)}</div>
 		<div class="meta"><span class="tag ${r.type}">${r.type === 'income' ? '收入' : '支出'}</span>${invTag}${pend}经手：${esc(r.handler)}</div></div>
 	<div class="amt ${r.type}">${sign}¥${r.amount.toLocaleString('zh-CN')}</div>
 	${ops ? `<div class="ops">${ops}</div>` : ''}
 	</div>`;
+}
+
+function renderPublicFeedbacks() {
+	const publicFbs = DB.feedbacks.filter(f => f.status === 'public').sort((a, b) => b.created_at - a.created_at);
+	if (!publicFbs.length) return '';
+	return `
+		<div style="margin-top:20px;border-top:1px solid var(--line);padding-top:16px;">
+			<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+				<span style="font-weight:700;font-size:16px;">📢 公开反馈</span>
+				${isLoggedIn() ? `<button class="btn btn-feedback" onclick="go('inbox'); setTimeout(() => switchInboxTab('myfeedbacks'), 150)">📬 查看我的反馈</button>` : ''}
+			</div>
+			${publicFbs.map(f => `
+				<div class="feedback-item">
+					<div class="header"><span>${esc(f.submitter_name)}</span><span style="font-size:12px;color:var(--ink-faint)">${new Date(f.created_at).toLocaleString('zh-CN')}</span></div>
+					<div class="content">${esc(f.content)}</div>
+					${f.admin_reply ? `<div class="reply">💬 ${esc(f.admin_reply)}</div>` : ''}
+				</div>
+			`).join('')}
+		</div>
+	`;
 }
 
 function vwMain() {
@@ -663,6 +633,13 @@ function vwMain() {
 		}
 	}
 	const recent = recordsOf(sem.id).filter(r => !r.pending_delete).slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
+	const feedbackSection = renderPublicFeedbacks();
+
+	let feedbackBtn = '';
+	if (!isAdmin() && (isVisitor() || isLoggedIn())) {
+		feedbackBtn = `<div style="display:flex;justify-content:flex-end;margin:12px 0 8px;"><button class="btn btn-feedback" onclick="go('feedback')">💬 我要反馈</button></div>`;
+	}
+
 	return `
 	<div class="mt">欢迎来到 <span class="cls">${esc(DB.settings.class_name)}</span> 班费公示平台</div>
 	<div style="text-align:center;font-size:14px;color:var(--blue);margin:-4px 0 12px;">📚 当前学期：<strong>${esc(sem.name)}</strong></div>
@@ -671,7 +648,10 @@ function vwMain() {
 	${semSelect()}
 	${statsHTML(sem.id)}
 	<div class="section-title"><span>最近流水</span><span class="link" onclick="go('records')">查看全部 ›</span></div>
-	<div class="card" style="padding:8px 16px"><div class="flow-list">${(recent.length ? recent.map(flowHTML).join('') : '<div class="empty">本学期暂无记录</div>')}</div></div>`;
+	<div class="card" style="padding:8px 12px"><div class="flow-list">${(recent.length ? recent.map(flowHTML).join('') : '<div class="empty">本学期暂无记录</div>')}</div></div>
+	${feedbackBtn}
+	${feedbackSection}
+	`;
 }
 
 function vwRecords() {
@@ -701,7 +681,7 @@ function vwRecords() {
 		<div class="filter-row">${monthChips}</div>
 		<div class="filter-row"><input class="field" type="date" id="ds" value="${f.start}" onchange="f_start(this.value)"><span style="color:var(--ink-soft)">至</span><input class="field" type="date" id="de" value="${f.end}" onchange="f_end(this.value)"><button class="btn btn-ghost btn-sm" onclick="resetDate()">清除</button></div>
 	</div>
-	<div class="card" style="padding:8px 16px"><div class="flow-list">${(recs.length ? recs.map(flowHTML).join('') : '')}</div>${recs.length ? '' : '<div class="empty">没有符合条件的记录</div>'}</div>`;
+	<div class="card" style="padding:8px 12px"><div class="flow-list">${(recs.length ? recs.map(flowHTML).join('') : '')}</div>${recs.length ? '' : '<div class="empty">没有符合条件的记录</div>'}</div>`;
 }
 
 function f_keyword(v) { state.filters.keyword = v; refreshRecords(); }
@@ -710,16 +690,85 @@ function f_end(v) { state.filters.end = v; refreshRecords(); }
 function setType(t) { state.filters.type = t; refreshRecords(); }
 function setMonth(m) { state.filters.month = m; refreshRecords(); }
 function resetDate() { state.filters.start = ''; state.filters.end = ''; refreshRecords(); }
-function refreshRecords() { if (state.view === 'records') { document.getElementById('content').innerHTML = vwRecords(); } }
+function refreshRecords() { if (state.view === 'records') { render(); } }
 
-/* ===== 学期切换（只修改本地状态） ===== */
 function switchSem(id) {
 	state.currentSemesterId = id;
 	localStorage.setItem('currentSemesterId', id);
 	render();
 }
 
-/* ---------- 记录新增/修改 ---------- */
+/* ---------- 反馈功能 ---------- */
+function vwFeedback() {
+	const isLoggedInUser = !!state.user;
+	let formHtml = `
+		<div class="mt" style="font-size:16px">💬 我要反馈</div>
+		<div class="card" style="margin-top:14px">
+	`;
+	if (!isLoggedInUser) {
+		formHtml += `
+			<div class="form-line"><label>你的姓名</label><input class="field" id="fb_name" placeholder="请输入姓名或昵称（空格可匿名）" maxlength="20"></div>
+		`;
+	} else {
+		formHtml += `
+			<div style="font-size:14px;color:var(--ink-soft);margin-bottom:12px;">👤 ${esc(state.user.name)} (${esc(state.user.role)})</div>
+		`;
+	}
+	formHtml += `
+			<div class="form-line"><label>反馈内容</label>
+				<textarea class="field" id="fb_content" rows="4" placeholder="请描述你的问题或建议（不超过200字）" maxlength="200"></textarea>
+				<div class="char-count"><span id="fb_count">0</span>/200</div>
+			</div>
+			<div style="display:flex;gap:10px;margin-top:6px">
+				<button class="btn btn-ghost btn-block" onclick="back()">取消</button>
+				<button class="btn btn-primary btn-block" onclick="submitFeedback()">提交反馈</button>
+			</div>
+		</div>
+		<div style="font-size:13px;color:var(--ink-soft);text-align:center;margin-top:8px;">你的反馈会在管理员审核后公开显示</div>
+	`;
+	setTimeout(() => {
+		const el = document.getElementById('fb_content');
+		if (el) {
+			el.addEventListener('input', function() {
+				const cnt = document.getElementById('fb_count');
+				if (cnt) cnt.textContent = this.value.length;
+			});
+		}
+	}, 50);
+	return formHtml;
+}
+
+async function submitFeedback() {
+	const content = document.getElementById('fb_content').value.trim();
+	if (!content) { alert('请填写反馈内容'); return; }
+	if (content.length > 200) { alert('反馈内容不能超过200字'); return; }
+
+	let submitter_name = state.user ? state.user.name : document.getElementById('fb_name').value.trim();
+	if (!submitter_name || submitter_name === '') { submitter_name = '匿名'; }
+
+	const feedback = {
+		id: uid(),
+		content: content,
+		submitter_name: submitter_name,
+		submitter_role: state.user ? state.user.role : '访客',
+		submitter_id: state.user ? state.user.studentId : '',
+		status: 'pending',
+		admin_reply: '',
+		created_at: Date.now(),
+		updated_at: Date.now()
+	};
+
+	try {
+		await apiPost('feedbacks', feedback);
+		DB.feedbacks.push(feedback);
+		alert('✅ 反馈已提交，感谢你的建议！');
+		back();
+	} catch (e) {
+		alert('提交失败: ' + e.message);
+	}
+}
+
+/* ---------- 记录操作 ---------- */
 function newRecord() { state.editingId = null; state._inv = null; go('edit'); }
 function editRecord(id) { state.editingId = id; const r = recordsOf(state.semester).find(x => x.id === id); state._inv = r ? r.invoice : null; go('edit'); }
 
@@ -762,15 +811,12 @@ async function saveRecord() {
 	const type = document.querySelector('input[name=tp]:checked').value;
 
 	if (!purpose) { alert('请填写用途或事由'); return; }
-	if (purpose.length > 200) { alert('用途描述不能超过 200 个字符'); return; }
+	if (purpose.length > 200) { alert('用途描述不能超过200个字符'); return; }
 	if (isNaN(amount) || amount <= 0) { alert('请填写正确的金额'); return; }
-	if (amount > 999.99) { alert('单笔金额不能超过 999.99 元'); return; }
+	if (amount > 999.99) { alert('单笔金额不能超过999.99元'); return; }
 
 	const sem = curSem();
-	if (!sem) {
-		alert('没有可用的学期，请先添加学期');
-		return;
-	}
+	if (!sem) { alert('没有可用的学期，请先添加学期'); return; }
 	const semester_id = sem.id;
 
 	try {
@@ -786,15 +832,9 @@ async function saveRecord() {
 			const newRec = {
 				id: uid(),
 				semester_id: semester_id,
-				date,
-				type,
-				purpose,
-				amount,
-				handler,
-				invoice: null,
-				pending_delete: false,
-				created_at: Date.now(),
-				updated_at: Date.now()
+				date, type, purpose, amount, handler,
+				invoice: null, pending_delete: false,
+				created_at: Date.now(), updated_at: Date.now()
 			};
 			await apiPost('records', newRec);
 			DB.records.push(newRec);
@@ -809,7 +849,7 @@ async function saveRecord() {
 	}
 }
 
-/* ---------- 删除申请 / 审批 ---------- */
+/* ---------- 删除申请 ---------- */
 function applyDelete(id) {
 	if (!canManageFlow()) { alert('当前身份无权限操作'); return; }
 	state.applyingId = id;
@@ -841,16 +881,13 @@ async function submitApply() {
 		};
 		await apiPost('applications', app);
 		DB.applications.push(app);
-		// 标记待删除，但保留显示
 		const idx = DB.records.findIndex(x => x.id === r.id);
 		if (idx >= 0) { DB.records[idx].pending_delete = true; await apiPatch('records', r.id, { pending_delete: true }); }
 		await addOpLog('申请删除', `申请删除记录 "${r.purpose}" 金额 ¥${r.amount}，原因：${reason}`);
 		closeModal();
 		alert('已提交，等待总管理员审批');
 		go('main', false);
-	} catch (e) {
-		alert('提交失败: ' + e.message);
-	}
+	} catch (e) { alert('提交失败: ' + e.message); }
 }
 
 function adminDelete(id, e) {
@@ -864,55 +901,196 @@ function adminDelete(id, e) {
 	render();
 }
 
+/* ---------- 信箱 ---------- */
 function vwInbox() {
-	const apps = DB.applications.slice().sort((a, b) => b.time - a.time);
-	let list;
+	if (!state.user) return `<div class="empty">请先登录</div>`;
+
+	let activeTab = state.inboxTab || 'applications';
 	if (isAdmin()) {
-		list = apps;
+		const tabs = [
+			{ id: 'applications', label: `📋 申请审批 (${DB.applications.filter(a => a.status === 'pending').length})` },
+			{ id: 'feedbacks', label: `💬 反馈管理 (${DB.feedbacks.filter(f => f.status === 'pending').length})` }
+		];
+		let content = '';
+		if (activeTab === 'applications') {
+			content = renderApplications();
+		} else {
+			content = renderAdminFeedbacks();
+		}
+		return `
+			<div class="mt" style="font-size:16px">📩 审批中心</div>
+			<div class="tab-bar">${tabs.map(t => `<span class="tab ${t.id === activeTab ? 'active' : ''}" onclick="switchInboxTab('${t.id}')">${t.label}</span>`).join('')}</div>
+			${content}
+		`;
 	} else {
-		list = apps.filter(a => a.applicant_student_id === state.user.studentId);
+		const tabs = [
+			{ id: 'applications', label: `📋 我的申请 (${DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length})` },
+			{ id: 'myfeedbacks', label: `💬 我的反馈 (${DB.feedbacks.filter(f => f.submitter_id === state.user.studentId && f.status === 'pending').length})` }
+		];
+		let content = '';
+		if (activeTab === 'applications') {
+			content = renderMyApplications();
+		} else {
+			content = renderMyFeedbacks();
+		}
+		return `
+			<div class="mt" style="font-size:16px">📩 我的信箱</div>
+			<div class="tab-bar">${tabs.map(t => `<span class="tab ${t.id === activeTab ? 'active' : ''}" onclick="switchInboxTab('${t.id}')">${t.label}</span>`).join('')}</div>
+			${content}
+		`;
 	}
+}
+
+function switchInboxTab(tab) {
+	state.inboxTab = tab;
+	render();
+}
+
+function renderApplications() {
+	const apps = DB.applications.slice().sort((a, b) => b.time - a.time);
+	const list = apps;
 	if (!list.length) return `<div class="empty">暂无申请</div>`;
-	return `<div class="mt" style="font-size:16px">${isAdmin() ? '删除申请审批' : '我的申请'}</div><div style="margin-top:14px">${list.map(a => {
-		const r = a.record || { purpose: '记录已变动', amount: '', type: 'expense' };
+	return list.map(a => {
+		const r = a.record || { purpose: '记录已变动', amount: 0, type: 'expense' };
 		let ops = '';
-		if (isAdmin() && a.status === 'pending') {
+		if (a.status === 'pending') {
 			ops = `<div class="ops" style="margin-top:8px;display:flex;gap:8px;">
-				<button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">✅ 批准删除</button>
+				<button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">✅ 批准</button>
 				<button class="btn btn-red btn-xs" onclick="rejectApp('${a.id}')">❌ 拒绝</button>
 			</div>`;
 		}
-		if (isAdmin() && a.status === 'rejected') {
+		if (a.status === 'rejected') {
 			ops = `<div class="ops" style="margin-top:8px;"><button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">改为批准</button></div>`;
 		}
 		return `<div class="appr">
-		<div class="top"><span>${esc(r.purpose || '')} · ${r.type === 'income' ? '+' : '-'}¥${r.amount}</span><span class="st ${a.status}">${a.status === 'pending' ? '⏳ 待审批' : a.status === 'approved' ? '✅ 已批准' : '❌ 已拒绝'}</span></div>
-		<div class="reason">申请人：${esc(a.applicant_name || a.applicant_student_id)}　原因：${esc(a.reason)}</div>
+		<div class="top"><span>${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${r.amount}</span><span class="st ${a.status}">${a.status === 'pending' ? '⏳ 待审' : a.status === 'approved' ? '✅ 已批' : '❌ 已拒'}</span></div>
+		<div class="reason">申请人：${esc(a.applicant_name)}　原因：${esc(a.reason)}</div>
 		${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
 		${ops}
 		</div>`;
-	}).join('')}</div>`;
+	}).join('');
 }
 
+function renderMyApplications() {
+	const apps = DB.applications.filter(a => a.applicant_student_id === state.user.studentId).sort((a, b) => b.time - a.time);
+	if (!apps.length) return `<div class="empty">暂无申请</div>`;
+	return apps.map(a => {
+		const r = a.record || { purpose: '记录已变动', amount: 0, type: 'expense' };
+		return `<div class="appr">
+		<div class="top"><span>${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${r.amount}</span><span class="st ${a.status}">${a.status === 'pending' ? '⏳ 待审' : a.status === 'approved' ? '✅ 已批' : '❌ 已拒'}</span></div>
+		<div class="reason">原因：${esc(a.reason)}</div>
+		${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
+		</div>`;
+	}).join('');
+}
+
+/* ---------- 管理员反馈管理 ---------- */
+function renderAdminFeedbacks() {
+	const fbs = DB.feedbacks.slice().sort((a, b) => b.created_at - a.created_at);
+	if (!fbs.length) return `<div class="empty">暂无反馈</div>`;
+	return fbs.map(f => {
+		const statusMap = { pending: '⏳ 待处理', read: '✅ 已读', public: '📢 已公开' };
+		let ops = '';
+		if (f.status === 'pending' || f.status === 'read') {
+			ops += `<button class="btn btn-primary btn-xs" onclick="markFeedbackRead('${f.id}')">确认已读</button>`;
+		}
+		if (f.status !== 'public') {
+			ops += `<button class="btn btn-blue btn-xs" onclick="openFeedbackReply('${f.id}')">公开回复</button>`;
+		}
+		ops += `<button class="btn btn-red btn-xs" onclick="deleteFeedback('${f.id}')">🗑️ 删除</button>`;
+		return `<div class="appr">
+		<div class="top"><span><strong>${esc(f.submitter_name)}</strong> · ${esc(f.submitter_role || '访客')}</span><span class="st ${f.status}">${statusMap[f.status] || f.status}</span></div>
+		<div class="reason" style="margin-top:4px;">${esc(f.content)}</div>
+		<div style="font-size:12px;color:var(--ink-soft);margin-bottom:6px;">${new Date(f.created_at).toLocaleString('zh-CN')}</div>
+		${f.admin_reply ? `<div class="reply">💬 管理员回复：${esc(f.admin_reply)}</div>` : ''}
+		${ops ? `<div class="ops">${ops}</div>` : ''}
+		</div>`;
+	}).join('');
+}
+
+async function markFeedbackRead(id) {
+	const f = DB.feedbacks.find(x => x.id === id);
+	if (!f) return;
+	try {
+		await apiPatch('feedbacks', id, { status: 'read', updated_at: Date.now() });
+		f.status = 'read';
+		f.updated_at = Date.now();
+		render();
+	} catch (e) { alert('操作失败: ' + e.message); }
+}
+
+function openFeedbackReply(id) {
+	openModal('公开回复', `
+		<div class="form-line"><label>回复内容（访客端可见）</label>
+			<textarea class="field" id="fb_reply" rows="3" placeholder="请输入回复内容" maxlength="200"></textarea>
+			<div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">不超过200字</div>
+		</div>
+		<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button>
+		<button class="btn btn-primary btn-block" onclick="submitFeedbackReply('${id}')">确认公开回复</button></div>
+	`);
+}
+
+async function submitFeedbackReply(id) {
+	const reply = document.getElementById('fb_reply').value.trim();
+	if (!reply) { alert('请填写回复内容'); return; }
+	const f = DB.feedbacks.find(x => x.id === id);
+	if (!f) return;
+	try {
+		await apiPatch('feedbacks', id, { status: 'public', admin_reply: reply, updated_at: Date.now() });
+		f.status = 'public';
+		f.admin_reply = reply;
+		f.updated_at = Date.now();
+		closeModal();
+		render();
+	} catch (e) { alert('操作失败: ' + e.message); }
+}
+
+async function deleteFeedback(id) {
+	if (!isAdmin()) { alert('无权限'); return; }
+	if (!confirm('确定删除这条反馈吗？')) return;
+	try {
+		await apiDelete('feedbacks', id);
+		DB.feedbacks = DB.feedbacks.filter(f => f.id !== id);
+		render();
+	} catch (e) {
+		alert('删除失败: ' + e.message);
+	}
+}
+
+/* ---------- 我的反馈（班委/生活委员） ---------- */
+function renderMyFeedbacks() {
+	const fbs = DB.feedbacks.filter(f => f.submitter_id === state.user.studentId).sort((a, b) => b.created_at - a.created_at);
+	if (!fbs.length) return `<div class="empty">暂无反馈</div>`;
+	const statusMap = { pending: '⏳ 待处理', read: '✅ 已读', public: '📢 已公开回复' };
+	return fbs.map(f => `
+		<div class="appr">
+			<div class="top"><span>我的反馈</span><span class="st ${f.status}">${statusMap[f.status] || f.status}</span></div>
+			<div class="reason">${esc(f.content)}</div>
+			<div style="font-size:12px;color:var(--ink-soft);">${new Date(f.created_at).toLocaleString('zh-CN')}</div>
+			${f.admin_reply ? `<div class="reply">💬 管理员回复：${esc(f.admin_reply)}</div>` : ''}
+		</div>
+	`).join('');
+}
+
+/* ---------- 审批操作 ---------- */
 async function approveApp(id) {
-	if (!isAdmin()) { alert('当前身份无权限操作'); return; }
+	if (!isAdmin()) { alert('无权限'); return; }
 	const a = DB.applications.find(x => x.id === id);
 	if (!a) return;
 	try {
 		await apiPatch('applications', id, { status: 'approved' });
 		a.status = 'approved';
-		// 物理删除记录
 		await apiDelete('records', a.record_id);
 		DB.records = DB.records.filter(x => x.id !== a.record_id);
-		await addOpLog('批准删除', `批准删除了记录 "${a.record ? a.record.purpose : ''}"`);
+		await addOpLog('批准删除', `批准删除了记录`);
 		render();
 	} catch (e) { alert('操作失败: ' + e.message); }
 }
 
 function rejectApp(id) {
-	if (!isAdmin()) { alert('当前身份无权限操作'); return; }
+	if (!isAdmin()) { alert('无权限'); return; }
 	openModal('拒绝申请', `
-	<div class="form-line"><label>拒绝理由（将通知申请人）</label><textarea class="field" id="rejReply" placeholder="如：单据齐全，无需删除"></textarea></div>
+	<div class="form-line"><label>拒绝理由</label><textarea class="field" id="rejReply" rows="3" placeholder="如：理由不充分"></textarea></div>
 	<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-red btn-block" onclick="doReject('${id}')">确认拒绝</button></div>
 	`);
 }
@@ -923,9 +1101,7 @@ async function doReject(id) {
 	if (!a) return;
 	try {
 		await apiPatch('applications', id, { status: 'rejected', reply });
-		a.status = 'rejected';
-		a.reply = reply;
-		// 恢复记录（取消待删除标记）
+		a.status = 'rejected'; a.reply = reply;
 		const idx = DB.records.findIndex(x => x.id === a.record_id);
 		if (idx >= 0) { DB.records[idx].pending_delete = false; await apiPatch('records', a.record_id, { pending_delete: false }); }
 		closeModal();
@@ -949,170 +1125,54 @@ function vwAdmin() {
 		export: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
 	};
 	return `
-	<div class="mt" style="font-size:16px">管理后台</div>
+	<div class="mt" style="font-size:16px">⚙️ 管理后台</div>
 	<div class="menu" style="margin-top:14px">
-	${item(I.sem, '学期管理', '添加/切换/删除学期 · 结转余额', "go('semester')")}
-	${item(I.acc, '账号管理', '添加/修改账号与密码 · ' + accCnt + ' 个', "go('account')")}
-	${item(I.note, '公告与班级名', '编辑通知与班级名称', "go('notice')")}
-	${item(I.log, '日志查看', '查看访问与操作日志', "go('log')")}
-	${item(I.export, '数据导出', '一键导出HTML，双击即可查看', "exportData()")}
-	${item(I.data, '数据管理', '清空记录 / 恢复示例数据 · ' + recCnt + ' 条', "openDataMgr()")}
-	${pend ? item(I.note, '删除申请审批', '待处理 ' + pend + ' 条', "go('inbox')") : ''}
+	${item(I.sem, '学期管理', '添加/切换/删除学期', "go('semester')")}
+	${item(I.acc, '账号管理', accCnt + ' 个账号', "go('account')")}
+	${item(I.note, '公告与班级名', '编辑通知', "go('notice')")}
+	${item(I.log, '日志查看', '访问与操作日志', "go('log')")}
+	${item(I.export, '数据导出', '导出HTML账单', "exportData()")}
+	${item(I.data, '数据管理', recCnt + ' 条记录', "openDataMgr()")}
+	${pend ? item(I.note, '删除申请审批', pend + ' 条待处理', "go('inbox')") : ''}
 	</div>`;
 }
 
-/* ===== 导出功能 ===== */
 function exportData() {
 	const now = new Date();
-	const dateStr = now.getFullYear() + '-' +
-		String(now.getMonth() + 1).padStart(2, '0') + '-' +
-		String(now.getDate()).padStart(2, '0');
+	const dateStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
 	const fileName = `班费数据_${dateStr}.html`;
-
 	const className = esc(DB.settings.class_name);
 	const exportTime = now.toLocaleString('zh-CN');
 
-	let semStatsHtml = '';
-	let allRecordsHtml = '';
-	let totalBalance = 0;
-	let totalIncome = 0;
-	let totalExpense = 0;
-
+	let semStatsHtml = '', allRecordsHtml = '', totalBalance = 0, totalIncome = 0, totalExpense = 0;
 	DB.semesters.forEach(sem => {
 		const s = stats(sem.id);
-		totalBalance += s.balance;
-		totalIncome += s.income;
-		totalExpense += s.expense;
-		semStatsHtml += `
-			<tr>
-				<td>${esc(sem.name)}</td>
-				<td style="text-align:right;">¥${s.income.toLocaleString()}</td>
-				<td style="text-align:right;">¥${s.expense.toLocaleString()}</td>
-				<td style="text-align:right;font-weight:700;color:#C1633E;">¥${s.balance.toLocaleString()}</td>
-			</tr>
-		`;
+		totalBalance += s.balance; totalIncome += s.income; totalExpense += s.expense;
+		semStatsHtml += `<tr><td>${esc(sem.name)}</td><td style="text-align:right;">¥${s.income.toLocaleString()}</td><td style="text-align:right;">¥${s.expense.toLocaleString()}</td><td style="text-align:right;font-weight:700;color:#C1633E;">¥${s.balance.toLocaleString()}</td></tr>`;
 	});
-
 	const allRecs = DB.records.filter(r => !r.pending_delete).sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id));
 	if (allRecs.length) {
-		allRecordsHtml = `
-			<h3 style="margin:20px 0 12px;font-size:16px;">📋 全部流水明细</h3>
-			<table style="width:100%;border-collapse:collapse;font-size:13px;">
-				<thead>
-					<tr style="background:#f5f1e9;border-bottom:2px solid #eae3d6;">
-						<th style="padding:8px 6px;text-align:left;">日期</th>
-						<th style="padding:8px 6px;text-align:left;">用途</th>
-						<th style="padding:8px 6px;text-align:left;">类型</th>
-						<th style="padding:8px 6px;text-align:right;">金额</th>
-						<th style="padding:8px 6px;text-align:left;">经手人</th>
-					</tr>
-				</thead>
-				<tbody>
-					${allRecs.map(r => `
-						<tr style="border-bottom:1px solid #f0ebe2;">
-							<td style="padding:6px 6px;">${r.date}</td>
-							<td style="padding:6px 6px;">${esc(r.purpose)}</td>
-							<td style="padding:6px 6px;"><span style="color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '收入' : '支出'}</span></td>
-							<td style="padding:6px 6px;text-align:right;font-weight:600;color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '+' : '-'}¥${r.amount.toLocaleString()}</td>
-							<td style="padding:6px 6px;">${esc(r.handler)}</td>
-						</tr>
-					`).join('')}
-				</tbody>
-			</table>
-			<div style="margin-top:12px;text-align:right;font-weight:600;color:var(--orange);font-size:15px;">
-				总余额：¥${totalBalance.toLocaleString()} &nbsp;|&nbsp; 总收入：¥${totalIncome.toLocaleString()} &nbsp;|&nbsp; 总支出：¥${totalExpense.toLocaleString()}
-			</div>
-		`;
-	} else {
-		allRecordsHtml = `<p style="color:#c9c2b4;text-align:center;padding:20px 0;">暂无流水记录</p>`;
-	}
-
-	const htmlContent = `<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${className} 班费数据导出</title>
-<style>
-	body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif; background: #faf8f3; padding: 30px 20px; max-width: 900px; margin: 0 auto; color: #2b2a27; }
-	h1 { font-size: 22px; margin-bottom: 4px; color: #C1633E; }
-	.sub { color: #938d80; font-size: 14px; margin-bottom: 20px; border-bottom: 1px solid #eae3d6; padding-bottom: 12px; }
-	table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-	th { background: #f5f1e9; font-weight: 600; font-size: 13px; }
-	th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0ebe2; }
-	.total-box { background: #fff; border-radius: 12px; padding: 16px 20px; margin: 16px 0; border: 1px solid #eae3d6; display: flex; justify-content: space-around; text-align: center; }
-	.total-box .item .label { font-size: 12px; color: #938d80; }
-	.total-box .item .value { font-size: 20px; font-weight: 700; }
-	.total-box .item.balance .value { color: #C1633E; }
-	.total-box .item.income .value { color: #5E8F71; }
-	.total-box .item.expense .value { color: #B5694A; }
-	.footer { text-align: center; color: #c9c2b4; font-size: 12px; margin-top: 30px; border-top: 1px solid #eae3d6; padding-top: 16px; }
-	@media print { body { background: #fff; padding: 10px; } .total-box { border-color: #ddd; } }
-</style>
-</head>
-<body>
-	<h1>📚 ${className}</h1>
-	<div class="sub">📅 导出时间：${exportTime}</div>
-
-	<div class="total-box">
-		<div class="item balance"><div class="label">总余额</div><div class="value">¥${totalBalance.toLocaleString()}</div></div>
-		<div class="item income"><div class="label">总收入</div><div class="value">¥${totalIncome.toLocaleString()}</div></div>
-		<div class="item expense"><div class="label">总支出</div><div class="value">¥${totalExpense.toLocaleString()}</div></div>
-	</div>
-
-	<h3 style="margin:20px 0 10px;font-size:16px;">📊 各学期汇总</h3>
-	<table>
-		<thead><tr><th>学期</th><th style="text-align:right;">收入</th><th style="text-align:right;">支出</th><th style="text-align:right;">余额</th></tr></thead>
-		<tbody>${semStatsHtml}</tbody>
-	</table>
-
-	${allRecordsHtml}
-
-	<div class="footer">由班费公示平台导出 · 数据来源于云端</div>
-</body>
-</html>`;
-
+		allRecordsHtml = `<h3 style="margin:20px 0 12px;font-size:16px;">📋 全部流水明细</h3><table style="width:100%;border-collapse:collapse;font-size:13px;"><thead><tr style="background:#f5f1e9;border-bottom:2px solid #eae3d6;"><th style="padding:8px 6px;text-align:left;">日期</th><th style="padding:8px 6px;text-align:left;">用途</th><th style="padding:8px 6px;text-align:left;">类型</th><th style="padding:8px 6px;text-align:right;">金额</th><th style="padding:8px 6px;text-align:left;">经手人</th></tr></thead><tbody>${allRecs.map(r => `<tr style="border-bottom:1px solid #f0ebe2;"><td style="padding:6px 6px;">${r.date}</td><td style="padding:6px 6px;">${esc(r.purpose)}</td><td style="padding:6px 6px;"><span style="color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '收入' : '支出'}</span></td><td style="padding:6px 6px;text-align:right;font-weight:600;color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '+' : '-'}¥${r.amount.toLocaleString()}</td><td style="padding:6px 6px;">${esc(r.handler)}</td></tr>`).join('')}</tbody></table><div style="margin-top:12px;text-align:right;font-weight:600;color:var(--orange);font-size:15px;">总余额：¥${totalBalance.toLocaleString()} &nbsp;|&nbsp; 总收入：¥${totalIncome.toLocaleString()} &nbsp;|&nbsp; 总支出：¥${totalExpense.toLocaleString()}</div>`;
+	} else { allRecordsHtml = `<p style="color:#c9c2b4;text-align:center;padding:20px 0;">暂无流水记录</p>`; }
+	const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${className} 班费数据导出</title><style>body{font-family:-apple-system,"PingFang SC",sans-serif;background:#faf8f3;padding:30px 20px;max-width:900px;margin:0 auto;color:#2b2a27;}h1{font-size:22px;margin-bottom:4px;color:#C1633E;}.sub{color:#938d80;font-size:14px;margin-bottom:20px;border-bottom:1px solid #eae3d6;padding-bottom:12px;}table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05);}th{background:#f5f1e9;font-weight:600;font-size:13px;}th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #f0ebe2;}.total-box{background:#fff;border-radius:12px;padding:16px 20px;margin:16px 0;border:1px solid #eae3d6;display:flex;justify-content:space-around;text-align:center;}.total-box .item .label{font-size:12px;color:#938d80;}.total-box .item .value{font-size:20px;font-weight:700;}.total-box .item.balance .value{color:#C1633E;}.total-box .item.income .value{color:#5E8F71;}.total-box .item.expense .value{color:#B5694A;}.footer{text-align:center;color:#c9c2b4;font-size:12px;margin-top:30px;border-top:1px solid #eae3d6;padding-top:16px;}@media print{body{background:#fff;padding:10px;}.total-box{border-color:#ddd;}}</style></head><body><h1>📚 ${className}</h1><div class="sub">📅 导出时间：${exportTime}</div><div class="total-box"><div class="item balance"><div class="label">总余额</div><div class="value">¥${totalBalance.toLocaleString()}</div></div><div class="item income"><div class="label">总收入</div><div class="value">¥${totalIncome.toLocaleString()}</div></div><div class="item expense"><div class="label">总支出</div><div class="value">¥${totalExpense.toLocaleString()}</div></div></div><h3 style="margin:20px 0 10px;font-size:16px;">📊 各学期汇总</h3><table><thead><tr><th>学期</th><th style="text-align:right;">收入</th><th style="text-align:right;">支出</th><th style="text-align:right;">余额</th></tr></thead><tbody>${semStatsHtml}</tbody></table>${allRecordsHtml}<div class="footer">由班费公示平台导出 · 数据来源于云端</div></body></html>`;
 	const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
 	const url = URL.createObjectURL(blob);
-	const a = document.createElement('a');
-	a.href = url;
-	a.download = fileName;
-	document.body.appendChild(a);
-	a.click();
-	document.body.removeChild(a);
-
+	const a = document.createElement('a'); a.href = url; a.download = fileName; document.body.appendChild(a); a.click(); document.body.removeChild(a);
 	setTimeout(() => URL.revokeObjectURL(url), 5000);
-
 	openModal('✅ 数据导出成功', `
 		<div style="text-align:left;font-size:14px;line-height:1.8;">
 			<p style="margin:4px 0;"><strong>📄 文件名：</strong>${fileName}</p>
-			<p style="margin:4px 0;color:#938d80;font-size:13px;">
-				📂 文件已自动下载到您的设备。<br>
-				点击下方「立即打开」可在浏览器中查看内容。
-			</p>
-			<p style="margin:8px 0 4px;font-size:13px;color:#8A6A22;background:#f8f0dc;padding:8px 12px;border-radius:10px;">
-				💡 如需保存到指定位置，请在下载时选择保存路径。
-			</p>
+			<p style="margin:4px 0;color:#938d80;font-size:13px;">📂 文件已自动下载<br>点击下方「立即打开」查看</p>
 		</div>
 		<div style="display:flex;gap:10px;margin-top:16px;">
 			<button class="btn btn-primary" onclick="openExportedFile()" style="flex:1;">📖 立即打开</button>
 			<button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">确定</button>
 		</div>
 	`);
-
 	window._exportedBlobUrl = url;
 }
+function openExportedFile() { if (window._exportedBlobUrl) { window.open(window._exportedBlobUrl, '_blank'); } else { alert('文件链接已失效'); } closeModal(); }
 
-function openExportedFile() {
-	if (window._exportedBlobUrl) {
-		window.open(window._exportedBlobUrl, '_blank');
-	} else {
-		alert('文件链接已失效，请重新导出。');
-	}
-	closeModal();
-}
-
-/* ---------- 数据管理 ---------- */
 function openDataMgr() {
 	openModal('数据管理', `
 	<p style="font-size:13px;color:var(--ink-soft)">清空后所有流水记录将被删除，操作不可撤销。学期、账号、设置将保留。</p>
@@ -1122,18 +1182,9 @@ function openDataMgr() {
 		<button class="btn btn-ghost btn-block" onclick="closeModal()">关闭</button>
 	</div>`);
 }
-
-async function clearRecords() {
-	if (!confirm('确定清空全部流水记录？此操作不可撤销。')) return;
-	DB.records = [];
-	await apiDeleteByFilter('records', 'id', '');
-	closeModal();
-	alert('已清空');
-	render();
-}
-
+async function clearRecords() { if (!confirm('确定清空全部流水记录？')) return; DB.records = []; await apiDeleteByFilter('records', 'id', ''); closeModal(); alert('已清空'); render(); }
 async function restoreSample() {
-	if (!confirm('将用示例数据覆盖当前记录，确定？')) return;
+	if (!confirm('将用示例数据覆盖当前记录？')) return;
 	await apiDeleteByFilter('records', 'id', '');
 	const sample = [
 		{ id: uid(), semester_id: 's1', date: '2025-09-05', type: 'income', purpose: '上学期结余结转', amount: 5000, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
@@ -1151,283 +1202,63 @@ async function restoreSample() {
 		{ id: uid(), semester_id: 's2', date: '2026-05-14', type: 'expense', purpose: '五四青年节活动物料', amount: 320, handler: '刘洋', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
 		{ id: uid(), semester_id: 's2', date: '2026-06-08', type: 'income', purpose: '废品回收班费返还', amount: 180, handler: '周婷', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() }
 	];
-	for (const rec of sample) {
-		await apiPost('records', rec);
-		DB.records.push(rec);
-	}
-	closeModal();
-	alert('已恢复示例数据');
-	render();
+	for (const rec of sample) { await apiPost('records', rec); DB.records.push(rec); }
+	closeModal(); alert('已恢复示例数据'); render();
 }
 
 /* ---------- 学期管理 ---------- */
-function vwSemester() {
-	if (!isAdmin()) { alert('当前身份无权限操作'); go('main', false); return ''; }
-	return `<div class="mt" style="font-size:16px">学期管理</div>
-	<div class="card" style="margin-top:14px">
-	${DB.semesters.map(s => `
-		<div class="kv">
-		<div class="k"><div class="n">${esc(s.name)} ${s.is_current ? '<span class="tag income">当前</span>' : ''}</div><div class="s">起始余额 ¥${s.start_balance.toLocaleString('zh-CN')} · ${recordsOf(s.id).length} 条记录</div></div>
-		<button class="btn btn-ghost btn-xs" onclick="editSem('${s.id}')">编辑</button>
-		<button class="btn btn-ghost btn-xs" onclick="setCurSem('${s.id}')">设为当前</button>
-		<button class="btn btn-red btn-xs" onclick="delSem('${s.id}')">删除</button>
-		</div>`).join('')}
-	<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addSem()">+ 新增学期</button>
-	</div>`;
-}
-
-function addSem() {
-	openModal('新增学期', `
-	<div class="form-line"><label>学期名称</label><input class="field" id="sn" placeholder="如：高二下"></div>
-	<div class="form-line"><label>起始余额（结转金额）</label><input class="field" id="sb" type="number" min="0" placeholder="0"></div>
-	<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem(null)">创建</button></div>`);
-}
-
-function editSem(id) {
-	const s = DB.semesters.find(x => x.id === id);
-	if (!s) return;
-	openModal('编辑学期', `
-	<div class="form-line"><label>学期名称</label><input class="field" id="sn" value="${esc(s.name)}"></div>
-	<div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" min="0" value="${s.start_balance}"></div>
-	<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem('${id}')">保存</button></div>`);
-}
-
-async function saveSem(id) {
-	const name = document.getElementById('sn').value.trim();
-	const bal = parseFloat(document.getElementById('sb').value) || 0;
-	if (!name) { alert('请填写学期名称'); return; }
-	try {
-		if (id) {
-			const sem = DB.semesters.find(s => s.id === id);
-			if (sem) { sem.name = name; sem.start_balance = bal; await apiPatch('semesters', id, { name, start_balance: bal }); }
-		} else {
-			const newSem = { id: uid(), name, start_balance: bal, is_current: false };
-			await apiPost('semesters', newSem);
-			DB.semesters.push(newSem);
-		}
-		closeModal();
-		render();
-	} catch (e) { alert('操作失败: ' + e.message); }
-}
-
-async function setCurSem(id) {
-	switchSem(id);
-	DB.semesters = DB.semesters.map(s => ({ ...s, is_current: s.id === id }));
-	render();
-}
-
-async function delSem(id) {
-	const s = DB.semesters.find(x => x.id === id);
-	if (!s) return;
-	const cnt = recordsOf(id).length;
-	if (!confirm(`删除学期「${s.name}」？该学期下 ${cnt} 条记录将一并删除，且不可恢复。`)) return;
-	try {
-		await apiDelete('semesters', id);
-		await apiDeleteByFilter('records', 'semester_id', id);
-		DB.semesters = DB.semesters.filter(x => x.id !== id);
-		DB.records = DB.records.filter(r => r.semester_id !== id);
-		if (state.currentSemesterId === id) {
-			state.currentSemesterId = DB.semesters[0]?.id || null;
-			if (state.currentSemesterId) localStorage.setItem('currentSemesterId', state.currentSemesterId);
-		}
-		render();
-	} catch (e) { alert('删除失败: ' + e.message); }
-}
+function vwSemester() { if (!isAdmin()) return ''; return `<div class="mt" style="font-size:16px">📅 学期管理</div><div class="card" style="margin-top:14px">${DB.semesters.map(s => `<div class="kv"><div class="k"><div class="n">${esc(s.name)} ${s.is_current ? '<span class="tag income">当前</span>' : ''}</div><div class="s">起始余额 ¥${s.start_balance.toLocaleString()} · ${recordsOf(s.id).length} 条记录</div></div><button class="btn btn-ghost btn-xs" onclick="editSem('${s.id}')">编辑</button><button class="btn btn-ghost btn-xs" onclick="setCurSem('${s.id}')">设为当前</button><button class="btn btn-red btn-xs" onclick="delSem('${s.id}')">删除</button></div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addSem()">+ 新增学期</button></div>`; }
+function addSem() { openModal('新增学期', `<div class="form-line"><label>学期名称</label><input class="field" id="sn" placeholder="如：高二下"></div><div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" min="0" placeholder="0"></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem(null)">创建</button></div>`); }
+function editSem(id) { const s = DB.semesters.find(x => x.id === id); if (!s) return; openModal('编辑学期', `<div class="form-line"><label>学期名称</label><input class="field" id="sn" value="${esc(s.name)}"></div><div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" min="0" value="${s.start_balance}"></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem('${id}')">保存</button></div>`); }
+async function saveSem(id) { const name = document.getElementById('sn').value.trim(); const bal = parseFloat(document.getElementById('sb').value) || 0; if (!name) { alert('请填写学期名称'); return; } try { if (id) { const sem = DB.semesters.find(s => s.id === id); if (sem) { sem.name = name; sem.start_balance = bal; await apiPatch('semesters', id, { name, start_balance: bal }); } } else { const newSem = { id: uid(), name, start_balance: bal, is_current: false }; await apiPost('semesters', newSem); DB.semesters.push(newSem); } closeModal(); render(); } catch (e) { alert('操作失败: ' + e.message); } }
+async function setCurSem(id) { switchSem(id); DB.semesters = DB.semesters.map(s => ({ ...s, is_current: s.id === id })); render(); }
+async function delSem(id) { const s = DB.semesters.find(x => x.id === id); if (!s) return; const cnt = recordsOf(id).length; if (!confirm(`删除学期「${s.name}」？该学期下 ${cnt} 条记录将一并删除，且不可恢复。`)) return; try { await apiDelete('semesters', id); await apiDeleteByFilter('records', 'semester_id', id); DB.semesters = DB.semesters.filter(x => x.id !== id); DB.records = DB.records.filter(r => r.semester_id !== id); if (state.currentSemesterId === id) { state.currentSemesterId = DB.semesters[0]?.id || null; if (state.currentSemesterId) localStorage.setItem('currentSemesterId', state.currentSemesterId); } render(); } catch (e) { alert('删除失败: ' + e.message); } }
 
 /* ---------- 账号管理 ---------- */
-function vwAccount() {
-	if (!isAdmin()) { alert('当前身份无权限操作'); go('main', false); return ''; }
-	return `<div class="mt" style="font-size:16px">账号管理</div>
-	<div class="card" style="margin-top:14px">
-	${DB.accounts.map(a => `
-		<div class="kv">
-		<div class="k"><div class="n">${esc(a.name)}</div><div class="s">学号 ${esc(a.student_id)} · ${a.role}</div></div>
-		<button class="btn btn-ghost btn-xs" onclick="editAcc('${a.student_id}')">编辑</button>
-		<button class="btn btn-red btn-xs" onclick="delAcc('${a.student_id}')">删除</button>
-		</div>`).join('')}
-	<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addAcc()">+ 新增账号</button>
-	</div>`;
-}
+function vwAccount() { if (!isAdmin()) return ''; return `<div class="mt" style="font-size:16px">👤 账号管理</div><div class="card" style="margin-top:14px">${DB.accounts.map(a => `<div class="kv"><div class="k"><div class="n">${esc(a.name)}</div><div class="s">学号 ${esc(a.student_id)} · ${a.role}</div></div><button class="btn btn-ghost btn-xs" onclick="editAcc('${a.student_id}')">编辑</button><button class="btn btn-red btn-xs" onclick="delAcc('${a.student_id}')">删除</button></div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addAcc()">+ 新增账号</button></div>`; }
+function addAcc() { if (!isAdmin()) return; accForm(null); }
+function editAcc(sid) { if (!isAdmin()) return; accForm(sid); }
+function accForm(sid) { if (!isAdmin()) return; const a = sid ? DB.accounts.find(x => x.student_id === sid) : null; const roleOpts = (sel) => ['总管理员', '生活委员', '班委', '普通同学'].map(r => `<option ${r === sel ? 'selected' : ''}>${r}</option>`).join(''); openModal(a ? '编辑账号' : '新增账号', `<div class="form-line"><label>姓名</label><input class="field" id="an" value="${a ? esc(a.name) : ''}"></div><div class="form-line"><label>学号</label><input class="field" id="as" value="${a ? esc(a.student_id) : ''}" ${a ? 'readonly' : ''} placeholder="如：20"></div><div class="form-line"><label>角色</label><select class="field" id="ar">${roleOpts(a ? a.role : '')}</select></div><div class="form-line"><label>密码${a ? '（留空则不修改）' : ''}</label><input class="field" id="ap" type="password" placeholder="登录密码"></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveAcc('${sid || ''}')">保存</button></div>`); }
+async function saveAcc(sid) { if (!isAdmin()) return; const name = document.getElementById('an').value.trim(); const sidv = document.getElementById('as').value.trim(); const role = document.getElementById('ar').value; const pw = document.getElementById('ap').value; if (!name || !sidv) { alert('请填写姓名与学号'); return; } try { if (sid) { const acc = DB.accounts.find(x => x.student_id === sid); if (acc) { acc.name = name; acc.role = role; const patchData = { name, role }; if (pw) patchData.password = pw; await apiPatch('accounts', sid, patchData, 'student_id'); } } else { if (DB.accounts.some(x => x.student_id === sidv)) { alert('该学号已存在'); return; } const newAcc = { student_id: sidv, password: pw || '123456', role, name }; await apiPost('accounts', newAcc); DB.accounts.push(newAcc); } closeModal(); render(); } catch (e) { alert('操作失败: ' + e.message); } }
+async function delAcc(sid) { if (!isAdmin()) return; if (!confirm('删除该账号？')) return; try { await apiDelete('accounts', sid, 'student_id'); DB.accounts = DB.accounts.filter(x => x.student_id !== sid); render(); } catch (e) { alert('删除失败: ' + e.message); } }
 
-function addAcc() { if (!isAdmin()) { return; } accForm(null); }
-function editAcc(sid) { if (!isAdmin()) { return; } accForm(sid); }
+function vwNotice() { if (!isAdmin()) return ''; return `<div class="mt" style="font-size:16px">📢 公告与班级名</div><div class="card" style="margin-top:14px"><div class="form-line"><label>班级名称</label><input class="field" id="cn" value="${esc(DB.settings.class_name)}"></div><div class="form-line"><label>通知内容</label><textarea class="field" id="nt" rows="4">${esc(DB.settings.notice || '')}</textarea></div><button class="btn btn-primary btn-block" onclick="saveNotice()">保存</button></div>`; }
+async function saveNotice() { const className = document.getElementById('cn').value.trim(); const notice = document.getElementById('nt').value.trim(); try { await apiPatch('settings', 1, { class_name: className, notice: notice }); DB.settings.class_name = className; DB.settings.notice = notice; alert('已保存'); render(); } catch (e) { alert('保存失败: ' + e.message); } }
 
-function accForm(sid) {
-	if (!isAdmin()) { return; }
-	const a = sid ? DB.accounts.find(x => x.student_id === sid) : null;
-	const roleOpts = (sel) => ['总管理员', '生活委员', '班委', '普通同学'].map(r => `<option ${r === sel ? 'selected' : ''}>${r}</option>`).join('');
-	openModal(a ? '编辑账号' : '新增账号', `
-	<div class="form-line"><label>姓名</label><input class="field" id="an" value="${a ? esc(a.name) : ''}"></div>
-	<div class="form-line"><label>学号</label><input class="field" id="as" value="${a ? esc(a.student_id) : ''}" ${a ? 'readonly' : ''} placeholder="如：20"></div>
-	<div class="form-line"><label>角色</label><select class="field" id="ar">${roleOpts(a ? a.role : '')}</select></div>
-	<div class="form-line"><label>密码${a ? '（留空则不修改）' : ''}</label><input class="field" id="ap" type="password" placeholder="登录密码"></div>
-	<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveAcc('${sid || ''}')">保存</button></div>`);
-}
+function vwLog() { if (!isAdmin()) return ''; const visitLogs = DB.logs.map(l => ({ ...l, type: '访问', action: '访问了平台' })); const opLogs = DB.oplogs.map(l => ({ ...l, type: '操作', action: l.action || '' })); const allLogs = [...visitLogs, ...opLogs].sort((a, b) => b.time - a.time).slice(0, 200); return `<div class="mt" style="font-size:16px">📋 全部日志</div><div class="card" style="margin-top:14px">${allLogs.length ? allLogs.map(l => `<div class="kv"><div class="k"><div class="n">${esc(l.type)} ${esc(l.action)}</div><div class="s">${esc(l.operator || l.nickname || '系统')} · ${l.detail ? esc(l.detail) : ''} · ${new Date(l.time).toLocaleString('zh-CN')}</div></div></div>`).join('') : '<div class="empty">暂无日志</div>'}</div>`; }
 
-async function saveAcc(sid) {
-	if (!isAdmin()) { return; }
-	const name = document.getElementById('an').value.trim();
-	const sidv = document.getElementById('as').value.trim();
-	const role = document.getElementById('ar').value;
-	const pw = document.getElementById('ap').value;
-	if (!name || !sidv) { alert('请填写姓名与学号'); return; }
-	try {
-		if (sid) {
-			const acc = DB.accounts.find(x => x.student_id === sid);
-			if (acc) {
-				acc.name = name;
-				acc.role = role;
-				// DB.accounts 不再包含 password 字段，
-				// 所以留空密码时只更新姓名/角色，绝不会把密码覆盖成 undefined。
-				const patchData = { name, role };
-				if (pw) patchData.password = pw;
-				await apiPatch('accounts', sid, patchData, 'student_id');
-			}
-		} else {
-			if (DB.accounts.some(x => x.student_id === sidv)) { alert('该学号已存在'); return; }
-			const newAcc = { student_id: sidv, password: pw || '123456', role, name };
-			await apiPost('accounts', newAcc);
-			DB.accounts.push(newAcc);
-		}
-		closeModal();
-		render();
-	} catch (e) { alert('操作失败: ' + e.message); }
-}
-
-async function delAcc(sid) {
-	if (!isAdmin()) { return; }
-	if (!confirm('删除该账号？')) return;
-	try {
-		await apiDelete('accounts', sid, 'student_id');
-		DB.accounts = DB.accounts.filter(x => x.student_id !== sid);
-		render();
-	} catch (e) { alert('删除失败: ' + e.message); }
-}
-
-/* ---------- 公告管理 ---------- */
-function vwNotice() {
-	if (!isAdmin()) { go('main', false); return ''; }
-	return `<div class="mt" style="font-size:16px">公告与班级名</div>
-	<div class="card" style="margin-top:14px">
-		<div class="form-line"><label>班级名称</label><input class="field" id="cn" value="${esc(DB.settings.class_name)}"></div>
-		<div class="form-line"><label>通知内容</label><textarea class="field" id="nt">${esc(DB.settings.notice || '')}</textarea></div>
-		<button class="btn btn-primary btn-block" onclick="saveNotice()">保存</button>
-	</div>`;
-}
-
-async function saveNotice() {
-	const className = document.getElementById('cn').value.trim();
-	const notice = document.getElementById('nt').value.trim();
-	try {
-		await apiPatch('settings', 1, { class_name: className, notice: notice });
-		DB.settings.class_name = className;
-		DB.settings.notice = notice;
-		alert('已保存');
-		render();
-	} catch (e) { alert('保存失败: ' + e.message); }
-}
-
-/* ---------- 日志查看 ---------- */
-function vwLog() {
-	if (!isAdmin()) { go('main', false); return ''; }
-	const visitLogs = DB.logs.map(l => ({ ...l, type: '访问', action: '访问了平台' }));
-	const opLogs = DB.oplogs.map(l => ({ ...l, type: '操作', action: l.action || '' }));
-	const allLogs = [...visitLogs, ...opLogs].sort((a, b) => b.time - a.time).slice(0, 200);
-
-	return `<div class="mt" style="font-size:16px">📋 全部日志（访问 + 操作）</div>
-	<div class="card" style="margin-top:14px">
-		${allLogs.length ? allLogs.map(l => `
-			<div class="kv">
-				<div class="k">
-					<div class="n">${esc(l.type)} ${esc(l.action)}</div>
-					<div class="s">${esc(l.operator || l.nickname || '系统')} · ${l.detail ? esc(l.detail) : ''} · ${new Date(l.time).toLocaleString('zh-CN')}</div>
-				</div>
-			</div>`).join('') : '<div class="empty">暂无日志</div>'}
-	</div>`;
-}
-
-/* ---------- 登录 / 浏览 / 图片 ---------- */
-function openLogin() {
-	openModal('管理员登录', `
-	<div class="form-line"><label>学号</label><input class="field" id="lgId" placeholder="如 20"></div>
-	<div class="form-line"><label>密码</label><input class="field" id="lgPw" type="password" placeholder="请输入密码"></div>
-	<button class="btn btn-primary btn-block" onclick="doLogin()">登录</button>
-	<div style="font-size:12px;color:var(--ink-soft);text-align:center;margin-top:10px">演示账号：总管理员 20 / 生活委员 32</div>`);
-}
-
-// 目前这只是一个很轻量的客户端节流，刷新页面就会重置，
-// 挡不住真正有心破解密码的人——它只是提高了"随手多试几次"的门槛。
-// 真正的暴力破解防护需要放在服务端（比如 Supabase Edge Function
-// 按 IP/学号做次数限制），这一步这次没有做，作为未来的优化方向。
+/* ---------- 登录 ---------- */
+function openLogin() { openModal('管理员登录', `<div class="form-line"><label>学号</label><input class="field" id="lgId" placeholder="如 20"></div><div class="form-line"><label>密码</label><input class="field" id="lgPw" type="password" placeholder="请输入密码"></div><button class="btn btn-primary btn-block" onclick="doLogin()">登录</button><div style="font-size:12px;color:var(--ink-soft);text-align:center;margin-top:10px">演示账号：总管理员 20 / 生活委员 32</div>`); }
 let _loginFails = 0, _loginLockUntil = 0;
-
 async function doLogin() {
-	if (Date.now() < _loginLockUntil) {
-		const wait = Math.ceil((_loginLockUntil - Date.now()) / 1000);
-		alert(`尝试次数过多，请 ${wait} 秒后再试`);
-		return;
-	}
-	const id = document.getElementById('lgId').value.trim();
-	const pw = document.getElementById('lgPw').value.trim();
+	if (Date.now() < _loginLockUntil) { const wait = Math.ceil((_loginLockUntil - Date.now()) / 1000); alert(`尝试次数过多，请 ${wait} 秒后再试`); return; }
+	const id = document.getElementById('lgId').value.trim(); const pw = document.getElementById('lgPw').value.trim();
 	if (!id || !pw) { alert('请输入学号和密码'); return; }
 	const btn = document.querySelector('#modalBody .btn-primary');
 	if (btn) { btn.disabled = true; btn.textContent = '登录中…'; }
 	try {
-		// 只在这一次登录尝试里单独查这一条账号（含密码），
-		// 不会把全体密码加载进 DB.accounts。
 		const acc = await apiGetOne('accounts', 'student_id', id, 'student_id,name,role,password');
-		if (!acc || acc.password !== pw) {
-			_loginFails++;
-			if (_loginFails >= 5) { _loginLockUntil = Date.now() + 30000; _loginFails = 0; }
-			alert('学号或密码错误');
-			return;
-		}
+		if (!acc || acc.password !== pw) { _loginFails++; if (_loginFails >= 5) { _loginLockUntil = Date.now() + 30000; _loginFails = 0; } alert('学号或密码错误'); return; }
 		_loginFails = 0;
 		state.user = { studentId: acc.student_id, role: acc.role, name: acc.name };
 		closeModal();
 		logVisit(acc.name);
 		state.history = ['home'];
 		go('main', false);
-	} catch (e) {
-		alert('登录失败: ' + e.message);
-	} finally {
-		if (btn) { btn.disabled = false; btn.textContent = '登录'; }
-	}
+	} catch (e) { alert('登录失败: ' + e.message); } finally { if (btn) { btn.disabled = false; btn.textContent = '登录'; } }
 }
+function enterBrowse() { state.user = null; logVisit('访客'); state.noticeAck = false; state.history = ['home']; go('main', false); }
 
-function enterBrowse() {
-	state.user = null;
-	logVisit('访客');
-	state.noticeAck = false;
-	state.history = ['home'];
-	go('main', false);
-}
+function openImg(id) { const r = recordsOf(state.semester).find(x => x.id === id); if (!r || !r.invoice) { alert('该记录无发票图片'); return; } document.getElementById('imgBody').innerHTML = `<span class="x" onclick="closeModal()">×</span><h3>发票 / 收据</h3><img src="${esc(safeImgSrc(r.invoice))}"><p style="font-size:12px;color:var(--ink-soft);text-align:center;margin:10px 0 0">${r.date} · 经手：${esc(r.handler)}</p>`; openMask('imgMask'); }
 
-function openImg(id) {
-	const r = recordsOf(state.semester).find(x => x.id === id);
-	if (!r || !r.invoice) {
-		alert('该记录无发票图片');
-		return;
-	}
-	document.getElementById('imgBody').innerHTML = `<span class="x" onclick="closeModal()">×</span><h3>发票 / 收据</h3><img src="${esc(safeImgSrc(r.invoice))}"><p style="font-size:12px;color:var(--ink-soft);text-align:center;margin:10px 0 0">${r.date} · 经手：${esc(r.handler)}</p>`;
-	openMask('imgMask');
-}
-
-/* ---------- 模态框 ---------- */
 function openModal(title, body) { document.getElementById('modalBody').innerHTML = `<span class="x" onclick="closeModal()">×</span><h3>${title}</h3>${body}`; openMask('modal'); }
 function openMask(id) { document.getElementById(id).classList.add('show'); }
 function closeModal() { document.getElementById('modal').classList.remove('show'); document.getElementById('imgMask').classList.remove('show'); }
 
-/* ================================================================
-   启动！
-   ================================================================ */
 window.onload = async function() {
 	document.getElementById('content').innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--ink-soft)">⏳ 正在连接云端数据库...</div>';
 	const ok = await loadAllData();
-	if (ok) {
-		go('home', false);
-		console.log('🚀 班费平台启动成功！');
-	}
+	if (ok) { go('home', false); console.log('🚀 班费平台启动成功！'); }
 };
 </script>
 </body>
