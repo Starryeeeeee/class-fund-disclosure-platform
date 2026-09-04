@@ -962,7 +962,7 @@ function flowHTML(r) {
 	if (isAdmin()) {
 	  ops += `<button class="btn btn-red btn-xs" onclick="adminDelete('${r.id}', event)">删</button>`;
 	} else if (isKeeper() || isCommittee()) {
-	  ops += `<button class="btn btn-red btn-xs" onclick="applyDelete('${r.id}')">申请删</button>`;
+	  ops += `<button class="btn btn-red btn-xs" onclick="applyDelete('${r.id}')">删除</button>`;
 	}
   }
   const tap = r.invoice ? `onclick="openImg('${r.id}')"` : (isVisitor() ? '' : `onclick="editRecord('${r.id}')"`);
@@ -1005,7 +1005,7 @@ function vwMain() {
   let func = '';
   if (canManageFlow()) {
 	const pending = DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length;
-	const myAppsLabel = isAdmin() ? '申请审批' : '我的申请';
+	const myAppsLabel = isAdmin() ? '审批中心' : '我的申请';
 	func = `<div class="func">
 	<button class="btn btn-primary" onclick="newRecord()">➕ 新增记录</button>
 	<button class="btn btn-ghost" onclick="state.inboxTab = 'applications'; go('inbox')">${myAppsLabel}${pending ? `(${pending})` : ''}</button>
