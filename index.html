@@ -21,6 +21,7 @@
 	--stamp:#B53A2D; --stamp-soft:rgba(181,58,45,.08);
 	--card-left-line:#E8824E;
 	--card-left-line-feedback:#3B6BA5;
+	--stats-left-line:#D03028;
 	--radius:4px; --radius-sm:2px;
 	--shadow-card:0 1px 0 rgba(0,0,0,.04), 0 2px 8px -2px rgba(0,0,0,.08);
 	--shadow-btn:0 1px 2px rgba(43,36,24,.06);
@@ -56,6 +57,7 @@
 	--stamp-soft: rgba(201,96,80,.12);
 	--card-left-line:#E8824E;
 	--card-left-line-feedback:#6B9BC7;
+	--stats-left-line:#E05048;
 	--shadow-card: 0 1px 0 rgba(0,0,0,.3), 0 2px 8px -2px rgba(0,0,0,.4);
 	--shadow-btn: 0 1px 2px rgba(0,0,0,.3);
 	--shadow-modal: 0 30px 70px -20px rgba(0,0,0,.7);
@@ -88,7 +90,7 @@
 	color:var(--ink);letter-spacing:.04em;text-align:center}
   .nav-right{flex:1;display:flex;align-items:center;justify-content:flex-end;gap:12px;padding-right:8px}
 
-  /* 昼夜切换滑块 */
+  /* 昼夜切换胶囊滑块 */
   .theme-toggle-wrap{
 	display:inline-flex;align-items:center;position:relative;
 	width:44px;height:22px;
@@ -228,7 +230,7 @@
   }
   .menu-item:active{background:var(--card-soft)}
 
-  /* ===== 统计栏 ===== */
+  /* ===== 统计栏（左竖线单独红色） ===== */
   .stats{
 	display:flex;gap:0;margin-bottom:16px;
 	background:var(--card);border:1px solid var(--line);
@@ -242,7 +244,7 @@
 	content:'';
 	position:absolute;left:0;top:0;bottom:0;
 	width:3px;
-	background:var(--card-left-line);
+	background:var(--stats-left-line);
 	border-radius:0;
 	opacity:.6
   }
@@ -250,7 +252,7 @@
 	content:'';
 	position:absolute;left:3px;top:0;bottom:0;
 	width:1px;
-	background:var(--card-left-line);
+	background:var(--stats-left-line);
 	opacity:.2
   }
   body.dark-mode .stats::before{opacity:.5}
@@ -290,7 +292,7 @@
   body.dark-mode .feedback-item::before{opacity:.4}
   body.dark-mode .feedback-item::after{opacity:.12}
 
-  /* ===== 模态框 ===== */
+  /* ===== 模态框（左竖线橙色，与按钮一致） ===== */
   .modal{
 	background:var(--card);border-radius:var(--radius);padding:22px;
 	width:100%;max-width:380px;border:1px solid var(--line);
@@ -302,7 +304,7 @@
 	content:'';
 	position:absolute;left:0;top:0;bottom:0;
 	width:3px;
-	background:var(--card-left-line);
+	background:var(--orange);
 	border-radius:0;
 	opacity:.6
   }
@@ -310,7 +312,7 @@
 	content:'';
 	position:absolute;left:3px;top:0;bottom:0;
 	width:1px;
-	background:var(--card-left-line);
+	background:var(--orange);
 	opacity:.2
   }
   body.dark-mode .modal::before{opacity:.5}
@@ -483,7 +485,7 @@
   .tab.active{background:var(--orange);color:#fff}
   .tab:active{opacity:.6}
 
-  /* ===== 页面入场动画（内容从下方升起） ===== */
+  /* ===== 页面入场动画 ===== */
   .content-enter {
 	opacity: 0;
 	transform: translateY(22px);
@@ -523,7 +525,13 @@
 
 <script>
 /* ================================================================
-   1. Supabase 云端配置
+   1. 版本信息
+   ================================================================ */
+const APP_VERSION = 'v2.2.0';
+const APP_DATE = '2026年9月4日';
+
+/* ================================================================
+   2. Supabase 云端配置
    ================================================================ */
 const SUPABASE_URL = 'https://ejvzxlslfdweqavturmi.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdnp4bHNsZmR3ZXFhdnR1cm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTU2MzYsImV4cCI6MjEwMzIzMTYzNn0.4UUWXysA20Bi-pwBfcfKMi50Op22530443zKgBxlZwo';
@@ -623,12 +631,11 @@ async function apiDeleteByFilter(table, field, value) {
 }
 
 /* ================================================================
-   2. 全局数据 & 状态
+   3. 全局数据 & 状态
    ================================================================ */
 const ROLE_ADMIN = '总管理员';
 const ROLE_KEEPER = '生活委员';
 const ROLE_COMMITTEE = '班委';
-const APP_VERSION = 'v2.0.0';
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 const safeImgSrc = s => (/^(https?:|data:image\/)/i.test(String(s || ''))) ? s : '';
@@ -783,6 +790,7 @@ function loadTheme() {
   }
 }
 
+/* ===== 关于弹窗 ===== */
 function openAbout() {
   openModal('📖 关于', `
 	<div style="margin-bottom:16px;">
@@ -791,8 +799,9 @@ function openAbout() {
 	</div>
 	<div class="about-section">
 	  <div><span class="label">版本</span><span class="value">${APP_VERSION}</span></div>
-	  <div><span class="label">更新日期</span><span class="value">2026年8月31日</span></div>
+	  <div><span class="label">最近更新</span><span class="value">${APP_DATE}</span></div>
 	  <div><span class="label">技术栈</span><span class="value">HTML + CSS + JavaScript + Supabase</span></div>
+	  <div><span class="label">了解更多</span><span class="value"><a href="https://github.com/starryeeeeee/class-fund-disclosure-platform" target="_blank" style="color:var(--blue);text-decoration:none;">点击跳转至GitHub仓库</a></span></div>
 	</div>
 	<div style="display:flex;gap:10px;margin-top:16px;">
 	  <button class="btn btn-primary btn-block" onclick="closeModal()">我知道了</button>
@@ -801,7 +810,7 @@ function openAbout() {
 }
 
 /* ================================================================
-   3. 渲染函数（方案一：完全重建 #content 元素）
+   4. 渲染函数
    ================================================================ */
 function render() {
   const navBack = document.getElementById('navBack');
@@ -870,7 +879,7 @@ function render() {
   const V = { home: vwHome, main: vwMain, records: vwRecords, edit: vwEdit, admin: vwAdmin, semester: vwSemester, account: vwAccount, notice: vwNotice, log: vwLog, inbox: vwInbox, feedback: vwFeedback };
   const html = (V[state.view] || vwHome)();
 
-  // ---- 完全重建 #content 元素 ----
+  // ---- 重建 #content 元素触发入场动画 ----
   const oldContent = document.getElementById('content');
   const newContent = document.createElement('div');
   newContent.id = 'content';
@@ -880,7 +889,7 @@ function render() {
 
   window.scrollTo(0, 0);
 
-  // ---- 触发入场动画 ----
+  // 触发入场动画
   requestAnimationFrame(() => {
 	requestAnimationFrame(() => {
 	  newContent.classList.add('active');
@@ -904,7 +913,7 @@ function logout() {
 }
 
 /* ================================================================
-   4. 各视图
+   5. 各视图
    ================================================================ */
 function vwHome() {
   return `
@@ -1005,7 +1014,7 @@ function vwMain() {
   let func = '';
   if (canManageFlow()) {
 	const pending = DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length;
-	const myAppsLabel = isAdmin() ? '审批中心' : '我的申请';
+	const myAppsLabel = isAdmin() ? '审批申请' : '我的申请';
 	func = `<div class="func">
 	<button class="btn btn-primary" onclick="newRecord()">➕ 新增记录</button>
 	<button class="btn btn-ghost" onclick="state.inboxTab = 'applications'; go('inbox')">${myAppsLabel}${pending ? `(${pending})` : ''}</button>
@@ -1655,7 +1664,7 @@ function openMask(id) { document.getElementById(id).classList.add('show'); }
 function closeModal() { document.getElementById('modal').classList.remove('show'); document.getElementById('imgMask').classList.remove('show'); }
 
 /* ================================================================
-   5. 启动
+   6. 启动
    ================================================================ */
 window.onload = async function() {
   loadTheme();
