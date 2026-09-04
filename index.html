@@ -2,7 +2,9 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="班费公示平台——公开透明的班级班费收支流水、删除审批与反馈系统">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📒%3C/text%3E%3C/svg%3E">
 <title>高二(1)班 班费公示平台</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,72 +12,72 @@
 <style>
   /* ===== 设计令牌 ===== */
   :root{
-	--bg:#FAF8F3; --card:#FFFFFF; --card-soft:#F5F1E9;
-	--orange:#C1633E; --orange-dark:#A34F30; --orange-soft:#F3E4DA;
-	--blue:#5C7C93; --blue-soft:#EAF0F3;
-	--yellow:#CC9C3F; --yellow-soft:#F8F0DC;
-	--ink:#2B2A27; --ink-soft:#938D80; --ink-faint:#C9C2B4; --line:#EAE3D6;
-	--income:#5E8F71; --income-soft:#E8F1EA;
-	--expense:#B5694A; --expense-soft:#F5E7DE;
-	--red:#B85347; --red-soft:#F7E7E4;
-	--stamp:#B53A2D; --stamp-soft:rgba(181,58,45,.08);
-	--card-left-line:#E8824E;
-	--card-left-line-feedback:#3B6BA5;
-	--stats-left-line:#D03028;
-	--radius:4px; --radius-sm:2px;
-	--shadow-card:0 1px 0 rgba(0,0,0,.04), 0 2px 8px -2px rgba(0,0,0,.08);
-	--shadow-btn:0 1px 2px rgba(43,36,24,.06);
-	--shadow-modal:0 30px 70px -20px rgba(30,24,14,.35);
-	--font-sans:'Inter',-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
-	--font-display:'Source Serif 4','Inter',"PingFang SC","Hiragino Sans GB","Microsoft YaHei",serif;
-	--font-hand:'Ma Shan Zheng','KaiTi','STKaiti','楷体',cursive;
+		--bg:#FAF8F3; --card:#FFFFFF; --card-soft:#F5F1E9;
+		--orange:#C1633E; --orange-dark:#A34F30; --orange-soft:#F3E4DA;
+		--blue:#5C7C93; --blue-soft:#EAF0F3;
+		--yellow:#CC9C3F; --yellow-soft:#F8F0DC;
+		--ink:#2B2A27; --ink-soft:#938D80; --ink-faint:#C9C2B4; --line:#EAE3D6;
+		--income:#5E8F71; --income-soft:#E8F1EA;
+		--expense:#B5694A; --expense-soft:#F5E7DE;
+		--red:#B85347; --red-soft:#F7E7E4;
+		--stamp:#B53A2D; --stamp-soft:rgba(181,58,45,.08);
+		--card-left-line:#E8824E;
+		--card-left-line-feedback:#3B6BA5;
+		--stats-left-line:#D03028;
+		--radius:4px; --radius-sm:2px;
+		--shadow-card:0 1px 0 rgba(0,0,0,.04), 0 2px 8px -2px rgba(0,0,0,.08);
+		--shadow-btn:0 1px 2px rgba(43,36,24,.06);
+		--shadow-modal:0 30px 70px -20px rgba(30,24,14,.35);
+		--font-sans:'Inter',-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
+		--font-display:'Source Serif 4','Inter',"PingFang SC","Hiragino Sans GB","Microsoft YaHei",serif;
+		--font-hand:'Ma Shan Zheng','KaiTi','STKaiti','楷体',cursive;
   }
 
   /* ===== 暗色模式 ===== */
   body.dark-mode {
-	--bg: #1C1A18;
-	--card: #2A2724;
-	--card-soft: #33302C;
-	--ink: #EFEAE3;
-	--ink-soft: #A69B8E;
-	--ink-faint: #6B6358;
-	--line: #3D3934;
-	--orange: #D67A55;
-	--orange-dark: #B8633F;
-	--orange-soft: #3D2E26;
-	--blue: #7BA3B8;
-	--blue-soft: #24323D;
-	--yellow: #D9AD5A;
-	--yellow-soft: #3D3422;
-	--income: #7DB392;
-	--income-soft: #25352B;
-	--expense: #D48765;
-	--expense-soft: #3D2B22;
-	--red: #D67A6A;
-	--red-soft: #3D2824;
-	--stamp: #C96050;
-	--stamp-soft: rgba(201,96,80,.12);
-	--card-left-line:#E8824E;
-	--card-left-line-feedback:#6B9BC7;
-	--stats-left-line:#E05048;
-	--shadow-card: 0 1px 0 rgba(0,0,0,.3), 0 2px 8px -2px rgba(0,0,0,.4);
-	--shadow-btn: 0 1px 2px rgba(0,0,0,.3);
-	--shadow-modal: 0 30px 70px -20px rgba(0,0,0,.7);
+		--bg: #1C1A18;
+		--card: #2A2724;
+		--card-soft: #33302C;
+		--ink: #EFEAE3;
+		--ink-soft: #A69B8E;
+		--ink-faint: #6B6358;
+		--line: #3D3934;
+		--orange: #D67A55;
+		--orange-dark: #B8633F;
+		--orange-soft: #3D2E26;
+		--blue: #7BA3B8;
+		--blue-soft: #24323D;
+		--yellow: #D9AD5A;
+		--yellow-soft: #3D3422;
+		--income: #7DB392;
+		--income-soft: #25352B;
+		--expense: #D48765;
+		--expense-soft: #3D2B22;
+		--red: #D67A6A;
+		--red-soft: #3D2824;
+		--stamp: #C96050;
+		--stamp-soft: rgba(201,96,80,.12);
+		--card-left-line:#E8824E;
+		--card-left-line-feedback:#6B9BC7;
+		--stats-left-line:#E05048;
+		--shadow-card: 0 1px 0 rgba(0,0,0,.3), 0 2px 8px -2px rgba(0,0,0,.4);
+		--shadow-btn: 0 1px 2px rgba(0,0,0,.3);
+		--shadow-modal: 0 30px 70px -20px rgba(0,0,0,.7);
   }
 
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0}
   body{background:var(--bg);color:var(--ink);
-	font-family:var(--font-sans);
-	font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;
-	font-feature-settings:"tnum" 1;letter-spacing:.005em;
-	transition:background .3s,color .3s}
+		font-family:var(--font-sans);
+		font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;
+		font-feature-settings:"tnum" 1;letter-spacing:.005em;
+		transition:background .3s,color .3s}
   .app{max-width:460px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;transition:background .3s}
 
   /* ===== 顶部导航栏 ===== */
   .navbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;height:60px;padding:0 6px;
-	background:rgba(250,248,243,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-	border-bottom:1px solid var(--line);transition:background .3s,border-color .3s}
+		background:rgba(250,248,243,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+		border-bottom:1px solid var(--line);transition:background .3s,border-color .3s}
   body.dark-mode .navbar{background:rgba(28,26,24,.88)}
   .nav-slot{width:84px;flex:0 0 auto;display:flex;align-items:center;min-height:1px}
   .nav-slot.left{justify-content:flex-start}
@@ -84,51 +86,51 @@
   .nav-back:active{opacity:.6;background:rgba(92,124,147,.08)}
   .nav-back svg{width:17px;height:17px;flex-shrink:0}
   .nav-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-	max-width:calc(100% - 176px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-	font-family:var(--font-hand);
-	font-size:20px;font-weight:400;
-	color:var(--ink);letter-spacing:.04em;text-align:center}
+		max-width:calc(100% - 176px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+		font-family:var(--font-hand);
+		font-size:20px;font-weight:400;
+		color:var(--ink);letter-spacing:.04em;text-align:center}
   .nav-right{flex:1;display:flex;align-items:center;justify-content:flex-end;gap:12px;padding-right:8px}
 
   /* 昼夜切换胶囊滑块 */
   .theme-toggle-wrap{
-	display:inline-flex;align-items:center;position:relative;
-	width:44px;height:22px;
-	background:var(--line);border-radius:999px;
-	cursor:pointer;transition:background .4s ease;
-	flex-shrink:0;border:none;padding:0;outline:none;
-	box-sizing:border-box;
+		display:inline-flex;align-items:center;position:relative;
+		width:44px;height:22px;
+		background:var(--line);border-radius:999px;
+		cursor:pointer;transition:background .4s ease;
+		flex-shrink:0;border:none;padding:0;outline:none;
+		box-sizing:border-box;
   }
   body.dark-mode .theme-toggle-wrap{background:#3D3934}
   .theme-toggle-thumb{
-	position:absolute;top:2px;left:2px;
-	width:18px;height:18px;border-radius:50%;
-	background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12);
-	transition:left .4s cubic-bezier(.34,1.56,.64,1),background .4s ease;
-	display:flex;align-items:center;justify-content:center;font-size:10px;line-height:1
+		position:absolute;top:2px;left:2px;
+		width:18px;height:18px;border-radius:50%;
+		background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12);
+		transition:left .4s cubic-bezier(.34,1.56,.64,1),background .4s ease;
+		display:flex;align-items:center;justify-content:center;font-size:10px;line-height:1
   }
   body.dark-mode .theme-toggle-thumb{left:calc(100% - 20px);background:#2A2724}
   .theme-toggle-thumb .icon{
-	position:absolute;transition:opacity .4s ease,transform .4s ease
+		position:absolute;transition:opacity .4s ease,transform .4s ease
   }
   .theme-toggle-thumb .icon-sun{opacity:1;transform:scale(1)}
   .theme-toggle-thumb .icon-moon{opacity:0;transform:scale(.5)}
   body.dark-mode .theme-toggle-thumb .icon-sun{opacity:0;transform:scale(.5)}
   body.dark-mode .theme-toggle-thumb .icon-moon{opacity:1;transform:scale(1)}
   .theme-toggle-icons{
-	position:absolute;top:0;left:0;width:100%;height:100%;
-	pointer-events:none;display:flex;align-items:center;
-	justify-content:space-between;padding:0 5px;box-sizing:border-box
+		position:absolute;top:0;left:0;width:100%;height:100%;
+		pointer-events:none;display:flex;align-items:center;
+		justify-content:space-between;padding:0 5px;box-sizing:border-box
   }
   .theme-toggle-icons .icon-fixed{
-	font-size:9px;opacity:.5;transition:opacity .4s ease;line-height:1;color:var(--ink-soft)
+		font-size:9px;opacity:.5;transition:opacity .4s ease;line-height:1;color:var(--ink-soft)
   }
   body.dark-mode .theme-toggle-icons .icon-fixed{color:#A69B8E}
 
   .env-icon{position:relative;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:2px;cursor:pointer;color:var(--blue);transition:background .15s,opacity .15s}
   .env-icon:active{opacity:.6;background:rgba(92,124,147,.08)}
   .env-icon svg{width:18px;height:18px}
-  .dot{position:absolute;top:0;right:0;min-width:14px;height:14px;border-radius:7px;background:var(--red);color:#fff;font-size:9px;font-weight:700;line-height:14px;text-align:center;padding:0 3px;box-shadow:0 0 0 2px rgba(250,248,243,.92)}
+  .dot{position:absolute;top:0;right:0;min-width:14px;height:14px;border-radius:7px;background:var(--red);color:#fff;font-size:9px;font-weight:700;line-height:14px;text-align:center;padding:0 3px;box-shadow:0 0 0 2px var(--bg)}
   .logout{font-size:13px;color:var(--ink-soft);cursor:pointer;font-weight:500;padding:8px 4px;transition:color .15s}
   .logout:active{color:var(--ink)}
 
@@ -139,72 +141,72 @@
 
   /* ===== 通用卡片（左竖线） ===== */
   .card{
-	background:var(--card);
-	border:1px solid var(--line);
-	border-radius:var(--radius);
-	padding:20px 18px 20px 22px;
-	box-shadow:var(--shadow-card);
-	position:relative;
-	transition:background .3s,border-color .3s
+		background:var(--card);
+		border:1px solid var(--line);
+		border-radius:var(--radius);
+		padding:20px 18px 20px 22px;
+		box-shadow:var(--shadow-card);
+		position:relative;
+		transition:background .3s,border-color .3s
   }
   .card::before{
-	content:'';
-	position:absolute;
-	left:0;top:0;bottom:0;
-	width:3px;
-	background:var(--card-left-line);
-	border-radius:0;
-	opacity:.6
+		content:'';
+		position:absolute;
+		left:0;top:0;bottom:0;
+		width:3px;
+		background:var(--card-left-line);
+		border-radius:0;
+		opacity:.6
   }
   .card::after{
-	content:'';
-	position:absolute;
-	left:3px;top:0;bottom:0;
-	width:1px;
-	background:var(--card-left-line);
-	opacity:.2
+		content:'';
+		position:absolute;
+		left:3px;top:0;bottom:0;
+		width:1px;
+		background:var(--card-left-line);
+		opacity:.2
   }
   body.dark-mode .card::before{opacity:.5}
   body.dark-mode .card::after{opacity:.15}
 
   /* ===== 首页入口卡片（悬停上浮+发光） ===== */
   .entry{
-	flex:1;cursor:pointer;text-align:center;padding:28px 12px;
-	border-radius:var(--radius);border:1px solid var(--line);
-	background:var(--card);
-	box-shadow:var(--shadow-card);
-	position:relative;
-	transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-				box-shadow 0.35s ease,
-				border-color 0.35s ease,
-				background 0.3s ease;
-	will-change: transform;
+		flex:1;cursor:pointer;text-align:center;padding:28px 12px;
+		border-radius:var(--radius);border:1px solid var(--line);
+		background:var(--card);
+		box-shadow:var(--shadow-card);
+		position:relative;
+		transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+								box-shadow 0.35s ease,
+								border-color 0.35s ease,
+								background 0.3s ease;
+		will-change: transform;
   }
   .entry::before{
-	content:'';
-	position:absolute;left:0;top:0;bottom:0;
-	width:3px;border-radius:0;
-	opacity:.55
+		content:'';
+		position:absolute;left:0;top:0;bottom:0;
+		width:3px;border-radius:0;
+		opacity:.55
   }
   .entry.admin::before{background:var(--orange)}
   .entry.browse::before{background:var(--blue)}
   .entry:active{transform:scale(.97);box-shadow:0 1px 2px rgba(0,0,0,.06)}
   .entry.admin:hover {
-	transform: translateY(-8px);
-	box-shadow: 0 14px 45px rgba(193, 99, 62, 0.18),
-				0 0 0 2.5px rgba(193, 99, 62, 0.15);
-	border-color: var(--orange);
+		transform: translateY(-8px);
+		box-shadow: 0 14px 45px rgba(193, 99, 62, 0.18),
+								0 0 0 2.5px rgba(193, 99, 62, 0.15);
+		border-color: var(--orange);
   }
   .entry.browse:hover {
-	transform: translateY(-8px);
-	box-shadow: 0 14px 45px rgba(92, 124, 147, 0.18),
-				0 0 0 2.5px rgba(92, 124, 147, 0.15);
-	border-color: var(--blue);
+		transform: translateY(-8px);
+		box-shadow: 0 14px 45px rgba(92, 124, 147, 0.18),
+								0 0 0 2.5px rgba(92, 124, 147, 0.15);
+		border-color: var(--blue);
   }
 
   .entry .ico{
-	width:44px;height:44px;margin:0 auto 14px;border-radius:var(--radius-sm);
-	display:flex;align-items:center;justify-content:center
+		width:44px;height:44px;margin:0 auto 14px;border-radius:var(--radius-sm);
+		display:flex;align-items:center;justify-content:center
   }
   .entry.admin .ico{background:var(--orange)}
   .entry.browse .ico{background:var(--blue)}
@@ -213,47 +215,50 @@
 
   /* ===== 菜单项（管理后台） ===== */
   .menu-item{
-	display:flex;align-items:center;gap:12px;
-	background:var(--card);border:1px solid var(--line);
-	border-radius:var(--radius);padding:16px;
-	cursor:pointer;box-shadow:var(--shadow-card);
-	position:relative;
-	transition:background .15s,background .3s,border-color .3s
+		display:flex;align-items:center;gap:12px;
+		background:var(--card);border:1px solid var(--line);
+		border-radius:var(--radius);padding:16px;
+		cursor:pointer;box-shadow:var(--shadow-card);
+		position:relative;
+		transition:background .15s,border-color .25s,transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s
+  }
+  @media (hover:hover){
+		.menu-item:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 8px 22px -8px rgba(92,124,147,.28)}
   }
   .menu-item::before{
-	content:'';
-	position:absolute;left:0;top:0;bottom:0;
-	width:3px;
-	background:var(--blue);
-	border-radius:0;
-	opacity:.5
+		content:'';
+		position:absolute;left:0;top:0;bottom:0;
+		width:3px;
+		background:var(--blue);
+		border-radius:0;
+		opacity:.5
   }
   .menu-item:active{background:var(--card-soft)}
 
   /* ===== 统计栏（左竖线单独红色） ===== */
   .stats{
-	display:flex;gap:0;margin-bottom:16px;
-	background:var(--card);border:1px solid var(--line);
-	border-radius:var(--radius);
-	box-shadow:var(--shadow-card);
-	padding:20px 6px;
-	position:relative;
-	transition:background .3s,border-color .3s
+		display:flex;gap:0;margin-bottom:16px;
+		background:var(--card);border:1px solid var(--line);
+		border-radius:var(--radius);
+		box-shadow:var(--shadow-card);
+		padding:20px 6px;
+		position:relative;
+		transition:background .3s,border-color .3s
   }
   .stats::before{
-	content:'';
-	position:absolute;left:0;top:0;bottom:0;
-	width:3px;
-	background:var(--stats-left-line);
-	border-radius:0;
-	opacity:.6
+		content:'';
+		position:absolute;left:0;top:0;bottom:0;
+		width:3px;
+		background:var(--stats-left-line);
+		border-radius:0;
+		opacity:.6
   }
   .stats::after{
-	content:'';
-	position:absolute;left:3px;top:0;bottom:0;
-	width:1px;
-	background:var(--stats-left-line);
-	opacity:.2
+		content:'';
+		position:absolute;left:3px;top:0;bottom:0;
+		width:1px;
+		background:var(--stats-left-line);
+		opacity:.2
   }
   body.dark-mode .stats::before{opacity:.5}
   body.dark-mode .stats::after{opacity:.15}
@@ -269,60 +274,60 @@
 
   /* ===== 反馈卡片（左竖线蓝色） ===== */
   .feedback-item{
-	background:var(--card);border:1px solid var(--line);
-	border-radius:var(--radius);padding:16px;margin-bottom:12px;
-	position:relative;
-	transition:background .3s,border-color .3s
+		background:var(--card);border:1px solid var(--line);
+		border-radius:var(--radius);padding:16px;margin-bottom:12px;
+		position:relative;
+		transition:background .3s,border-color .3s
   }
   .feedback-item::before{
-	content:'';
-	position:absolute;left:0;top:0;bottom:0;
-	width:3px;
-	background:var(--card-left-line-feedback);
-	border-radius:0;
-	opacity:.5
+		content:'';
+		position:absolute;left:0;top:0;bottom:0;
+		width:3px;
+		background:var(--card-left-line-feedback);
+		border-radius:0;
+		opacity:.5
   }
   .feedback-item::after{
-	content:'';
-	position:absolute;left:3px;top:0;bottom:0;
-	width:1px;
-	background:var(--card-left-line-feedback);
-	opacity:.15
+		content:'';
+		position:absolute;left:3px;top:0;bottom:0;
+		width:1px;
+		background:var(--card-left-line-feedback);
+		opacity:.15
   }
   body.dark-mode .feedback-item::before{opacity:.4}
   body.dark-mode .feedback-item::after{opacity:.12}
 
   /* ===== 模态框（左竖线橙色，与按钮一致） ===== */
   .modal{
-	background:var(--card);border-radius:var(--radius);padding:22px;
-	width:100%;max-width:380px;border:1px solid var(--line);
-	max-height:88vh;overflow:auto;box-shadow:var(--shadow-modal);
-	position:relative;
-	transition:background .3s,border-color .3s
+		background:var(--card);border-radius:var(--radius);padding:22px;
+		width:100%;max-width:380px;border:1px solid var(--line);
+		max-height:88vh;overflow:auto;box-shadow:var(--shadow-modal);
+		position:relative;
+		transition:background .3s,border-color .3s
   }
   .modal::before{
-	content:'';
-	position:absolute;left:0;top:0;bottom:0;
-	width:3px;
-	background:var(--orange);
-	border-radius:0;
-	opacity:.6
+		content:'';
+		position:absolute;left:0;top:0;bottom:0;
+		width:3px;
+		background:var(--orange);
+		border-radius:0;
+		opacity:.6
   }
   .modal::after{
-	content:'';
-	position:absolute;left:3px;top:0;bottom:0;
-	width:1px;
-	background:var(--orange);
-	opacity:.2
+		content:'';
+		position:absolute;left:3px;top:0;bottom:0;
+		width:1px;
+		background:var(--orange);
+		opacity:.2
   }
   body.dark-mode .modal::before{opacity:.5}
   body.dark-mode .modal::after{opacity:.15}
 
   /* ===== 首页标题（手写体） ===== */
   .home-title{
-	font-family:var(--font-hand);
-	text-align:center;font-size:24px;font-weight:400;
-	letter-spacing:.06em;line-height:1.4
+		font-family:var(--font-hand);
+		text-align:center;font-size:24px;font-weight:400;
+		letter-spacing:.06em;line-height:1.4
   }
 
   /* ===== 首页 ===== */
@@ -347,6 +352,7 @@
   .btn-ghost:active{background:var(--card-soft)}
   .btn-red{background:var(--red-soft);color:var(--red);border:1px solid transparent}
   .btn-red:active{background:#F0D9D5}
+  .btn-red:disabled{opacity:.55;cursor:not-allowed;transform:none}
   .btn-block{width:100%}
   .btn-sm{padding:9px 14px;font-size:13px;border-radius:var(--radius-sm)}
   .btn-xs{padding:4px 8px;font-size:11px;border-radius:2px;font-weight:500}
@@ -365,7 +371,7 @@
   /* ===== 学期切换 ===== */
   .sem-switch{display:flex;align-items:center;gap:10px;margin-bottom:16px}
   .sem-switch label{font-size:13px;color:var(--ink-soft);white-space:nowrap}
-  select.sem{flex:1;font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 11px;transition:border-color .15s,background .3s,color .3s,border-color .3s}
+  select.sem{flex:1;font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 11px;transition:border-color .15s,background .3s,color .3s}
   select.sem:focus{outline:none;border-color:var(--blue)}
 
   /* ===== 功能按钮区 ===== */
@@ -398,22 +404,22 @@
 
   /* ===== 印章（审批用） ===== */
   .stamp-mini{
-	display:inline-block;
-	border:1.5px solid var(--stamp);
-	color:var(--stamp);
-	border-radius:2px;
-	padding:1px 7px 0 7px;
-	font-size:11px;
-	font-weight:700;
-	letter-spacing:.12em;
-	transform:rotate(-6deg);
-	opacity:.75;
-	line-height:1.6;
-	user-select:none;
-	pointer-events:none;
-	flex-shrink:0;
-	margin-left:2px;
-	vertical-align:middle;
+		display:inline-block;
+		border:1.5px solid var(--stamp);
+		color:var(--stamp);
+		border-radius:2px;
+		padding:1px 7px 0 7px;
+		font-size:11px;
+		font-weight:700;
+		letter-spacing:.12em;
+		transform:rotate(-6deg);
+		opacity:.75;
+		line-height:1.6;
+		user-select:none;
+		pointer-events:none;
+		flex-shrink:0;
+		margin-left:2px;
+		vertical-align:middle;
   }
 
   /* ===== 筛选器 ===== */
@@ -421,7 +427,7 @@
   .filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
   .chip{padding:7px 14px;border-radius:2px;font-size:12.5px;font-weight:500;cursor:pointer;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);transition:background .15s,color .15s,border-color .15s,background .3s,border-color .3s}
   .chip.on{background:var(--orange);color:#fff;border-color:var(--orange)}
-  .field{flex:1;min-width:120px;font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 11px;transition:border-color .15s,box-shadow .15s,background .3s,color .3s,border-color .3s}
+  .field{flex:1;min-width:120px;font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 11px;transition:border-color .15s,box-shadow .15s,background .3s,color .3s}
   .field:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
   .search-wrap{position:relative}
   .search-wrap svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-soft)}
@@ -458,8 +464,12 @@
   .status-badge.public{background:var(--blue-soft);color:var(--blue)}
   .feedback-empty{text-align:center;color:var(--ink-faint);padding:30px 0}
 
-  .mask{position:fixed;inset:0;background:rgba(30,26,18,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:50;padding:24px}
-  .mask.show{display:flex}
+  .mask{position:fixed;inset:0;background:rgba(30,26,18,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;visibility:hidden;opacity:0;transition:opacity .25s ease,visibility 0s linear .32s}
+  .mask.show{visibility:visible;opacity:1;transition:opacity .25s ease}
+  .modal{transform:translateY(32px) scale(.96);opacity:0;transition:transform .36s cubic-bezier(.34,1.56,.64,1),opacity .26s ease,background .3s,border-color .3s}
+  .mask.show .modal{transform:translateY(0) scale(1);opacity:1}
+  .modal .x{transition:color .15s,transform .25s;border-radius:50%;padding:0 4px}
+  .modal .x:hover{color:var(--ink);transform:rotate(90deg)}
   .modal h3{margin:0 0 16px;font-size:18px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;justify-content:space-between}
   .modal .x{float:right;cursor:pointer;color:var(--ink-soft);font-size:22px;line-height:1}
   .modal img{max-width:100%;border-radius:2px;border:1px solid var(--line)}
@@ -487,14 +497,89 @@
 
   /* ===== 页面入场动画 ===== */
   .content-enter {
-	opacity: 0;
-	transform: translateY(22px);
-	transition: opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-				transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+		opacity: 0;
+		transform: translateY(22px);
+		transition: opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+								transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   .content-enter.active {
-	opacity: 1;
-	transform: translateY(0);
+		opacity: 1;
+		transform: translateY(0);
+  }
+
+  /* ===== 余额正负着色 ===== */
+  .stat.balance .v.is-pos{color:var(--income)}
+  .stat.balance .v.is-neg{color:var(--expense)}
+
+  /* ===== 流水行：桌面悬停 + 逐条入场 ===== */
+  @media (hover:hover){
+		.flow:hover{background:var(--card-soft)}
+  }
+  .flow{animation:flowIn .4s cubic-bezier(.25,.8,.3,1) both}
+  @keyframes flowIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ===== 信封徽章脉冲 ===== */
+  .dot{animation:dotPulse 2.4s ease-out infinite}
+  @keyframes dotPulse{
+		0%{box-shadow:0 0 0 0 rgba(184,83,71,.4),0 0 0 2px var(--bg)}
+		70%{box-shadow:0 0 0 6px rgba(184,83,71,0),0 0 0 2px var(--bg)}
+		100%{box-shadow:0 0 0 0 rgba(184,83,71,0),0 0 0 2px var(--bg)}
+  }
+
+  /* ===== 印章盖章动画 ===== */
+  .stamp-mini{animation:stampIn .5s cubic-bezier(.34,1.56,.64,1) both}
+  @keyframes stampIn{
+		0%{opacity:0;transform:rotate(-6deg) scale(2.1)}
+		62%{opacity:.92;transform:rotate(-6deg) scale(.9)}
+		100%{opacity:.75;transform:rotate(-6deg) scale(1)}
+  }
+
+  /* ===== Toast 通知 ===== */
+  #toastWrap{position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:120;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;width:max-content;max-width:calc(100vw - 40px)}
+  .toast{display:flex;align-items:center;gap:8px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:var(--radius);padding:11px 16px;font-size:13.5px;font-weight:500;box-shadow:0 10px 32px -8px rgba(30,24,14,.28);opacity:0;transform:translateY(-14px) scale(.96);transition:opacity .3s ease,transform .36s cubic-bezier(.34,1.56,.64,1);max-width:100%}
+  .toast.show{opacity:1;transform:translateY(0) scale(1)}
+  .toast.hide{opacity:0;transform:translateY(-10px) scale(.97);transition:opacity .25s ease,transform .25s ease}
+  .toast-success{border-left-color:var(--income)}
+  .toast-error{border-left-color:var(--red)}
+  .toast-warn{border-left-color:var(--yellow)}
+  .toast .t-ico{flex-shrink:0;font-size:15px;line-height:1}
+
+  /* ===== 骨架屏 ===== */
+  .skel{background:linear-gradient(100deg,var(--card-soft) 35%,var(--card) 50%,var(--card-soft) 65%);background-size:280% 100%;animation:shimmer 1.4s ease infinite;border-radius:var(--radius);border:1px solid var(--line)}
+  @keyframes shimmer{from{background-position:120% 0}to{background-position:-80% 0}}
+  .skel-page{padding:48px 6px}
+  .skel-logo{width:58px;height:58px;margin:0 auto 22px}
+  .skel-title{height:24px;width:62%;margin:0 auto 12px;border-radius:3px}
+  .skel-line{height:13px;width:42%;margin:0 auto 36px;border-radius:3px}
+  .skel-row{display:flex;gap:12px;margin-bottom:14px}
+  .skel-card{flex:1;height:122px}
+  .skel-block{height:150px;margin-top:18px}
+
+  /* ===== 顶部加载条 ===== */
+  #topbar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--orange),var(--yellow));z-index:200;opacity:0;transition:width .35s ease,opacity .35s ease;border-radius:0 2px 2px 0;pointer-events:none}
+  #topbar.loading{opacity:1;width:82%}
+  #topbar.done{width:100%;opacity:0}
+
+  /* ===== 滚动条美化 ===== */
+  .modal::-webkit-scrollbar{width:5px}
+  .modal::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:3px}
+  .modal::-webkit-scrollbar-track{background:transparent}
+
+  /* ===== 焦点可见性 ===== */
+  .btn:focus-visible,.chip:focus-visible,.tab:focus-visible,.entry:focus-visible,.menu-item:focus-visible,.nav-back:focus-visible,.env-icon:focus-visible,.theme-toggle-wrap:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+  /* ===== 空状态 ===== */
+  .empty .empty-ico{font-size:32px;opacity:.45;display:block;margin-bottom:6px;line-height:1}
+
+  /* ===== 暗色模式补充修复 ===== */
+  body.dark-mode .btn-red:active{background:#4A2E2A}
+  body.dark-mode .dot{box-shadow:0 0 0 2px #1C1A18}
+  body.dark-mode .toast{box-shadow:0 10px 32px -8px rgba(0,0,0,.6)}
+
+  /* ===== 减少动效偏好（无障碍） ===== */
+  @media (prefers-reduced-motion: reduce){
+		*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+		.flow,.stamp-mini,.dot{animation:none}
   }
 </style>
 </head>
@@ -502,14 +587,14 @@
 <div class="app">
   <!-- 顶部导航 -->
   <nav class="navbar">
-	<div class="nav-slot left">
-	  <button class="nav-back hidden" id="navBack" onclick="handleNavLeft()">
-		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-		<span id="navBackLabel">返回</span>
-	  </button>
-	</div>
-	<div class="nav-title" id="navTitle">班费公示平台</div>
-	<div class="nav-right" id="navRight"></div>
+		<div class="nav-slot left">
+		  <button class="nav-back hidden" id="navBack" onclick="handleNavLeft()">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+				<span id="navBackLabel">返回</span>
+		  </button>
+		</div>
+		<div class="nav-title" id="navTitle">班费公示平台</div>
+		<div class="nav-right" id="navRight"></div>
   </nav>
   <div id="content" class="content-enter"></div>
 </div>
@@ -522,13 +607,16 @@
 <div class="mask" id="imgMask" onclick="if(event.target===this)closeModal()">
   <div class="modal" id="imgBody"></div>
 </div>
+<!-- 顶部加载条 & Toast 容器 -->
+<div id="topbar"></div>
+<div id="toastWrap"></div>
 
 <script>
 /* ================================================================
    1. 版本信息
    ================================================================ */
-const APP_VERSION = 'v2.2.0';
-const APP_DATE = '2026年9月4日';
+const APP_VERSION = 'v2.3.0';
+const APP_DATE = '2026年9月5日';
 
 /* ================================================================
    2. Supabase 云端配置
@@ -539,11 +627,11 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 async function apiGet(table, selectFields = '*') {
   const url = `${SUPABASE_URL}/rest/v1/${table}?select=${selectFields}&apikey=${SUPABASE_KEY}`;
   const r = await fetch(url, {
-	headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+		headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
   });
   if (!r.ok) {
-	const text = await r.text();
-	throw new Error(`GET ${table} 失败(${r.status}): ${text}`);
+		const text = await r.text();
+		throw new Error(`GET ${table} 失败(${r.status}): ${text}`);
   }
   return r.json();
 }
@@ -551,11 +639,11 @@ async function apiGet(table, selectFields = '*') {
 async function apiGetOne(table, field, value, selectFields = '*') {
   const url = `${SUPABASE_URL}/rest/v1/${table}?${field}=eq.${encodeURIComponent(value)}&select=${selectFields}&apikey=${SUPABASE_KEY}`;
   const r = await fetch(url, {
-	headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+		headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
   });
   if (!r.ok) {
-	const text = await r.text();
-	throw new Error(`GET ${table} 失败(${r.status}): ${text}`);
+		const text = await r.text();
+		throw new Error(`GET ${table} 失败(${r.status}): ${text}`);
   }
   const rows = await r.json();
   return rows[0] || null;
@@ -564,17 +652,17 @@ async function apiGetOne(table, field, value, selectFields = '*') {
 async function apiPost(table, data) {
   const url = `${SUPABASE_URL}/rest/v1/${table}?apikey=${SUPABASE_KEY}`;
   const r = await fetch(url, {
-	method: 'POST',
-	headers: {
-	  'apikey': SUPABASE_KEY,
-	  'Authorization': `Bearer ${SUPABASE_KEY}`,
-	  'Content-Type': 'application/json'
-	},
-	body: JSON.stringify(data)
+		method: 'POST',
+		headers: {
+		  'apikey': SUPABASE_KEY,
+		  'Authorization': `Bearer ${SUPABASE_KEY}`,
+		  'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
   });
   if (!r.ok) {
-	const text = await r.text();
-	throw new Error(`POST ${table} 失败(${r.status}): ${text}`);
+		const text = await r.text();
+		throw new Error(`POST ${table} 失败(${r.status}): ${text}`);
   }
   try { return await r.json(); } catch { return null; }
 }
@@ -582,17 +670,17 @@ async function apiPost(table, data) {
 async function apiPatch(table, id, data, keyField = 'id') {
   const url = `${SUPABASE_URL}/rest/v1/${table}?${keyField}=eq.${id}&apikey=${SUPABASE_KEY}`;
   const r = await fetch(url, {
-	method: 'PATCH',
-	headers: {
-	  'apikey': SUPABASE_KEY,
-	  'Authorization': `Bearer ${SUPABASE_KEY}`,
-	  'Content-Type': 'application/json'
-	},
-	body: JSON.stringify(data)
+		method: 'PATCH',
+		headers: {
+		  'apikey': SUPABASE_KEY,
+		  'Authorization': `Bearer ${SUPABASE_KEY}`,
+		  'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(data)
   });
   if (!r.ok) {
-	const text = await r.text();
-	throw new Error(`PATCH ${table} 失败(${r.status}): ${text}`);
+		const text = await r.text();
+		throw new Error(`PATCH ${table} 失败(${r.status}): ${text}`);
   }
   try { return await r.json(); } catch { return null; }
 }
@@ -600,15 +688,15 @@ async function apiPatch(table, id, data, keyField = 'id') {
 async function apiDelete(table, id, keyField = 'id') {
   const url = `${SUPABASE_URL}/rest/v1/${table}?${keyField}=eq.${id}&apikey=${SUPABASE_KEY}`;
   const r = await fetch(url, {
-	method: 'DELETE',
-	headers: {
-	  'apikey': SUPABASE_KEY,
-	  'Authorization': `Bearer ${SUPABASE_KEY}`
-	}
+		method: 'DELETE',
+		headers: {
+		  'apikey': SUPABASE_KEY,
+		  'Authorization': `Bearer ${SUPABASE_KEY}`
+		}
   });
   if (!r.ok) {
-	const text = await r.text();
-	throw new Error(`DELETE ${table} 失败(${r.status}): ${text}`);
+		const text = await r.text();
+		throw new Error(`DELETE ${table} 失败(${r.status}): ${text}`);
   }
   try { return await r.json(); } catch { return null; }
 }
@@ -617,15 +705,32 @@ async function apiDeleteByFilter(table, field, value) {
   if (!value) return;
   const url = `${SUPABASE_URL}/rest/v1/${table}?${field}=eq.${value}&apikey=${SUPABASE_KEY}`;
   const r = await fetch(url, {
-	method: 'DELETE',
-	headers: {
-	  'apikey': SUPABASE_KEY,
-	  'Authorization': `Bearer ${SUPABASE_KEY}`
-	}
+		method: 'DELETE',
+		headers: {
+		  'apikey': SUPABASE_KEY,
+		  'Authorization': `Bearer ${SUPABASE_KEY}`
+		}
   });
   if (!r.ok) {
-	const text = await r.text();
-	throw new Error(`DELETE ${table} 失败(${r.status}): ${text}`);
+		const text = await r.text();
+		throw new Error(`DELETE ${table} 失败(${r.status}): ${text}`);
+  }
+  try { return await r.json(); } catch { return null; }
+}
+
+/* 删除整表全部行（id=neq.null 匹配所有行） */
+async function apiDeleteAll(table) {
+  const url = `${SUPABASE_URL}/rest/v1/${table}?id=neq.null&apikey=${SUPABASE_KEY}`;
+  const r = await fetch(url, {
+		method: 'DELETE',
+		headers: {
+		  'apikey': SUPABASE_KEY,
+		  'Authorization': `Bearer ${SUPABASE_KEY}`
+		}
+  });
+  if (!r.ok) {
+		const text = await r.text();
+		throw new Error(`DELETE ${table} 失败(${r.status}): ${text}`);
   }
   try { return await r.json(); } catch { return null; }
 }
@@ -636,9 +741,15 @@ async function apiDeleteByFilter(table, field, value) {
 const ROLE_ADMIN = '总管理员';
 const ROLE_KEEPER = '生活委员';
 const ROLE_COMMITTEE = '班委';
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 const safeImgSrc = s => (/^(https?:|data:image\/)/i.test(String(s || ''))) ? s : '';
+const fmtMoney = n => { const num = Number(n || 0); const s = Math.abs(num).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); return num < 0 ? '-' + s : s; };
+const emptyBox = (ico, txt) => `<div class="empty"><span class="empty-ico">${ico}</span>${txt}</div>`;
+
+let _busy = false;
+function busyStart() { if (_busy) return false; _busy = true; return true; }
+function busyEnd() { _busy = false; }
 
 let DB = { semesters: [], accounts: [], records: [], applications: [], feedbacks: [], logs: [], oplogs: [], settings: { class_name: '高二(1)班', notice: '' } };
 let state = {
@@ -663,8 +774,8 @@ const isLoggedIn = () => !!state.user;
 
 const curSem = () => {
   if (state.currentSemesterId) {
-	const found = DB.semesters.find(s => s.id === state.currentSemesterId);
-	if (found) return found;
+		const found = DB.semesters.find(s => s.id === state.currentSemesterId);
+		if (found) return found;
   }
   return DB.semesters[0] || null;
 };
@@ -683,16 +794,16 @@ const monthOf = d => d.slice(0, 7);
 async function addOpLog(action, detail) {
   if (!state.user) return;
   try {
-	const logEntry = {
-	  time: Date.now(),
-	  operator: state.user.name + '(' + state.user.studentId + ')',
-	  action: action,
-	  detail: detail
-	};
-	await apiPost('oplogs', logEntry);
-	DB.oplogs.push(logEntry);
+		const logEntry = {
+		  time: Date.now(),
+		  operator: state.user.name + '(' + state.user.studentId + ')',
+		  action: action,
+		  detail: detail
+		};
+		await apiPost('oplogs', logEntry);
+		DB.oplogs.push(logEntry);
   } catch (e) {
-	console.warn('日志记录失败:', e);
+		console.warn('日志记录失败:', e);
   }
 }
 
@@ -701,58 +812,60 @@ async function logVisit(nick) {
   const dev = /iPhone/.test(ua) ? 'iPhone' : /Android/.test(ua) ? 'Android' : /iPad/.test(ua) ? 'iPad' : '其他设备';
   const role = state.user ? state.user.role : '访客';
   const logEntry = {
-	nickname: nick,
-	role: role,
-	device: dev,
-	ip: '本地（静态托管）',
-	time: Date.now(),
-	semester: state.semester || (curSem() ? curSem().id : null)
+		nickname: nick,
+		role: role,
+		device: dev,
+		ip: '本地（静态托管）',
+		time: Date.now(),
+		semester: state.semester || (curSem() ? curSem().id : null)
   };
   try {
-	await apiPost('logs', logEntry);
-	DB.logs.push(logEntry);
+		await apiPost('logs', logEntry);
+		DB.logs.push(logEntry);
   } catch (e) { console.warn('访问日志记录失败:', e); }
 }
 
-async function loadAllData() {
+async function loadAllData(silent = false) {
   try {
-	const [sems, accs, recs, apps, fbs, logs, oplogs, set] = await Promise.all([
-	  apiGet('semesters'),
-	  apiGet('accounts', 'student_id,name,role'),
-	  apiGet('records'),
-	  apiGet('applications'),
-	  apiGet('feedbacks'),
-	  apiGet('logs'),
-	  apiGet('oplogs'),
-	  apiGet('settings')
-	]);
-	DB.semesters = sems || [];
-	DB.accounts = accs || [];
-	DB.records = recs || [];
-	DB.applications = apps || [];
-	DB.feedbacks = fbs || [];
-	DB.logs = logs || [];
-	DB.oplogs = oplogs || [];
-	if (set && set.length) DB.settings = set[0];
+		const [sems, accs, recs, apps, fbs, logs, oplogs, set] = await Promise.all([
+		  apiGet('semesters'),
+		  apiGet('accounts', 'student_id,name,role'),
+		  apiGet('records'),
+		  apiGet('applications'),
+		  apiGet('feedbacks'),
+		  apiGet('logs'),
+		  apiGet('oplogs'),
+		  apiGet('settings')
+		]);
+		DB.semesters = sems || [];
+		DB.accounts = accs || [];
+		DB.records = recs || [];
+		DB.applications = apps || [];
+		DB.feedbacks = fbs || [];
+		DB.logs = logs || [];
+		DB.oplogs = oplogs || [];
+		if (set && set.length) DB.settings = set[0];
 
-	if (DB.semesters.length > 0) {
-	  const saved = localStorage.getItem('currentSemesterId');
-	  if (saved && DB.semesters.some(s => s.id === saved)) {
-		state.currentSemesterId = saved;
-	  } else {
-		state.currentSemesterId = DB.semesters[0].id;
-	  }
-	}
-	return true;
+		if (DB.semesters.length > 0) {
+		  const saved = localStorage.getItem('currentSemesterId');
+		  if (saved && DB.semesters.some(s => s.id === saved)) {
+				state.currentSemesterId = saved;
+		  } else {
+				state.currentSemesterId = DB.semesters[0].id;
+		  }
+		}
+		return true;
   } catch (e) {
-	console.error('❌ 加载数据失败:', e);
-	document.getElementById('content').innerHTML = `
-	  <div class="card" style="background:#fee;border-color:#fcc;">
-		<h3>⚠️ 连接云端失败</h3>
-		<p style="color:#b00;font-size:14px;">${esc(e.message)}</p>
-		<button class="btn btn-primary" onclick="location.reload()">重新加载</button>
-	  </div>`;
-	return false;
+		console.error('❌ 加载数据失败:', e);
+		if (!silent) {
+		  document.getElementById('content').innerHTML = `
+		  <div class="card" style="background:#fee;border-color:#fcc;">
+				<h3>⚠️ 连接云端失败</h3>
+				<p style="color:#b00;font-size:14px;">${esc(e.message)}</p>
+				<button class="btn btn-primary" onclick="location.reload()">重新加载</button>
+		  </div>`;
+		}
+		return false;
   }
 }
 
@@ -760,19 +873,31 @@ function go(view, push = true) {
   if (push) state.history.push(state.view);
   state.view = view;
   if (view === 'records' || view === 'main') {
-	const c = curSem();
-	state.semester = c ? c.id : null;
+		const c = curSem();
+		state.semester = c ? c.id : null;
   }
   render();
+  try {
+		if (push) history.pushState({ v: view }, '', '#' + view);
+		else history.replaceState({ v: view }, '', '#' + view);
+  } catch (e) { }
 }
+
+/* 浏览器物理返回键同步 SPA 视图 */
+window.addEventListener('popstate', function () {
+  if (state.history.length > 1) {
+		state.view = state.history.pop();
+  } else {
+		state.view = 'home';
+  }
+  render();
+});
 
 function back() {
   if (state.history.length > 1) {
-	const prev = state.history.pop();
-	state.view = prev;
-	render();
+		history.back();
   } else {
-	go('home', false);
+		go('home', false);
   }
 }
 
@@ -786,26 +911,81 @@ function toggleTheme() {
 function loadTheme() {
   const saved = localStorage.getItem('theme');
   if (saved === 'dark') {
-	document.body.classList.add('dark-mode');
+		document.body.classList.add('dark-mode');
   }
+}
+
+/* ===== Toast 通知系统 ===== */
+const TOAST_ICONS = { success: '✅', error: '⚠️', warn: '💡', info: '🔔' };
+function toast(msg, type = 'info', dur = 2400) {
+  let wrap = document.getElementById('toastWrap');
+  if (!wrap) { wrap = document.createElement('div'); wrap.id = 'toastWrap'; document.body.appendChild(wrap); }
+  const el = document.createElement('div');
+  el.className = 'toast toast-' + type;
+  el.innerHTML = `<span class="t-ico">${TOAST_ICONS[type] || TOAST_ICONS.info}</span><span>${esc(msg)}</span>`;
+  wrap.appendChild(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+  setTimeout(() => {
+		el.classList.remove('show'); el.classList.add('hide');
+		setTimeout(() => el.remove(), 320);
+  }, dur);
+}
+
+function topbar(mode) {
+  const bar = document.getElementById('topbar');
+  if (!bar) return;
+  if (mode === 'loading') { bar.className = 'loading'; }
+  else if (mode === 'done') { bar.className = 'done'; setTimeout(() => { bar.className = ''; }, 420); }
+  else { bar.className = ''; }
+}
+
+/* ===== 统一确认对话框（替代原生 confirm） ===== */
+function confirmAction(title, msgHtml, okLabel, danger, onOk) {
+  openModal(esc(title), `
+		<p style="font-size:14px;color:var(--ink-soft);line-height:1.75;margin:0 0 18px;">${msgHtml}</p>
+		<div style="display:flex;gap:10px">
+		  <button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button>
+		  <button class="btn ${danger ? 'btn-red' : 'btn-primary'} btn-block" id="cfmOkBtn">${esc(okLabel)}</button>
+		</div>
+  `);
+  const btn = document.getElementById('cfmOkBtn');
+  if (btn) btn.onclick = () => { closeModal(); onOk(); };
+}
+
+/* ===== 统计数字滚动动画 ===== */
+function animateNums() {
+  document.querySelectorAll('#content .stat .v[data-v]').forEach(el => {
+		const target = parseFloat(el.dataset.v) || 0;
+		if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		  el.textContent = '¥' + fmtMoney(target); return;
+		}
+		const dur = 650, t0 = performance.now();
+		const step = now => {
+		  const p = Math.min((now - t0) / dur, 1);
+		  const eased = 1 - Math.pow(1 - p, 3);
+		  el.textContent = '¥' + fmtMoney(target * eased);
+		  if (p < 1) requestAnimationFrame(step);
+		};
+		requestAnimationFrame(step);
+  });
 }
 
 /* ===== 关于弹窗 ===== */
 function openAbout() {
   openModal('📖 关于', `
-	<div style="margin-bottom:16px;">
-	  <div style="font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px;">${esc(DB.settings.class_name)}</div>
-	  <div style="font-size:13px;color:var(--ink-soft);">班费公示平台</div>
-	</div>
-	<div class="about-section">
-	  <div><span class="label">版本</span><span class="value">${APP_VERSION}</span></div>
-	  <div><span class="label">最近更新</span><span class="value">${APP_DATE}</span></div>
-	  <div><span class="label">技术栈</span><span class="value">HTML + CSS + JavaScript + Supabase</span></div>
-	  <div><span class="label">了解更多</span><span class="value"><a href="https://github.com/starryeeeeee/class-fund-disclosure-platform" target="_blank" style="color:var(--blue);text-decoration:none;">点击跳转至GitHub仓库</a></span></div>
-	</div>
-	<div style="display:flex;gap:10px;margin-top:16px;">
-	  <button class="btn btn-primary btn-block" onclick="closeModal()">我知道了</button>
-	</div>
+		<div style="margin-bottom:16px;">
+		  <div style="font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px;">${esc(DB.settings.class_name)}</div>
+		  <div style="font-size:13px;color:var(--ink-soft);">班费公示平台</div>
+		</div>
+		<div class="about-section">
+		  <div><span class="label">版本</span><span class="value">${APP_VERSION}</span></div>
+		  <div><span class="label">最近更新</span><span class="value">${APP_DATE}</span></div>
+		  <div><span class="label">技术栈</span><span class="value">HTML + CSS + JavaScript + Supabase</span></div>
+		  <div><span class="label">了解更多</span><span class="value"><a href="https://github.com/starryeeeeee/class-fund-disclosure-platform" target="_blank" style="color:var(--blue);text-decoration:none;">点击跳转至GitHub仓库</a></span></div>
+		</div>
+		<div style="display:flex;gap:10px;margin-top:16px;">
+		  <button class="btn btn-primary btn-block" onclick="closeModal()">我知道了</button>
+		</div>
   `);
 }
 
@@ -818,27 +998,27 @@ function render() {
   const isHome = state.view === 'home';
 
   if (state.user && state.view === 'main') {
-	navBack.classList.remove('hidden');
-	navLabel.textContent = '退出';
-	const svg = navBack.querySelector('svg');
-	if (svg) svg.style.display = 'none';
+		navBack.classList.remove('hidden');
+		navLabel.textContent = '退出';
+		const svg = navBack.querySelector('svg');
+		if (svg) svg.style.display = 'none';
   } else if (!isHome) {
-	navBack.classList.remove('hidden');
-	navLabel.textContent = '返回';
-	const svg = navBack.querySelector('svg');
-	if (svg) svg.style.display = 'block';
+		navBack.classList.remove('hidden');
+		navLabel.textContent = '返回';
+		const svg = navBack.querySelector('svg');
+		if (svg) svg.style.display = 'block';
   } else {
-	navBack.classList.add('hidden');
+		navBack.classList.add('hidden');
   }
 
   let title = '班费公示平台';
   if (state.view === 'home') title = '班费公示平台';
   else if (state.view === 'main') {
-	if (isVisitor()) title = '浏览主页';
-	else if (isAdmin()) title = '总管理员主页';
-	else if (isKeeper()) title = '生活委员主页';
-	else if (isCommittee()) title = '班委主页';
-	else title = '浏览主页';
+		if (isVisitor()) title = '浏览主页';
+		else if (isAdmin()) title = '总管理员主页';
+		else if (isKeeper()) title = '生活委员主页';
+		else if (isCommittee()) title = '班委主页';
+		else title = '浏览主页';
   } else if (state.view === 'records') title = '全部流水';
   else if (state.view === 'edit') title = state.editingId ? '修改记录' : '新增记录';
   else if (state.view === 'admin') title = '管理后台';
@@ -852,26 +1032,26 @@ function render() {
 
   let right = '';
   right += `
-	<div class="theme-toggle-wrap" onclick="toggleTheme()" role="button" tabindex="0" aria-label="切换昼夜模式">
-	  <div class="theme-toggle-thumb">
-		<span class="icon icon-sun">☀️</span>
-		<span class="icon icon-moon">🌙</span>
-	  </div>
-	  <div class="theme-toggle-icons">
-		<span class="icon-fixed">☀️</span>
-		<span class="icon-fixed">🌙</span>
-	  </div>
-	</div>
+		<div class="theme-toggle-wrap" onclick="toggleTheme()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTheme();}" role="button" tabindex="0" aria-label="切换昼夜模式">
+		  <div class="theme-toggle-thumb">
+				<span class="icon icon-sun">☀️</span>
+				<span class="icon icon-moon">🌙</span>
+		  </div>
+		  <div class="theme-toggle-icons">
+				<span class="icon-fixed">☀️</span>
+				<span class="icon-fixed">🌙</span>
+		  </div>
+		</div>
   `;
 
   if (!isVisitor()) {
-	const showEnvelope = isAdmin() || isKeeper() || isCommittee();
-	if (showEnvelope) {
-	  const appPending = DB.applications.filter(a => isAdmin() ? a.status === 'pending' : (a.applicant_student_id === state.user.studentId && a.status === 'pending'));
-	  const fbPending = isAdmin() ? DB.feedbacks.filter(f => f.status === 'pending').length : 0;
-	  const cnt = appPending.length + fbPending;
-	  right += `<div class="env-icon" onclick="go('inbox')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9 6 9-6"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>${cnt ? `<span class="dot">${cnt}</span>` : ''}</div>`;
-	}
+		const showEnvelope = isAdmin() || isKeeper() || isCommittee();
+		if (showEnvelope) {
+		  const appPending = DB.applications.filter(a => isAdmin() ? a.status === 'pending' : (a.applicant_student_id === state.user.studentId && a.status === 'pending'));
+		  const fbPending = isAdmin() ? DB.feedbacks.filter(f => f.status === 'pending').length : 0;
+		  const cnt = appPending.length + fbPending;
+		  right += `<div class="env-icon" onclick="go('inbox')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l9 6 9-6"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>${cnt ? `<span class="dot">${cnt}</span>` : ''}</div>`;
+		}
   }
   document.getElementById('navRight').innerHTML = right;
 
@@ -891,16 +1071,17 @@ function render() {
 
   // 触发入场动画
   requestAnimationFrame(() => {
-	requestAnimationFrame(() => {
-	  newContent.classList.add('active');
-	});
+		requestAnimationFrame(() => {
+		  newContent.classList.add('active');
+		  animateNums();
+		});
   });
 }
 
 function handleNavLeft() {
   if (state.user && state.view === 'main') {
-	logout();
-	return;
+		logout();
+		return;
   }
   back();
 }
@@ -909,6 +1090,7 @@ function logout() {
   state.user = null;
   state.semester = null;
   state.history = ['home'];
+  toast('已退出登录', 'info');
   go('home', false);
 }
 
@@ -918,25 +1100,25 @@ function logout() {
 function vwHome() {
   return `
   <div class="home-wrap">
-	<div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#CC9C3F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v12H3z"/><path d="M3 7l9 6 9-6"/><path d="M7 11h.01M12 13h.01M17 11h.01"/></svg></div>
-	<div class="home-title">${esc(DB.settings.class_name)} 班费公示平台</div>
-	<div class="home-desc">随时查看班费流向📋🤩公开透明</div>
-	<div class="entry-row">
-	  <div class="entry admin" onclick="openLogin()">
-		<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></div>
-		<div class="t">管理员登录</div>
-	  </div>
-	  <div class="entry browse" onclick="enterBrowse()">
-		<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
-		<div class="t">浏览模式</div>
-	  </div>
-	</div>
+		<div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#CC9C3F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v12H3z"/><path d="M3 7l9 6 9-6"/><path d="M7 11h.01M12 13h.01M17 11h.01"/></svg></div>
+		<div class="home-title">${esc(DB.settings.class_name)} 班费公示平台</div>
+		<div class="home-desc">随时查看班费流向📋🤩公开透明</div>
+		<div class="entry-row">
+		  <div class="entry admin" onclick="openLogin()">
+				<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></div>
+				<div class="t">管理员登录</div>
+		  </div>
+		  <div class="entry browse" onclick="enterBrowse()">
+				<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+				<div class="t">浏览模式</div>
+		  </div>
+		</div>
   </div>
   <div class="foot">
-	<div>如发现bug或安全问题欢迎指出🤓不胜感激😘</div>
-	<div class="foot-actions">
-	  <a onclick="openAbout()">关于</a>
-	</div>
+		<div>如发现bug或安全问题欢迎指出🤓不胜感激😘</div>
+		<div class="foot-actions">
+		  <a onclick="openAbout()">关于</a>
+		</div>
   </div>`;
 }
 
@@ -949,10 +1131,10 @@ function noticeCard() {
 function statsHTML(semId) {
   const s = stats(semId);
   return `<div class="stats">
-  <div class="stat balance"><div class="k">当前总余额</div><div class="v">¥${s.balance.toLocaleString('zh-CN')}</div></div>
-  <div class="stat income"><div class="k">本学期总收入</div><div class="v">¥${s.income.toLocaleString('zh-CN')}</div></div>
-  <div class="stat expense"><div class="k">本学期总支出</div><div class="v">¥${s.expense.toLocaleString('zh-CN')}</div></div>
-  </div><div class="history">历史总账（全部学期累计）：¥${historyTotal().toLocaleString('zh-CN')}</div>`;
+  <div class="stat balance"><div class="k">当前总余额</div><div class="v ${s.balance >= 0 ? 'is-pos' : 'is-neg'}" data-v="${s.balance}">¥${fmtMoney(s.balance)}</div></div>
+  <div class="stat income"><div class="k">本学期总收入</div><div class="v" data-v="${s.income}">¥${fmtMoney(s.income)}</div></div>
+  <div class="stat expense"><div class="k">本学期总支出</div><div class="v" data-v="${s.expense}">¥${fmtMoney(s.expense)}</div></div>
+  </div><div class="history">历史总账（全部学期累计）：¥${fmtMoney(historyTotal())}</div>`;
 }
 
 function semSelect() {
@@ -960,26 +1142,27 @@ function semSelect() {
   return `<div class="sem-switch"><label>当前学期</label><select class="sem" onchange="switchSem(this.value)">${opts}</select></div>`;
 }
 
-function flowHTML(r) {
-  const d = r.date.slice(8), m = r.date.slice(5, 7);
+function flowHTML(r, idx) {
+  const d = r.date ? r.date.slice(8) : '--', m = r.date ? r.date.slice(5, 7) : '--';
   const sign = r.type === 'income' ? '+' : '-';
   const invTag = r.invoice ? `<span class="tag inv">发票</span>` : '';
   const pend = r.pending_delete ? `<span class="tag pending">⏳ 待删除</span>` : '';
   let ops = '';
   if (!r.pending_delete && canManageFlow()) {
-	ops += `<button class="btn btn-ghost btn-xs" onclick="editRecord('${r.id}')">改</button>`;
-	if (isAdmin()) {
-	  ops += `<button class="btn btn-red btn-xs" onclick="adminDelete('${r.id}', event)">删</button>`;
-	} else if (isKeeper() || isCommittee()) {
-	  ops += `<button class="btn btn-red btn-xs" onclick="applyDelete('${r.id}')">删除</button>`;
-	}
+		ops += `<button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();editRecord('${r.id}')">改</button>`;
+		if (isAdmin()) {
+		  ops += `<button class="btn btn-red btn-xs" onclick="event.stopPropagation();adminDelete('${r.id}', event)">删</button>`;
+		} else if (isKeeper() || isCommittee()) {
+		  ops += `<button class="btn btn-red btn-xs" onclick="event.stopPropagation();applyDelete('${r.id}')">删除</button>`;
+		}
   }
   const tap = r.invoice ? `onclick="openImg('${r.id}')"` : (isVisitor() ? '' : `onclick="editRecord('${r.id}')"`);
-  return `<div class="flow" ${tap}>
+  const delay = typeof idx === 'number' ? ` style="animation-delay:${Math.min(idx, 14) * 28}ms"` : '';
+  return `<div class="flow" ${tap}${delay}>
   <div class="date"><span class="d">${d}</span><span style="font-size:9px;display:block;color:var(--ink-soft)">${m}月</span></div>
   <div class="body"><div class="purpose">${esc(r.purpose)}</div>
-	<div class="meta"><span class="tag ${r.type}">${r.type === 'income' ? '收入' : '支出'}</span>${invTag}${pend}经手：${esc(r.handler)}</div></div>
-  <div class="amt ${r.type}">${sign}¥${r.amount.toLocaleString('zh-CN')}</div>
+		<div class="meta"><span class="tag ${r.type}">${r.type === 'income' ? '收入' : '支出'}</span>${invTag}${pend}经手：${esc(r.handler)}</div></div>
+  <div class="amt ${r.type}">${sign}¥${fmtMoney(r.amount)}</div>
   ${ops ? `<div class="ops">${ops}</div>` : ''}
   </div>`;
 }
@@ -989,48 +1172,50 @@ function renderPublicFeedbacks() {
   if (!publicFbs.length) return '';
   const feedbackTab = isAdmin() ? 'feedbacks' : 'myfeedbacks';
   return `
-	<div style="margin-top:20px;border-top:1px solid var(--line);padding-top:16px;">
-	  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-		<span style="font-weight:700;font-size:16px;">📢 公开反馈</span>
-		${isLoggedIn() ? `<button class="btn btn-feedback" onclick="state.inboxTab = '${feedbackTab}'; go('inbox')">📬 查看我的反馈</button>` : ''}
-	  </div>
-	  ${publicFbs.map(f => `
-		<div class="feedback-item">
-		  <div class="header"><span>${esc(f.submitter_name)}</span><span style="font-size:12px;color:var(--ink-faint)">${new Date(f.created_at).toLocaleString('zh-CN')}</span></div>
-		  <div class="content">${esc(f.content)}</div>
-		  ${f.admin_reply ? `<div class="reply">💬 ${esc(f.admin_reply)}</div>` : ''}
+		<div style="margin-top:20px;border-top:1px solid var(--line);padding-top:16px;">
+		  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+				<span style="font-weight:700;font-size:16px;">📢 公开反馈</span>
+				${isLoggedIn() ? `<button class="btn btn-feedback" onclick="state.inboxTab = '${feedbackTab}'; go('inbox')">📬 查看我的反馈</button>` : ''}
+		  </div>
+		  ${publicFbs.map(f => `
+				<div class="feedback-item">
+				  <div class="header"><span>${esc(f.submitter_name)}</span><span style="font-size:12px;color:var(--ink-faint)">${new Date(f.created_at).toLocaleString('zh-CN')}</span></div>
+				  <div class="content">${esc(f.content)}</div>
+				  ${f.admin_reply ? `<div class="reply">💬 ${esc(f.admin_reply)}</div>` : ''}
+				</div>
+		  `).join('')}
 		</div>
-	  `).join('')}
-	</div>
   `;
 }
 
 function vwMain() {
   const sem = curSem();
   if (!sem) {
-	return `<div class="mt">请管理员在后台添加学期</div>`;
+		return `<div class="mt">请管理员在后台添加学期</div>`;
   }
   state.semester = sem.id;
   let func = '';
   if (canManageFlow()) {
-	const pending = DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length;
-	const myAppsLabel = isAdmin() ? '审批申请' : '我的申请';
-	func = `<div class="func">
-	<button class="btn btn-primary" onclick="newRecord()">➕ 新增记录</button>
-	<button class="btn btn-ghost" onclick="state.inboxTab = 'applications'; go('inbox')">${myAppsLabel}${pending ? `(${pending})` : ''}</button>
-	</div>`;
-	if (isAdmin()) {
-	  func += `<div class="func" style="margin-top:8px">
-	  <button class="btn btn-blue" onclick="go('admin')">⚙ 管理后台</button>
-	  </div>`;
-	}
+		const pending = DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length;
+		const myAppsLabel = isAdmin() ? '审批申请' : '我的申请';
+		func = `<div class="func">
+		<button class="btn btn-primary" onclick="newRecord()">➕ 新增记录</button>
+		<button class="btn btn-ghost" onclick="state.inboxTab = 'applications'; go('inbox')">${myAppsLabel}${pending ? `(${pending})` : ''}</button>
+		</div>`;
+		if (isAdmin()) {
+		  func += `<div class="func" style="margin-top:8px">
+		  <button class="btn btn-blue" onclick="go('admin')">⚙ 管理后台</button>
+		  </div>`;
+		}
   }
-  const recent = recordsOf(sem.id).filter(r => !r.pending_delete).slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
+  const recent = recordsOf(sem.id).filter(r => !r.pending_delete).slice()
+		.sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.created_at || 0) - (a.created_at || 0))
+		.slice(0, 6);
   const feedbackSection = renderPublicFeedbacks();
 
   let feedbackBtn = '';
   if (!isAdmin() && (isVisitor() || isLoggedIn())) {
-	feedbackBtn = `<div style="display:flex;justify-content:flex-end;margin:12px 0 8px;"><button class="btn btn-feedback" onclick="go('feedback')">💬 我要反馈</button></div>`;
+		feedbackBtn = `<div style="display:flex;justify-content:flex-end;margin:12px 0 8px;"><button class="btn btn-feedback" onclick="go('feedback')">💬 我要反馈</button></div>`;
   }
 
   return `
@@ -1041,7 +1226,7 @@ function vwMain() {
   ${semSelect()}
   ${statsHTML(sem.id)}
   <div class="section-title"><span>最近流水</span><span class="link" onclick="go('records')">查看全部 ›</span></div>
-  <div class="card" style="padding:8px 12px"><div class="flow-list">${(recent.length ? recent.map(flowHTML).join('') : '<div class="empty">本学期暂无记录</div>')}</div></div>
+  <div class="card" style="padding:8px 12px"><div class="flow-list">${(recent.length ? recent.map((r, i) => flowHTML(r, i)).join('') : emptyBox('🪙', '本学期暂无记录'))}</div></div>
   ${feedbackBtn}
   ${feedbackSection}
   `;
@@ -1049,32 +1234,39 @@ function vwMain() {
 
 function vwRecords() {
   const sem = curSem();
-  if (!sem) return `<div class="empty">暂无学期</div>`;
+  if (!sem) return emptyBox('📅', '暂无学期');
   state.semester = sem.id;
   const months = Array.from(new Set(recordsOf(sem.id).map(r => monthOf(r.date)))).sort();
   const f = state.filters;
-  let recs = recordsOf(sem.id);
-  if (f.type !== 'all') recs = recs.filter(r => r.type === f.type);
-  if (f.month !== 'all') recs = recs.filter(r => monthOf(r.date) === f.month);
-  if (f.keyword) recs = recs.filter(r => r.purpose.includes(f.keyword));
-  if (f.start) recs = recs.filter(r => r.date >= f.start);
-  if (f.end) recs = recs.filter(r => r.date <= f.end);
-  recs = recs.slice().sort((a, b) => b.date.localeCompare(a.date));
+  const recs = getFilteredRecords();
   const monthChips = `<span class="chip ${f.month === 'all' ? 'on' : ''}" onclick="setMonth('all')">全部月份</span>` +
-	months.map(m => `<span class="chip ${f.month === m ? 'on' : ''}" onclick="setMonth('${m}')">${m.slice(5)}月</span>`).join('');
+		months.map(m => `<span class="chip ${f.month === m ? 'on' : ''}" onclick="setMonth('${m}')">${m.slice(5)}月</span>`).join('');
   return `
   <div class="mt" style="font-size:16px">全部流水明细</div>
   <div style="text-align:center;font-size:14px;color:var(--blue);margin:-4px 0 12px;">📚 当前学期：<strong>${esc(sem.name)}</strong></div>
   ${semSelect()}
   ${statsHTML(sem.id)}
   <div class="filters">
-	<div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-	<input class="field" id="kw" placeholder="搜索用途关键词…" value="${esc(f.keyword)}" oninput="f_keyword(this.value)"></div>
-	<div class="filter-row"><span class="chip ${f.type === 'all' ? 'on' : ''}" onclick="setType('all')">全部</span><span class="chip ${f.type === 'income' ? 'on' : ''}" onclick="setType('income')">仅收入</span><span class="chip ${f.type === 'expense' ? 'on' : ''}" onclick="setType('expense')">仅支出</span></div>
-	<div class="filter-row">${monthChips}</div>
-	<div class="filter-row"><input class="field" type="date" id="ds" value="${f.start}" onchange="f_start(this.value)"><span style="color:var(--ink-soft)">至</span><input class="field" type="date" id="de" value="${f.end}" onchange="f_end(this.value)"><button class="btn btn-ghost btn-sm" onclick="resetDate()">清除</button></div>
+		<div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+		<input class="field" id="kw" placeholder="搜索用途关键词…" value="${esc(f.keyword)}" oninput="f_keyword(this.value)"></div>
+		<div class="filter-row"><span class="chip ${f.type === 'all' ? 'on' : ''}" onclick="setType('all')">全部</span><span class="chip ${f.type === 'income' ? 'on' : ''}" onclick="setType('income')">仅收入</span><span class="chip ${f.type === 'expense' ? 'on' : ''}" onclick="setType('expense')">仅支出</span></div>
+		<div class="filter-row">${monthChips}</div>
+		<div class="filter-row"><input class="field" type="date" id="ds" value="${f.start}" onchange="f_start(this.value)"><span style="color:var(--ink-soft)">至</span><input class="field" type="date" id="de" value="${f.end}" onchange="f_end(this.value)"><button class="btn btn-ghost btn-sm" onclick="resetDate()">清除</button></div>
   </div>
-  <div class="card" style="padding:8px 12px"><div class="flow-list">${(recs.length ? recs.map(flowHTML).join('') : '')}</div>${recs.length ? '' : '<div class="empty">没有符合条件的记录</div>'}</div>`;
+  <div class="card" style="padding:8px 12px" id="recordsListCard"><div class="flow-list">${recs.map((r, i) => flowHTML(r, i)).join('')}</div>${recs.length ? '' : emptyBox('🔍', '没有符合条件的记录')}</div>`;
+}
+
+function getFilteredRecords() {
+  const sem = curSem();
+  if (!sem) return [];
+  const f = state.filters;
+  let recs = recordsOf(sem.id);
+  if (f.type !== 'all') recs = recs.filter(r => r.type === f.type);
+  if (f.month !== 'all') recs = recs.filter(r => monthOf(r.date) === f.month);
+  if (f.keyword) recs = recs.filter(r => (r.purpose || '').includes(f.keyword));
+  if (f.start) recs = recs.filter(r => r.date >= f.start);
+  if (f.end) recs = recs.filter(r => r.date <= f.end);
+  return recs.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 }
 
 function f_keyword(v) { state.filters.keyword = v; refreshRecords(); }
@@ -1083,11 +1275,20 @@ function f_end(v) { state.filters.end = v; refreshRecords(); }
 function setType(t) { state.filters.type = t; refreshRecords(); }
 function setMonth(m) { state.filters.month = m; refreshRecords(); }
 function resetDate() { state.filters.start = ''; state.filters.end = ''; refreshRecords(); }
-function refreshRecords() { if (state.view === 'records') { render(); } }
+
+/* 局部刷新：只重绘列表卡片，保持搜索框焦点（修复输入失焦 Bug） */
+function refreshRecords() {
+  if (state.view !== 'records') return;
+  const card = document.getElementById('recordsListCard');
+  if (!card) { render(); return; }
+  const recs = getFilteredRecords();
+  card.innerHTML = `<div class="flow-list">${recs.map((r, i) => flowHTML(r, i)).join('')}</div>${recs.length ? '' : emptyBox('🔍', '没有符合条件的记录')}`;
+}
 
 function switchSem(id) {
   state.currentSemesterId = id;
   localStorage.setItem('currentSemesterId', id);
+  state.filters = { type: 'all', month: 'all', keyword: '', start: '', end: '' };
   render();
 }
 
@@ -1095,103 +1296,96 @@ function switchSem(id) {
 function vwFeedback() {
   const isLoggedInUser = !!state.user;
   let formHtml = `
-	<div class="mt" style="font-size:16px">💬 我要反馈</div>
-	<div class="card" style="margin-top:14px">
+		<div class="mt" style="font-size:16px">💬 我要反馈</div>
+		<div class="card" style="margin-top:14px">
   `;
   if (!isLoggedInUser) {
-	formHtml += `
-	  <div class="form-line"><label>你的姓名</label><input class="field" id="fb_name" placeholder="请输入姓名或昵称（空格可匿名）" maxlength="20"></div>
-	`;
+		formHtml += `
+		  <div class="form-line"><label>你的姓名</label><input class="field" id="fb_name" placeholder="请输入姓名或昵称（空格可匿名）" maxlength="20"></div>
+		`;
   } else {
-	formHtml += `
-	  <div style="font-size:14px;color:var(--ink-soft);margin-bottom:12px;">👤 ${esc(state.user.name)} (${esc(state.user.role)})</div>
-	`;
+		formHtml += `
+		  <div style="font-size:14px;color:var(--ink-soft);margin-bottom:12px;">👤 ${esc(state.user.name)} (${esc(state.user.role)})</div>
+		`;
   }
   formHtml += `
-	  <div class="form-line"><label>反馈内容</label>
-		<textarea class="field" id="fb_content" rows="4" placeholder="请描述你的问题或建议（不超过200字）" maxlength="200"></textarea>
-		<div class="char-count"><span id="fb_count">0</span>/200</div>
-	  </div>
-	  <div style="display:flex;gap:10px;margin-top:6px">
-		<button class="btn btn-ghost btn-block" onclick="back()">取消</button>
-		<button class="btn btn-primary btn-block" onclick="submitFeedback()">提交反馈</button>
-	  </div>
-	</div>
-	<div style="font-size:13px;color:var(--ink-soft);text-align:center;margin-top:8px;">你的反馈会在管理员审核后公开显示</div>
+		  <div class="form-line"><label>反馈内容</label>
+				<textarea class="field" id="fb_content" rows="4" placeholder="请描述你的问题或建议（不超过200字）" maxlength="200" oninput="const c=document.getElementById('fb_count'); if(c)c.textContent=this.value.length"></textarea>
+				<div class="char-count"><span id="fb_count">0</span>/200</div>
+		  </div>
+		  <div style="display:flex;gap:10px;margin-top:6px">
+				<button class="btn btn-ghost btn-block" onclick="back()">取消</button>
+				<button class="btn btn-primary btn-block" onclick="submitFeedback()">提交反馈</button>
+		  </div>
+		</div>
+		<div style="font-size:13px;color:var(--ink-soft);text-align:center;margin-top:8px;">你的反馈会在管理员审核后公开显示</div>
   `;
-  setTimeout(() => {
-	const el = document.getElementById('fb_content');
-	if (el) {
-	  el.addEventListener('input', function() {
-		const cnt = document.getElementById('fb_count');
-		if (cnt) cnt.textContent = this.value.length;
-	  });
-	}
-  }, 50);
   return formHtml;
 }
 
 async function submitFeedback() {
   const content = document.getElementById('fb_content').value.trim();
-  if (!content) { alert('请填写反馈内容'); return; }
-  if (content.length > 200) { alert('反馈内容不能超过200字'); return; }
+  if (!content) { toast('请填写反馈内容', 'warn'); return; }
+  if (content.length > 200) { toast('反馈内容不能超过200字', 'warn'); return; }
 
-  let submitter_name = state.user ? state.user.name : document.getElementById('fb_name').value.trim();
-  if (!submitter_name || submitter_name === '') { submitter_name = '匿名'; }
+  const nameEl = document.getElementById('fb_name');
+  let submitter_name = state.user ? state.user.name : (nameEl ? nameEl.value.trim() : '');
+  if (!submitter_name) { submitter_name = '匿名'; }
 
   const feedback = {
-	id: uid(),
-	content: content,
-	submitter_name: submitter_name,
-	submitter_role: state.user ? state.user.role : '访客',
-	submitter_id: state.user ? state.user.studentId : '',
-	status: 'pending',
-	admin_reply: '',
-	created_at: Date.now(),
-	updated_at: Date.now()
+		id: uid(),
+		content: content,
+		submitter_name: submitter_name,
+		submitter_role: state.user ? state.user.role : '访客',
+		submitter_id: state.user ? state.user.studentId : '',
+		status: 'pending',
+		admin_reply: '',
+		created_at: Date.now(),
+		updated_at: Date.now()
   };
 
+  if (!busyStart()) return;
   try {
-	await apiPost('feedbacks', feedback);
-	DB.feedbacks.push(feedback);
-	alert('✅ 反馈已提交，感谢你的建议！');
-	back();
+		await apiPost('feedbacks', feedback);
+		DB.feedbacks.push(feedback);
+		toast('反馈已提交，感谢你的建议！', 'success');
+		back();
   } catch (e) {
-	alert('提交失败: ' + e.message);
-  }
+		toast('提交失败: ' + e.message, 'error');
+  } finally { busyEnd(); }
 }
 
 /* ===== 记录操作 ===== */
-function newRecord() { state.editingId = null; state._inv = null; go('edit'); }
-function editRecord(id) { state.editingId = id; const r = recordsOf(state.semester).find(x => x.id === id); state._inv = r ? r.invoice : null; go('edit'); }
+function newRecord() { state.editingId = null; state._inv = null; state._editFrom = state.view === 'records' ? 'records' : 'main'; go('edit'); }
+function editRecord(id) { state.editingId = id; const r = recordsOf(state.semester).find(x => x.id === id); state._inv = r ? r.invoice : null; state._editFrom = state.view === 'records' ? 'records' : 'main'; go('edit'); }
 
 function vwEdit() {
-  if (!canManageFlow()) { alert('当前身份无权限操作'); back(); return ''; }
+  if (!canManageFlow()) { toast('当前身份无权限操作', 'warn'); back(); return ''; }
   const editing = !!state.editingId;
   const r = editing ? recordsOf(state.semester).find(x => x.id === state.editingId) : null;
   const today = new Date().toISOString().slice(0, 10);
   return `
   <div class="mt" style="font-size:16px">${editing ? '修改记录' : '新增记录'}</div>
   <div class="card" style="margin-top:14px">
-	<div class="form-line"><label>交易日期</label><input class="field" id="f_date" type="date" value="${r ? r.date : today}"></div>
-	<div class="form-line"><label>收支类型</label>
-	<div class="radio-row">
-	  <label><input type="radio" name="tp" value="income" ${r ? (r.type === 'income' ? 'checked' : '') : 'checked'}> 收入</label>
-	  <label><input type="radio" name="tp" value="expense" ${r ? (r.type === 'expense' ? 'checked' : '') : ''}> 支出</label>
-	</div></div>
-	<div class="form-line"><label>用途或事由（必填）</label>
-	  <input class="field" id="f_purpose" maxlength="200" value="${r ? esc(r.purpose) : ''}" placeholder="如：班级活动物料">
-	  <div style="font-size:12px;color:var(--ink-soft);margin-top:2px;">不超过 200 个字符</div>
-	</div>
-	<div class="form-line"><label>金额（正数）</label>
-	  <input class="field" id="f_amount" type="number" min="0.01" max="999.99" step="0.01" value="${r ? r.amount : ''}" placeholder="0.00">
-	  <div style="font-size:12px;color:var(--ink-soft);margin-top:2px;">单笔不超过 ¥999.99</div>
-	</div>
-	<div class="form-line"><label>经手人</label><input class="field" id="f_handler" value="${r ? esc(r.handler) : ''}" placeholder="填写经手人"></div>
-	<div style="display:flex;gap:10px;margin-top:6px">
-	<button class="btn btn-ghost btn-block" onclick="back()">取消</button>
-	<button class="btn btn-primary btn-block" onclick="saveRecord()">保存</button>
-	</div>
+		<div class="form-line"><label>交易日期</label><input class="field" id="f_date" type="date" value="${r ? r.date : today}"></div>
+		<div class="form-line"><label>收支类型</label>
+		<div class="radio-row">
+		  <label><input type="radio" name="tp" value="income" ${r ? (r.type === 'income' ? 'checked' : '') : 'checked'}> 收入</label>
+		  <label><input type="radio" name="tp" value="expense" ${r ? (r.type === 'expense' ? 'checked' : '') : ''}> 支出</label>
+		</div></div>
+		<div class="form-line"><label>用途或事由（必填）</label>
+		  <input class="field" id="f_purpose" maxlength="200" value="${r ? esc(r.purpose) : ''}" placeholder="如：班级活动物料">
+		  <div style="font-size:12px;color:var(--ink-soft);margin-top:2px;">不超过 200 个字符</div>
+		</div>
+		<div class="form-line"><label>金额（正数）</label>
+		  <input class="field" id="f_amount" type="number" min="0.01" max="999.99" step="0.01" value="${r ? r.amount : ''}" placeholder="0.00">
+		  <div style="font-size:12px;color:var(--ink-soft);margin-top:2px;">单笔不超过 ¥999.99</div>
+		</div>
+		<div class="form-line"><label>经手人</label><input class="field" id="f_handler" value="${r ? esc(r.handler) : ''}" placeholder="填写经手人"></div>
+		<div style="display:flex;gap:10px;margin-top:6px">
+		<button class="btn btn-ghost btn-block" onclick="back()">取消</button>
+		<button class="btn btn-primary btn-block" onclick="saveRecord()">保存</button>
+		</div>
   </div>`;
 }
 
@@ -1202,53 +1396,55 @@ async function saveRecord() {
   const date = document.getElementById('f_date').value;
   const type = document.querySelector('input[name=tp]:checked').value;
 
-  if (!purpose) { alert('请填写用途或事由'); return; }
-  if (purpose.length > 200) { alert('用途描述不能超过200个字符'); return; }
-  if (isNaN(amount) || amount <= 0) { alert('请填写正确的金额'); return; }
-  if (amount > 999.99) { alert('单笔金额不能超过999.99元'); return; }
+  if (!purpose) { toast('请填写用途或事由', 'warn'); return; }
+  if (purpose.length > 200) { toast('用途描述不能超过200个字符', 'warn'); return; }
+  if (isNaN(amount) || amount <= 0) { toast('请填写正确的金额', 'warn'); return; }
+  if (amount > 999.99) { toast('单笔金额不能超过999.99元', 'warn'); return; }
 
   const sem = curSem();
-  if (!sem) { alert('没有可用的学期，请先添加学期'); return; }
+  if (!sem) { toast('没有可用的学期，请先添加学期', 'warn'); return; }
   const semester_id = sem.id;
 
+  if (!busyStart()) return;
   try {
-	if (state.editingId) {
-	  const old = DB.records.find(r => r.id === state.editingId);
-	  if (!old) throw new Error('记录不存在');
-	  const updated = { ...old, date, type, purpose, amount, handler, invoice: null, updated_at: Date.now() };
-	  await apiPatch('records', state.editingId, updated);
-	  const idx = DB.records.findIndex(r => r.id === state.editingId);
-	  if (idx >= 0) DB.records[idx] = updated;
-	  await addOpLog('修改记录', `修改了记录 "${old.purpose}" 金额 ¥${old.amount} → ¥${amount}`);
-	} else {
-	  const newRec = {
-		id: uid(),
-		semester_id: semester_id,
-		date, type, purpose, amount, handler,
-		invoice: null, pending_delete: false,
-		created_at: Date.now(), updated_at: Date.now()
-	  };
-	  await apiPost('records', newRec);
-	  DB.records.push(newRec);
-	  await addOpLog('添加记录', `添加记录 "${purpose}" 金额 ¥${amount}`);
-	}
-	state.editingId = null;
-	alert('已保存');
-	go('main', false);
+		if (state.editingId) {
+		  const old = DB.records.find(r => r.id === state.editingId);
+		  if (!old) throw new Error('记录不存在');
+		  // 保留原有发票，不再硬编码清空（Bug 修复）
+		  const updated = { ...old, date, type, purpose, amount, handler, updated_at: Date.now() };
+		  await apiPatch('records', state.editingId, updated);
+		  const idx = DB.records.findIndex(r => r.id === state.editingId);
+		  if (idx >= 0) DB.records[idx] = updated;
+		  await addOpLog('修改记录', `修改了记录 "${old.purpose}" 金额 ¥${fmtMoney(old.amount)} → ¥${fmtMoney(amount)}`);
+		} else {
+		  const newRec = {
+				id: uid(),
+				semester_id: semester_id,
+				date, type, purpose, amount, handler,
+				invoice: null, pending_delete: false,
+				created_at: Date.now(), updated_at: Date.now()
+		  };
+		  await apiPost('records', newRec);
+		  DB.records.push(newRec);
+		  await addOpLog('添加记录', `添加记录 "${purpose}" 金额 ¥${fmtMoney(amount)}`);
+		}
+		state.editingId = null;
+		toast('已保存', 'success');
+		go(state._editFrom === 'records' ? 'records' : 'main', false);
   } catch (e) {
-	alert('保存失败: ' + e.message);
-	console.error(e);
-  }
+		toast('保存失败: ' + e.message, 'error');
+		console.error(e);
+  } finally { busyEnd(); }
 }
 
 /* ===== 删除申请 ===== */
 function applyDelete(id) {
-  if (!canManageFlow()) { alert('当前身份无权限操作'); return; }
+  if (!canManageFlow()) { toast('当前身份无权限操作', 'warn'); return; }
   state.applyingId = id;
   const r = recordsOf(state.semester).find(x => x.id === id);
-  if (!r) { alert('该记录已不存在'); return; }
+  if (!r) { toast('该记录已不存在', 'warn'); return; }
   openModal('申请删除记录', `
-  <p style="font-size:13px;color:var(--ink-soft)">记录：${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${r.amount}</p>
+  <p style="font-size:13px;color:var(--ink-soft)">记录：${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</p>
   <div class="form-line"><label>删除原因</label><textarea class="field" id="appReason" placeholder="请填写删除原因"></textarea></div>
   <div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-red btn-block" onclick="submitApply()">提交申请</button></div>
   `);
@@ -1256,80 +1452,88 @@ function applyDelete(id) {
 
 async function submitApply() {
   const reason = document.getElementById('appReason').value.trim();
-  if (!reason) { alert('请填写删除原因'); return; }
+  if (!reason) { toast('请填写删除原因', 'warn'); return; }
   const r = recordsOf(state.semester).find(x => x.id === state.applyingId);
   if (!r) return;
+  if (!busyStart()) return;
   try {
-	const app = {
-	  id: uid(),
-	  record_id: r.id,
-	  record: r,
-	  applicant_student_id: state.user.studentId,
-	  applicant_name: state.user.name,
-	  reason: reason,
-	  status: 'pending',
-	  reply: '',
-	  time: Date.now()
-	};
-	await apiPost('applications', app);
-	DB.applications.push(app);
-	const idx = DB.records.findIndex(x => x.id === r.id);
-	if (idx >= 0) { DB.records[idx].pending_delete = true; await apiPatch('records', r.id, { pending_delete: true }); }
-	await addOpLog('申请删除', `申请删除记录 "${r.purpose}" 金额 ¥${r.amount}，原因：${reason}`);
-	closeModal();
-	alert('已提交，等待总管理员审批');
-	go('main', false);
-  } catch (e) { alert('提交失败: ' + e.message); }
+		const app = {
+		  id: uid(),
+		  record_id: r.id,
+		  record: r,
+		  applicant_student_id: state.user.studentId,
+		  applicant_name: state.user.name,
+		  reason: reason,
+		  status: 'pending',
+		  reply: '',
+		  time: Date.now()
+		};
+		await apiPost('applications', app);
+		DB.applications.push(app);
+		const idx = DB.records.findIndex(x => x.id === r.id);
+		if (idx >= 0) { DB.records[idx].pending_delete = true; await apiPatch('records', r.id, { pending_delete: true }); }
+		await addOpLog('申请删除', `申请删除记录 "${r.purpose}" 金额 ¥${fmtMoney(r.amount)}，原因：${reason}`);
+		closeModal();
+		toast('已提交，等待总管理员审批', 'success');
+		go('main', false);
+  } catch (e) { toast('提交失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
 }
 
 function adminDelete(id, e) {
   if (e) e.stopPropagation();
-  if (!isAdmin()) { alert('当前身份无权限操作'); return; }
-  if (!confirm('确定直接删除该记录？')) return;
-  const r = recordsOf(state.semester).find(x => x.id === id);
-  if (r) addOpLog('直接删除', `直接删除了记录 "${r.purpose}" 金额 ¥${r.amount}`);
-  DB.records = DB.records.filter(x => x.id !== id);
-  apiDelete('records', id);
-  render();
+  if (!isAdmin()) { toast('当前身份无权限操作', 'warn'); return; }
+  confirmAction('删除记录', '确定<b>直接删除</b>该记录？删除后不可恢复。', '直接删除', true, async () => {
+		if (!busyStart()) return;
+		try {
+		  const r = DB.records.find(x => x.id === id);
+		  await apiDelete('records', id);
+		  DB.records = DB.records.filter(x => x.id !== id);
+		  if (r) addOpLog('直接删除', `直接删除了记录 "${r.purpose}" 金额 ¥${fmtMoney(r.amount)}`);
+		  toast('记录已删除', 'success');
+		  render();
+		} catch (err) { toast('删除失败: ' + err.message, 'error'); }
+		finally { busyEnd(); }
+  });
 }
 
 /* ===== 信箱 ===== */
 function vwInbox() {
-  if (!state.user) return `<div class="empty">请先登录</div>`;
+  if (!state.user) return emptyBox('🔐', '请先登录');
 
   let activeTab = state.inboxTab || 'applications';
   if (isAdmin()) {
-	const tabs = [
-	  { id: 'applications', label: `📋 申请审批 (${DB.applications.filter(a => a.status === 'pending').length})` },
-	  { id: 'feedbacks', label: `💬 反馈管理 (${DB.feedbacks.filter(f => f.status === 'pending').length})` }
-	];
-	let content = '';
-	if (activeTab === 'applications') {
-	  content = renderApplications();
-	} else {
-	  content = renderAdminFeedbacks();
-	}
-	return `
-	  <div class="mt" style="font-size:16px">📩 审批中心</div>
-	  <div class="tab-bar">${tabs.map(t => `<span class="tab ${t.id === activeTab ? 'active' : ''}" onclick="switchInboxTab('${t.id}')">${t.label}</span>`).join('')}</div>
-	  ${content}
-	`;
+		const tabs = [
+		  { id: 'applications', label: `📋 申请审批 (${DB.applications.filter(a => a.status === 'pending').length})` },
+		  { id: 'feedbacks', label: `💬 反馈管理 (${DB.feedbacks.filter(f => f.status === 'pending').length})` }
+		];
+		let content = '';
+		if (activeTab === 'applications') {
+		  content = renderApplications();
+		} else {
+		  content = renderAdminFeedbacks();
+		}
+		return `
+		  <div class="mt" style="font-size:16px">📩 审批中心</div>
+		  <div class="tab-bar">${tabs.map(t => `<span class="tab ${t.id === activeTab ? 'active' : ''}" onclick="switchInboxTab('${t.id}')">${t.label}</span>`).join('')}</div>
+		  ${content}
+		`;
   } else {
-	const tabs = [
-	  { id: 'applications', label: `📋 我的申请 (${DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length})` },
-	  { id: 'myfeedbacks', label: `💬 我的反馈 (${DB.feedbacks.filter(f => f.submitter_id === state.user.studentId && f.status === 'pending').length})` }
-	];
-	let content = '';
-	if (activeTab === 'applications') {
-	  content = renderMyApplications();
-	} else {
-	  content = renderMyFeedbacks();
-	}
-	return `
-	  <div class="mt" style="font-size:16px">📩 我的信箱</div>
-	  <div class="tab-bar">${tabs.map(t => `<span class="tab ${t.id === activeTab ? 'active' : ''}" onclick="switchInboxTab('${t.id}')">${t.label}</span>`).join('')}</div>
-	  ${content}
-	`;
+		const tabs = [
+		  { id: 'applications', label: `📋 我的申请 (${DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length})` },
+		  { id: 'myfeedbacks', label: `💬 我的反馈 (${DB.feedbacks.filter(f => f.submitter_id === state.user.studentId && f.status === 'pending').length})` }
+		];
+		let content = '';
+		if (activeTab === 'applications') {
+		  content = renderMyApplications();
+		} else {
+		  content = renderMyFeedbacks();
+		}
+		return `
+		  <div class="mt" style="font-size:16px">📩 我的信箱</div>
+		  <div class="tab-bar">${tabs.map(t => `<span class="tab ${t.id === activeTab ? 'active' : ''}" onclick="switchInboxTab('${t.id}')">${t.label}</span>`).join('')}</div>
+		  ${content}
+		`;
   }
 }
 
@@ -1341,78 +1545,78 @@ function switchInboxTab(tab) {
 function renderApplications() {
   const apps = DB.applications.slice().sort((a, b) => b.time - a.time);
   const list = apps;
-  if (!list.length) return `<div class="empty">暂无申请</div>`;
+  if (!list.length) return emptyBox('📭', '暂无申请');
   return list.map(a => {
-	const r = a.record || { purpose: '记录已变动', amount: 0, type: 'expense' };
-	let statusHtml = '';
-	if (a.status === 'pending') {
-	  statusHtml = `<span class="st pending">⏳ 待审</span>`;
-	} else if (a.status === 'approved') {
-	  statusHtml = `<span class="stamp-mini">已批准</span>`;
-	} else if (a.status === 'rejected') {
-	  statusHtml = `<span class="stamp-mini">已拒绝</span>`;
-	}
-	let ops = '';
-	if (a.status === 'pending') {
-	  ops = `<div class="ops" style="margin-top:8px;display:flex;gap:8px;">
-		<button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">✅ 批准</button>
-		<button class="btn btn-red btn-xs" onclick="rejectApp('${a.id}')">❌ 拒绝</button>
-	  </div>`;
-	}
-	if (a.status === 'rejected') {
-	  ops = `<div class="ops" style="margin-top:8px;"><button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">改为批准</button></div>`;
-	}
-	return `<div class="appr">
-	<div class="top"><span>${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${r.amount}</span>${statusHtml}</div>
-	<div class="reason">申请人：${esc(a.applicant_name)}　原因：${esc(a.reason)}</div>
-	${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
-	${ops}
-	</div>`;
+		const r = a.record || { purpose: '记录已变动', amount: 0, type: 'expense' };
+		let statusHtml = '';
+		if (a.status === 'pending') {
+		  statusHtml = `<span class="st pending">⏳ 待审</span>`;
+		} else if (a.status === 'approved') {
+		  statusHtml = `<span class="stamp-mini">已批准</span>`;
+		} else if (a.status === 'rejected') {
+		  statusHtml = `<span class="stamp-mini">已拒绝</span>`;
+		}
+		let ops = '';
+		if (a.status === 'pending') {
+		  ops = `<div class="ops" style="margin-top:8px;display:flex;gap:8px;">
+				<button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">✅ 批准</button>
+				<button class="btn btn-red btn-xs" onclick="rejectApp('${a.id}')">❌ 拒绝</button>
+		  </div>`;
+		}
+		if (a.status === 'rejected') {
+		  ops = `<div class="ops" style="margin-top:8px;"><button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">改为批准</button></div>`;
+		}
+		return `<div class="appr">
+		<div class="top"><span>${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</span>${statusHtml}</div>
+		<div class="reason">申请人：${esc(a.applicant_name)}　原因：${esc(a.reason)}</div>
+		${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
+		${ops}
+		</div>`;
   }).join('');
 }
 
 function renderMyApplications() {
   const apps = DB.applications.filter(a => a.applicant_student_id === state.user.studentId).sort((a, b) => b.time - a.time);
-  if (!apps.length) return `<div class="empty">暂无申请</div>`;
+  if (!apps.length) return emptyBox('📭', '暂无申请');
   return apps.map(a => {
-	const r = a.record || { purpose: '记录已变动', amount: 0, type: 'expense' };
-	let statusHtml = '';
-	if (a.status === 'pending') {
-	  statusHtml = `<span class="st pending">⏳ 待审</span>`;
-	} else if (a.status === 'approved') {
-	  statusHtml = `<span class="stamp-mini">已批准</span>`;
-	} else if (a.status === 'rejected') {
-	  statusHtml = `<span class="stamp-mini">已拒绝</span>`;
-	}
-	return `<div class="appr">
-	<div class="top"><span>${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${r.amount}</span>${statusHtml}</div>
-	<div class="reason">原因：${esc(a.reason)}</div>
-	${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
-	</div>`;
+		const r = a.record || { purpose: '记录已变动', amount: 0, type: 'expense' };
+		let statusHtml = '';
+		if (a.status === 'pending') {
+		  statusHtml = `<span class="st pending">⏳ 待审</span>`;
+		} else if (a.status === 'approved') {
+		  statusHtml = `<span class="stamp-mini">已批准</span>`;
+		} else if (a.status === 'rejected') {
+		  statusHtml = `<span class="stamp-mini">已拒绝</span>`;
+		}
+		return `<div class="appr">
+		<div class="top"><span>${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</span>${statusHtml}</div>
+		<div class="reason">原因：${esc(a.reason)}</div>
+		${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
+		</div>`;
   }).join('');
 }
 
 /* ===== 管理员反馈管理 ===== */
 function renderAdminFeedbacks() {
   const fbs = DB.feedbacks.slice().sort((a, b) => b.created_at - a.created_at);
-  if (!fbs.length) return `<div class="empty">暂无反馈</div>`;
+  if (!fbs.length) return emptyBox('💬', '暂无反馈');
   return fbs.map(f => {
-	const statusMap = { pending: '⏳ 待处理', read: '✅ 已读', public: '📢 已公开' };
-	let ops = '';
-	if (f.status === 'pending' || f.status === 'read') {
-	  ops += `<button class="btn btn-primary btn-xs" onclick="markFeedbackRead('${f.id}')">确认已读</button>`;
-	}
-	if (f.status !== 'public') {
-	  ops += `<button class="btn btn-blue btn-xs" onclick="openFeedbackReply('${f.id}')">公开回复</button>`;
-	}
-	ops += `<button class="btn btn-red btn-xs" onclick="deleteFeedback('${f.id}')">🗑️ 删除</button>`;
-	return `<div class="appr">
-	<div class="top"><span><strong>${esc(f.submitter_name)}</strong> · ${esc(f.submitter_role || '访客')}</span><span class="st ${f.status}">${statusMap[f.status] || f.status}</span></div>
-	<div class="reason" style="margin-top:4px;">${esc(f.content)}</div>
-	<div style="font-size:12px;color:var(--ink-soft);margin-bottom:6px;">${new Date(f.created_at).toLocaleString('zh-CN')}</div>
-	${f.admin_reply ? `<div class="reply">💬 管理员回复：${esc(f.admin_reply)}</div>` : ''}
-	${ops ? `<div class="ops">${ops}</div>` : ''}
-	</div>`;
+		const statusMap = { pending: '⏳ 待处理', read: '✅ 已读', public: '📢 已公开' };
+		let ops = '';
+		if (f.status === 'pending' || f.status === 'read') {
+		  ops += `<button class="btn btn-primary btn-xs" onclick="markFeedbackRead('${f.id}')">确认已读</button>`;
+		}
+		if (f.status !== 'public') {
+		  ops += `<button class="btn btn-blue btn-xs" onclick="openFeedbackReply('${f.id}')">公开回复</button>`;
+		}
+		ops += `<button class="btn btn-red btn-xs" onclick="deleteFeedback('${f.id}')">🗑️ 删除</button>`;
+		return `<div class="appr">
+		<div class="top"><span><strong>${esc(f.submitter_name)}</strong> · ${esc(f.submitter_role || '访客')}</span><span class="st ${f.status}">${statusMap[f.status] || f.status}</span></div>
+		<div class="reason" style="margin-top:4px;">${esc(f.content)}</div>
+		<div style="font-size:12px;color:var(--ink-soft);margin-bottom:6px;">${new Date(f.created_at).toLocaleString('zh-CN')}</div>
+		${f.admin_reply ? `<div class="reply">💬 管理员回复：${esc(f.admin_reply)}</div>` : ''}
+		${ops ? `<div class="ops">${ops}</div>` : ''}
+		</div>`;
   }).join('');
 }
 
@@ -1420,83 +1624,94 @@ async function markFeedbackRead(id) {
   const f = DB.feedbacks.find(x => x.id === id);
   if (!f) return;
   try {
-	await apiPatch('feedbacks', id, { status: 'read', updated_at: Date.now() });
-	f.status = 'read';
-	f.updated_at = Date.now();
-	render();
-  } catch (e) { alert('操作失败: ' + e.message); }
+		await apiPatch('feedbacks', id, { status: 'read', updated_at: Date.now() });
+		f.status = 'read';
+		f.updated_at = Date.now();
+		render();
+  } catch (e) { toast('操作失败: ' + e.message, 'error'); }
 }
 
 function openFeedbackReply(id) {
   openModal('公开回复', `
-	<div class="form-line"><label>回复内容（访客端可见）</label>
-	  <textarea class="field" id="fb_reply" rows="3" placeholder="请输入回复内容" maxlength="200"></textarea>
-	  <div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">不超过200字</div>
-	</div>
-	<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button>
-	<button class="btn btn-primary btn-block" onclick="submitFeedbackReply('${id}')">确认公开回复</button></div>
+		<div class="form-line"><label>回复内容（访客端可见）</label>
+		  <textarea class="field" id="fb_reply" rows="3" placeholder="请输入回复内容" maxlength="200"></textarea>
+		  <div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">不超过200字</div>
+		</div>
+		<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button>
+		<button class="btn btn-primary btn-block" onclick="submitFeedbackReply('${id}')">确认公开回复</button></div>
   `);
 }
 
 async function submitFeedbackReply(id) {
   const reply = document.getElementById('fb_reply').value.trim();
-  if (!reply) { alert('请填写回复内容'); return; }
+  if (!reply) { toast('请填写回复内容', 'warn'); return; }
   const f = DB.feedbacks.find(x => x.id === id);
   if (!f) return;
+  if (!busyStart()) return;
   try {
-	await apiPatch('feedbacks', id, { status: 'public', admin_reply: reply, updated_at: Date.now() });
-	f.status = 'public';
-	f.admin_reply = reply;
-	f.updated_at = Date.now();
-	closeModal();
-	render();
-  } catch (e) { alert('操作失败: ' + e.message); }
+		await apiPatch('feedbacks', id, { status: 'public', admin_reply: reply, updated_at: Date.now() });
+		f.status = 'public';
+		f.admin_reply = reply;
+		f.updated_at = Date.now();
+		closeModal();
+		render();
+		toast('已公开回复', 'success');
+  } catch (e) { toast('操作失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
 }
 
 async function deleteFeedback(id) {
-  if (!isAdmin()) { alert('无权限'); return; }
-  if (!confirm('确定删除这条反馈吗？')) return;
-  try {
-	await apiDelete('feedbacks', id);
-	DB.feedbacks = DB.feedbacks.filter(f => f.id !== id);
-	render();
-  } catch (e) {
-	alert('删除失败: ' + e.message);
-  }
+  if (!isAdmin()) { toast('无权限', 'warn'); return; }
+  confirmAction('删除反馈', '确定删除这条反馈吗？删除后不可恢复。', '删除', true, async () => {
+		if (!busyStart()) return;
+		try {
+		  await apiDelete('feedbacks', id);
+		  DB.feedbacks = DB.feedbacks.filter(f => f.id !== id);
+		  render();
+		  toast('反馈已删除', 'success');
+		} catch (e) {
+		  toast('删除失败: ' + e.message, 'error');
+		}
+		finally { busyEnd(); }
+  });
 }
 
 /* ===== 我的反馈（班委/生活委员） ===== */
 function renderMyFeedbacks() {
   const fbs = DB.feedbacks.filter(f => f.submitter_id === state.user.studentId).sort((a, b) => b.created_at - a.created_at);
-  if (!fbs.length) return `<div class="empty">暂无反馈</div>`;
+  if (!fbs.length) return emptyBox('💬', '暂无反馈，点击主页「我要反馈」提交');
   const statusMap = { pending: '⏳ 待处理', read: '✅ 已读', public: '📢 已公开回复' };
   return fbs.map(f => `
-	<div class="appr">
-	  <div class="top"><span>我的反馈</span><span class="st ${f.status}">${statusMap[f.status] || f.status}</span></div>
-	  <div class="reason">${esc(f.content)}</div>
-	  <div style="font-size:12px;color:var(--ink-soft);">${new Date(f.created_at).toLocaleString('zh-CN')}</div>
-	  ${f.admin_reply ? `<div class="reply">💬 管理员回复：${esc(f.admin_reply)}</div>` : ''}
-	</div>
+		<div class="appr">
+		  <div class="top"><span>我的反馈</span><span class="st ${f.status}">${statusMap[f.status] || f.status}</span></div>
+		  <div class="reason">${esc(f.content)}</div>
+		  <div style="font-size:12px;color:var(--ink-soft);">${new Date(f.created_at).toLocaleString('zh-CN')}</div>
+		  ${f.admin_reply ? `<div class="reply">💬 管理员回复：${esc(f.admin_reply)}</div>` : ''}
+		</div>
   `).join('');
 }
 
 /* ===== 审批操作 ===== */
 async function approveApp(id) {
-  if (!isAdmin()) { alert('无权限'); return; }
+  if (!isAdmin()) { toast('无权限', 'warn'); return; }
   const a = DB.applications.find(x => x.id === id);
   if (!a) return;
+  if (!busyStart()) return;
   try {
-	await apiPatch('applications', id, { status: 'approved' });
-	a.status = 'approved';
-	await apiDelete('records', a.record_id);
-	DB.records = DB.records.filter(x => x.id !== a.record_id);
-	await addOpLog('批准删除', `批准删除了记录`);
-	render();
-  } catch (e) { alert('操作失败: ' + e.message); }
+		await apiPatch('applications', id, { status: 'approved' });
+		a.status = 'approved';
+		await apiDelete('records', a.record_id);
+		DB.records = DB.records.filter(x => x.id !== a.record_id);
+		const rec = a.record;
+		await addOpLog('批准删除', rec ? `批准删除记录 "${rec.purpose}" 金额 ¥${fmtMoney(rec.amount)}` : '批准删除了一条记录');
+		toast('已批准并删除该记录', 'success');
+		render();
+  } catch (e) { toast('操作失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
 }
 
 function rejectApp(id) {
-  if (!isAdmin()) { alert('无权限'); return; }
+  if (!isAdmin()) { toast('无权限', 'warn'); return; }
   openModal('拒绝申请', `
   <div class="form-line"><label>拒绝理由</label><textarea class="field" id="rejReply" rows="3" placeholder="如：理由不充分"></textarea></div>
   <div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-red btn-block" onclick="doReject('${id}')">确认拒绝</button></div>
@@ -1507,30 +1722,34 @@ async function doReject(id) {
   const reply = document.getElementById('rejReply').value.trim() || '未说明原因';
   const a = DB.applications.find(x => x.id === id);
   if (!a) return;
+  if (!busyStart()) return;
   try {
-	await apiPatch('applications', id, { status: 'rejected', reply });
-	a.status = 'rejected'; a.reply = reply;
-	const idx = DB.records.findIndex(x => x.id === a.record_id);
-	if (idx >= 0) { DB.records[idx].pending_delete = false; await apiPatch('records', a.record_id, { pending_delete: false }); }
-	closeModal();
-	render();
-  } catch (e) { alert('操作失败: ' + e.message); }
+		await apiPatch('applications', id, { status: 'rejected', reply });
+		a.status = 'rejected'; a.reply = reply;
+		const idx = DB.records.findIndex(x => x.id === a.record_id);
+		if (idx >= 0) { DB.records[idx].pending_delete = false; await apiPatch('records', a.record_id, { pending_delete: false }); }
+		await addOpLog('拒绝删除', `拒绝了 "${a.applicant_name}" 的删除申请，理由：${reply}`);
+		closeModal();
+		render();
+		toast('已拒绝该申请', 'info');
+  } catch (e) { toast('操作失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
 }
 
 /* ===== 管理后台 ===== */
 function vwAdmin() {
-  if (!isAdmin()) { alert('当前身份无权限操作'); go('main', false); return ''; }
+  if (!isAdmin()) { toast('当前身份无权限操作', 'warn'); go('main', false); return ''; }
   const recCnt = DB.records.filter(r => !r.pending_delete).length;
   const accCnt = DB.accounts.length;
   const pend = DB.applications.filter(a => a.status === 'pending').length;
   const item = (ico, t, d, fn) => `<div class="menu-item" onclick="${fn}"><div class="mi-ico">${ico}</div><div><div class="mi-t">${t}</div><div class="mi-d">${d}</div></div><div class="arrow">›</div></div>`;
   const I = {
-	sem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>',
-	acc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><path d="M16 11l2 2 4-4"/></svg>',
-	note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>',
-	log: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 6 4-12 2 6h6"/></svg>',
-	data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
-	export: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+		sem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>',
+		acc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><path d="M16 11l2 2 4-4"/></svg>',
+		note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>',
+		log: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 6 4-12 2 6h6"/></svg>',
+		data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>',
+		export: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
   };
   return `
   <div class="mt" style="font-size:16px">⚙️ 管理后台</div>
@@ -1554,123 +1773,279 @@ function exportData() {
 
   let semStatsHtml = '', allRecordsHtml = '', totalBalance = 0, totalIncome = 0, totalExpense = 0;
   DB.semesters.forEach(sem => {
-	const s = stats(sem.id);
-	totalBalance += s.balance; totalIncome += s.income; totalExpense += s.expense;
-	semStatsHtml += `<tr><td>${esc(sem.name)}</td><td style="text-align:right;">¥${s.income.toLocaleString()}</td><td style="text-align:right;">¥${s.expense.toLocaleString()}</td><td style="text-align:right;font-weight:700;color:#C1633E;">¥${s.balance.toLocaleString()}</td></tr>`;
+		const s = stats(sem.id);
+		totalBalance += s.balance; totalIncome += s.income; totalExpense += s.expense;
+		semStatsHtml += `<tr><td>${esc(sem.name)}</td><td style="text-align:right;">¥${fmtMoney(s.income)}</td><td style="text-align:right;">¥${fmtMoney(s.expense)}</td><td style="text-align:right;font-weight:700;color:#C1633E;">¥${fmtMoney(s.balance)}</td></tr>`;
   });
-  const allRecs = DB.records.filter(r => !r.pending_delete).sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id));
+  const allRecs = DB.records.filter(r => !r.pending_delete).sort((a, b) => (b.date || '').localeCompare(a.date || '') || a.id.localeCompare(b.id));
   if (allRecs.length) {
-	allRecordsHtml = `<h3 style="margin:20px 0 12px;font-size:16px;">📋 全部流水明细</h3><table style="width:100%;border-collapse:collapse;font-size:13px;"><thead><tr style="background:#f5f1e9;border-bottom:2px solid #eae3d6;"><th style="padding:8px 6px;text-align:left;">日期</th><th style="padding:8px 6px;text-align:left;">用途</th><th style="padding:8px 6px;text-align:left;">类型</th><th style="padding:8px 6px;text-align:right;">金额</th><th style="padding:8px 6px;text-align:left;">经手人</th></tr></thead><tbody>${allRecs.map(r => `<tr style="border-bottom:1px solid #f0ebe2;"><td style="padding:6px 6px;">${r.date}</td><td style="padding:6px 6px;">${esc(r.purpose)}</td><td style="padding:6px 6px;"><span style="color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '收入' : '支出'}</span></td><td style="padding:6px 6px;text-align:right;font-weight:600;color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '+' : '-'}¥${r.amount.toLocaleString()}</td><td style="padding:6px 6px;">${esc(r.handler)}</td></tr>`).join('')}</tbody></table><div style="margin-top:12px;text-align:right;font-weight:600;color:var(--orange);font-size:15px;">总余额：¥${totalBalance.toLocaleString()} &nbsp;|&nbsp; 总收入：¥${totalIncome.toLocaleString()} &nbsp;|&nbsp; 总支出：¥${totalExpense.toLocaleString()}</div>`;
+		allRecordsHtml = `<h3 style="margin:20px 0 12px;font-size:16px;">📋 全部流水明细</h3><table style="width:100%;border-collapse:collapse;font-size:13px;"><thead><tr style="background:#f5f1e9;border-bottom:2px solid #eae3d6;"><th style="padding:8px 6px;text-align:left;">日期</th><th style="padding:8px 6px;text-align:left;">用途</th><th style="padding:8px 6px;text-align:left;">类型</th><th style="padding:8px 6px;text-align:right;">金额</th><th style="padding:8px 6px;text-align:left;">经手人</th></tr></thead><tbody>${allRecs.map(r => `<tr style="border-bottom:1px solid #f0ebe2;"><td style="padding:6px 6px;">${r.date || ''}</td><td style="padding:6px 6px;">${esc(r.purpose)}</td><td style="padding:6px 6px;"><span style="color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '收入' : '支出'}</span></td><td style="padding:6px 6px;text-align:right;font-weight:600;color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</td><td style="padding:6px 6px;">${esc(r.handler)}</td></tr>`).join('')}</tbody></table><div style="margin-top:12px;text-align:right;font-weight:600;color:#C1633E;font-size:15px;">总余额：¥${fmtMoney(totalBalance)} &nbsp;|&nbsp; 总收入：¥${fmtMoney(totalIncome)} &nbsp;|&nbsp; 总支出：¥${fmtMoney(totalExpense)}</div>`;
   } else { allRecordsHtml = `<p style="color:#c9c2b4;text-align:center;padding:20px 0;">暂无流水记录</p>`; }
-  const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${className} 班费数据导出</title><style>body{font-family:-apple-system,"PingFang SC",sans-serif;background:#faf8f3;padding:30px 20px;max-width:900px;margin:0 auto;color:#2b2a27;}h1{font-size:22px;margin-bottom:4px;color:#C1633E;}.sub{color:#938d80;font-size:14px;margin-bottom:20px;border-bottom:1px solid #eae3d6;padding-bottom:12px;}table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05);}th{background:#f5f1e9;font-weight:600;font-size:13px;}th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #f0ebe2;}.total-box{background:#fff;border-radius:12px;padding:16px 20px;margin:16px 0;border:1px solid #eae3d6;display:flex;justify-content:space-around;text-align:center;}.total-box .item .label{font-size:12px;color:#938d80;}.total-box .item .value{font-size:20px;font-weight:700;}.total-box .item.balance .value{color:#C1633E;}.total-box .item.income .value{color:#5E8F71;}.total-box .item.expense .value{color:#B5694A;}.footer{text-align:center;color:#c9c2b4;font-size:12px;margin-top:30px;border-top:1px solid #eae3d6;padding-top:16px;}@media print{body{background:#fff;padding:10px;}.total-box{border-color:#ddd;}}</style></head><body><h1>📚 ${className}</h1><div class="sub">📅 导出时间：${exportTime}</div><div class="total-box"><div class="item balance"><div class="label">总余额</div><div class="value">¥${totalBalance.toLocaleString()}</div></div><div class="item income"><div class="label">总收入</div><div class="value">¥${totalIncome.toLocaleString()}</div></div><div class="item expense"><div class="label">总支出</div><div class="value">¥${totalExpense.toLocaleString()}</div></div></div><h3 style="margin:20px 0 10px;font-size:16px;">📊 各学期汇总</h3><table><thead><tr><th>学期</th><th style="text-align:right;">收入</th><th style="text-align:right;">支出</th><th style="text-align:right;">余额</th></tr></thead><tbody>${semStatsHtml}</tbody></table>${allRecordsHtml}<div class="footer">由班费公示平台导出 · 数据来源于云端</div></body></html>`;
+  const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${className} 班费数据导出</title><style>body{font-family:-apple-system,"PingFang SC",sans-serif;background:#faf8f3;padding:30px 20px;max-width:900px;margin:0 auto;color:#2b2a27;}h1{font-size:22px;margin-bottom:4px;color:#C1633E;}.sub{color:#938d80;font-size:14px;margin-bottom:20px;border-bottom:1px solid #eae3d6;padding-bottom:12px;}table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05);}th{background:#f5f1e9;font-weight:600;font-size:13px;}th,td{padding:10px 12px;text-align:left;border-bottom:1px solid #f0ebe2;}.total-box{background:#fff;border-radius:12px;padding:16px 20px;margin:16px 0;border:1px solid #eae3d6;display:flex;justify-content:space-around;text-align:center;}.total-box .item .label{font-size:12px;color:#938d80;}.total-box .item .value{font-size:20px;font-weight:700;}.total-box .item.balance .value{color:#C1633E;}.total-box .item.income .value{color:#5E8F71;}.total-box .item.expense .value{color:#B5694A;}.footer{text-align:center;color:#c9c2b4;font-size:12px;margin-top:30px;border-top:1px solid #eae3d6;padding-top:16px;}@media print{body{background:#fff;padding:10px;}.total-box{border-color:#ddd;}}</style></head><body><h1>📚 ${className}</h1><div class="sub">📅 导出时间：${exportTime}</div><div class="total-box"><div class="item balance"><div class="label">总余额</div><div class="value">¥${fmtMoney(totalBalance)}</div></div><div class="item income"><div class="label">总收入</div><div class="value">¥${fmtMoney(totalIncome)}</div></div><div class="item expense"><div class="label">总支出</div><div class="value">¥${fmtMoney(totalExpense)}</div></div></div><h3 style="margin:20px 0 10px;font-size:16px;">📊 各学期汇总</h3><table><thead><tr><th>学期</th><th style="text-align:right;">收入</th><th style="text-align:right;">支出</th><th style="text-align:right;">余额</th></tr></thead><tbody>${semStatsHtml}</tbody></table>${allRecordsHtml}<div class="footer">由班费公示平台导出 · 数据来源于云端</div></body></html>`;
   const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href = url; a.download = fileName; document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 5000);
   openModal('✅ 数据导出成功', `
-	<div style="text-align:left;font-size:14px;line-height:1.8;">
-	  <p style="margin:4px 0;"><strong>📄 文件名：</strong>${fileName}</p>
-	  <p style="margin:4px 0;color:#938d80;font-size:13px;">📂 文件已自动下载<br>点击下方「立即打开」查看</p>
-	</div>
-	<div style="display:flex;gap:10px;margin-top:16px;">
-	  <button class="btn btn-primary" onclick="openExportedFile()" style="flex:1;">📖 立即打开</button>
-	  <button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">确定</button>
-	</div>
+		<div style="text-align:left;font-size:14px;line-height:1.8;">
+		  <p style="margin:4px 0;"><strong>📄 文件名：</strong>${fileName}</p>
+		  <p style="margin:4px 0;color:#938d80;font-size:13px;">📂 文件已自动下载<br>点击下方「立即打开」查看</p>
+		</div>
+		<div style="display:flex;gap:10px;margin-top:16px;">
+		  <button class="btn btn-primary" onclick="openExportedFile()" style="flex:1;">📖 立即打开</button>
+		  <button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">确定</button>
+		</div>
   `);
   window._exportedBlobUrl = url;
 }
-function openExportedFile() { if (window._exportedBlobUrl) { window.open(window._exportedBlobUrl, '_blank'); } else { alert('文件链接已失效'); } closeModal(); }
+function openExportedFile() { if (window._exportedBlobUrl) { window.open(window._exportedBlobUrl, '_blank'); } else { toast('文件链接已失效，请重新导出', 'warn'); } closeModal(); }
 
 function openDataMgr() {
   openModal('数据管理', `
   <p style="font-size:13px;color:var(--ink-soft)">清空后所有流水记录将被删除，操作不可撤销。学期、账号、设置将保留。</p>
   <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
-	<button class="btn btn-red btn-block" onclick="clearRecords()">清空全部流水记录</button>
-	<button class="btn btn-ghost btn-block" onclick="restoreSample()">恢复示例数据</button>
-	<button class="btn btn-ghost btn-block" onclick="closeModal()">关闭</button>
+		<button class="btn btn-red btn-block" onclick="clearRecords()">清空全部流水记录</button>
+		<button class="btn btn-ghost btn-block" onclick="restoreSample()">恢复示例数据</button>
+		<button class="btn btn-ghost btn-block" onclick="closeModal()">关闭</button>
   </div>`);
 }
-async function clearRecords() { if (!confirm('确定清空全部流水记录？')) return; DB.records = []; await apiDeleteByFilter('records', 'id', ''); closeModal(); alert('已清空'); render(); }
+async function clearRecords() {
+  confirmAction('清空全部流水', '确定清空<b>全部</b>流水记录？该操作不可撤销，学期、账号、设置将保留。', '确认清空', true, async () => {
+		if (!busyStart()) return;
+		try {
+		  await apiDeleteAll('records');
+		  DB.records = [];
+		  await addOpLog('清空记录', '清空了全部流水记录');
+		  toast('已清空全部流水记录', 'success');
+		  render();
+		} catch (e) { toast('清空失败: ' + e.message, 'error'); }
+		finally { busyEnd(); }
+  });
+}
 async function restoreSample() {
-  if (!confirm('将用示例数据覆盖当前记录？')) return;
-  await apiDeleteByFilter('records', 'id', '');
-  const sample = [
-	{ id: uid(), semester_id: 's1', date: '2025-09-05', type: 'income', purpose: '上学期结余结转', amount: 5000, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
-	{ id: uid(), semester_id: 's1', date: '2025-09-12', type: 'income', purpose: '班费收缴（每人50元×45人）', amount: 2250, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
-	{ id: uid(), semester_id: 's1', date: '2025-09-20', type: 'expense', purpose: '班级绿植采购', amount: 168, handler: '王小明', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
-	{ id: uid(), semester_id: 's1', date: '2025-10-08', type: 'expense', purpose: '运动会班级横幅', amount: 96, handler: '李华', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
-	{ id: uid(), semester_id: 's1', date: '2025-10-22', type: 'expense', purpose: '期中奖品与文具', amount: 240, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
-	{ id: uid(), semester_id: 's1', date: '2025-11-15', type: 'income', purpose: '校园义卖班级分成', amount: 530, handler: '张伟', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
-	{ id: uid(), semester_id: 's1', date: '2025-12-03', type: 'expense', purpose: '班级联欢会零食', amount: 388, handler: '赵敏', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
-	{ id: uid(), semester_id: 's1', date: '2025-12-20', type: 'expense', purpose: '期末复习资料打印', amount: 152, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
-	{ id: uid(), semester_id: 's2', date: '2026-02-18', type: 'income', purpose: '上学期结余结转', amount: 8200, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
-	{ id: uid(), semester_id: 's2', date: '2026-02-25', type: 'income', purpose: '班费收缴（补交）', amount: 300, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
-	{ id: uid(), semester_id: 's2', date: '2026-03-10', type: 'expense', purpose: '春游班级门票', amount: 1200, handler: '陈强', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
-	{ id: uid(), semester_id: 's2', date: '2026-04-02', type: 'expense', purpose: '图书角新书采购', amount: 460, handler: '生活委员', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
-	{ id: uid(), semester_id: 's2', date: '2026-05-14', type: 'expense', purpose: '五四青年节活动物料', amount: 320, handler: '刘洋', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() },
-	{ id: uid(), semester_id: 's2', date: '2026-06-08', type: 'income', purpose: '废品回收班费返还', amount: 180, handler: '周婷', invoice: null, pending_delete: false, created_at: Date.now(), updated_at: Date.now() }
-  ];
-  for (const rec of sample) { await apiPost('records', rec); DB.records.push(rec); }
-  closeModal(); alert('已恢复示例数据'); render();
+  confirmAction('恢复示例数据', '将<b>清空当前全部记录</b>并写入示例数据，确定继续？', '恢复示例', true, async () => {
+		if (!busyStart()) return;
+		try {
+		  const sem = curSem();
+		  if (!sem) { toast('请先在学期管理中添加学期', 'warn'); return; }
+		  await apiDeleteAll('records');
+		  const base = Date.now();
+		  const mk = (i, date, type, purpose, amount, handler) => ({ id: uid() + i.toString(36), semester_id: sem.id, date, type, purpose, amount, handler, invoice: null, pending_delete: false, created_at: base, updated_at: base });
+		  const sample = [
+				mk(1, '2025-09-05', 'income', '上学期结余结转', 5000, '生活委员'),
+				mk(2, '2025-09-12', 'income', '班费收缴（每人50元×45人）', 2250, '生活委员'),
+				mk(3, '2025-09-20', 'expense', '班级绿植采购', 168, '王小明'),
+				mk(4, '2025-10-08', 'expense', '运动会班级横幅', 96, '李华'),
+				mk(5, '2025-10-22', 'expense', '期中奖品与文具', 240, '生活委员'),
+				mk(6, '2025-11-15', 'income', '校园义卖班级分成', 530, '张伟'),
+				mk(7, '2025-12-03', 'expense', '班级联欢会零食', 388, '赵敏'),
+				mk(8, '2025-12-20', 'expense', '期末复习资料打印', 152, '生活委员')
+		  ];
+		  await apiPost('records', sample);
+		  DB.records.push(...sample);
+		  await addOpLog('恢复示例', `恢复了示例数据（${sample.length} 条，挂载到当前学期「${sem.name}」）`);
+		  toast('示例数据已恢复', 'success');
+		  render();
+		} catch (e) { toast('恢复失败: ' + e.message, 'error'); }
+		finally { busyEnd(); }
+  });
 }
 
 /* ===== 学期管理 ===== */
-function vwSemester() { if (!isAdmin()) return ''; return `<div class="mt" style="font-size:16px">📅 学期管理</div><div class="card" style="margin-top:14px">${DB.semesters.map(s => `<div class="kv"><div class="k"><div class="n">${esc(s.name)} ${s.is_current ? '<span class="tag income">当前</span>' : ''}</div><div class="s">起始余额 ¥${s.start_balance.toLocaleString()} · ${recordsOf(s.id).length} 条记录</div></div><button class="btn btn-ghost btn-xs" onclick="editSem('${s.id}')">编辑</button><button class="btn btn-ghost btn-xs" onclick="setCurSem('${s.id}')">设为当前</button><button class="btn btn-red btn-xs" onclick="delSem('${s.id}')">删除</button></div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addSem()">+ 新增学期</button></div>`; }
+function vwSemester() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); return `<div class="mt" style="font-size:16px">📅 学期管理</div><div class="card" style="margin-top:14px">${DB.semesters.map(s => `<div class="kv"><div class="k"><div class="n">${esc(s.name)} ${s.is_current ? '<span class="tag income">当前</span>' : ''}</div><div class="s">起始余额 ¥${fmtMoney(s.start_balance)} · ${recordsOf(s.id).length} 条记录</div></div><button class="btn btn-ghost btn-xs" onclick="editSem('${s.id}')">编辑</button><button class="btn btn-ghost btn-xs" onclick="setCurSem('${s.id}')">设为当前</button><button class="btn btn-red btn-xs" onclick="delSem('${s.id}')">删除</button></div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addSem()">+ 新增学期</button></div>`; }
 function addSem() { openModal('新增学期', `<div class="form-line"><label>学期名称</label><input class="field" id="sn" placeholder="如：高二下"></div><div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" min="0" placeholder="0"></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem(null)">创建</button></div>`); }
 function editSem(id) { const s = DB.semesters.find(x => x.id === id); if (!s) return; openModal('编辑学期', `<div class="form-line"><label>学期名称</label><input class="field" id="sn" value="${esc(s.name)}"></div><div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" min="0" value="${s.start_balance}"></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem('${id}')">保存</button></div>`); }
-async function saveSem(id) { const name = document.getElementById('sn').value.trim(); const bal = parseFloat(document.getElementById('sb').value) || 0; if (!name) { alert('请填写学期名称'); return; } try { if (id) { const sem = DB.semesters.find(s => s.id === id); if (sem) { sem.name = name; sem.start_balance = bal; await apiPatch('semesters', id, { name, start_balance: bal }); } } else { const newSem = { id: uid(), name, start_balance: bal, is_current: false }; await apiPost('semesters', newSem); DB.semesters.push(newSem); } closeModal(); render(); } catch (e) { alert('操作失败: ' + e.message); } }
-async function setCurSem(id) { switchSem(id); DB.semesters = DB.semesters.map(s => ({ ...s, is_current: s.id === id })); render(); }
-async function delSem(id) { const s = DB.semesters.find(x => x.id === id); if (!s) return; const cnt = recordsOf(id).length; if (!confirm(`删除学期「${s.name}」？该学期下 ${cnt} 条记录将一并删除，且不可恢复。`)) return; try { await apiDelete('semesters', id); await apiDeleteByFilter('records', 'semester_id', id); DB.semesters = DB.semesters.filter(x => x.id !== id); DB.records = DB.records.filter(r => r.semester_id !== id); if (state.currentSemesterId === id) { state.currentSemesterId = DB.semesters[0]?.id || null; if (state.currentSemesterId) localStorage.setItem('currentSemesterId', state.currentSemesterId); } render(); } catch (e) { alert('删除失败: ' + e.message); } }
+async function saveSem(id) {
+  const name = document.getElementById('sn').value.trim();
+  const bal = parseFloat(document.getElementById('sb').value) || 0;
+  if (!name) { toast('请填写学期名称', 'warn'); return; }
+  if (name.length > 30) { toast('学期名称不能超过30个字符', 'warn'); return; }
+  if (!busyStart()) return;
+  try {
+		if (id) {
+		  const sem = DB.semesters.find(s => s.id === id);
+		  if (sem) { sem.name = name; sem.start_balance = bal; await apiPatch('semesters', id, { name, start_balance: bal }); }
+		} else {
+		  const newSem = { id: uid(), name, start_balance: bal, is_current: false };
+		  await apiPost('semesters', newSem);
+		  DB.semesters.push(newSem);
+		}
+		closeModal();
+		toast(id ? '学期已更新' : '学期已创建', 'success');
+		render();
+  } catch (e) { toast('操作失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
+}
+async function setCurSem(id) {
+  switchSem(id);
+  DB.semesters = DB.semesters.map(s => ({ ...s, is_current: s.id === id }));
+  try { await apiPatch('semesters', id, { is_current: true }); } catch (e) { }
+}
+async function delSem(id) {
+  const s = DB.semesters.find(x => x.id === id);
+  if (!s) return;
+  const cnt = recordsOf(id).length;
+  confirmAction('删除学期', `确定删除学期「<b>${esc(s.name)}</b>」？该学期下 <b>${cnt}</b> 条记录将一并删除，且不可恢复。`, '确认删除', true, async () => {
+		if (!busyStart()) return;
+		try {
+		  await apiDelete('semesters', id);
+		  await apiDeleteByFilter('records', 'semester_id', id);
+		  DB.semesters = DB.semesters.filter(x => x.id !== id);
+		  DB.records = DB.records.filter(r => r.semester_id !== id);
+		  if (state.currentSemesterId === id) {
+				state.currentSemesterId = DB.semesters[0]?.id || null;
+				if (state.currentSemesterId) localStorage.setItem('currentSemesterId', state.currentSemesterId);
+		  }
+		  render();
+		  toast('学期已删除', 'success');
+		} catch (e) { toast('删除失败: ' + e.message, 'error'); }
+		finally { busyEnd(); }
+  });
+}
 
 /* ===== 账号管理 ===== */
-function vwAccount() { if (!isAdmin()) return ''; return `<div class="mt" style="font-size:16px">👤 账号管理</div><div class="card" style="margin-top:14px">${DB.accounts.map(a => `<div class="kv"><div class="k"><div class="n">${esc(a.name)}</div><div class="s">学号 ${esc(a.student_id)} · ${a.role}</div></div><button class="btn btn-ghost btn-xs" onclick="editAcc('${a.student_id}')">编辑</button><button class="btn btn-red btn-xs" onclick="delAcc('${a.student_id}')">删除</button></div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addAcc()">+ 新增账号</button></div>`; }
+function vwAccount() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); return `<div class="mt" style="font-size:16px">👤 账号管理</div><div class="card" style="margin-top:14px">${DB.accounts.map(a => `<div class="kv"><div class="k"><div class="n">${esc(a.name)}</div><div class="s">学号 ${esc(a.student_id)} · ${a.role}</div></div><button class="btn btn-ghost btn-xs" onclick="editAcc('${a.student_id}')">编辑</button><button class="btn btn-red btn-xs" onclick="delAcc('${a.student_id}')">删除</button></div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addAcc()">+ 新增账号</button></div>`; }
 function addAcc() { if (!isAdmin()) return; accForm(null); }
 function editAcc(sid) { if (!isAdmin()) return; accForm(sid); }
 function accForm(sid) { if (!isAdmin()) return; const a = sid ? DB.accounts.find(x => x.student_id === sid) : null; const roleOpts = (sel) => ['总管理员', '生活委员', '班委', '普通同学'].map(r => `<option ${r === sel ? 'selected' : ''}>${r}</option>`).join(''); openModal(a ? '编辑账号' : '新增账号', `<div class="form-line"><label>姓名</label><input class="field" id="an" value="${a ? esc(a.name) : ''}"></div><div class="form-line"><label>学号</label><input class="field" id="as" value="${a ? esc(a.student_id) : ''}" ${a ? 'readonly' : ''} placeholder="如：20"></div><div class="form-line"><label>角色</label><select class="field" id="ar">${roleOpts(a ? a.role : '')}</select></div><div class="form-line"><label>密码${a ? '（留空则不修改）' : ''}</label><input class="field" id="ap" type="password" placeholder="登录密码"></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveAcc('${sid || ''}')">保存</button></div>`); }
-async function saveAcc(sid) { if (!isAdmin()) return; const name = document.getElementById('an').value.trim(); const sidv = document.getElementById('as').value.trim(); const role = document.getElementById('ar').value; const pw = document.getElementById('ap').value; if (!name || !sidv) { alert('请填写姓名与学号'); return; } try { if (sid) { const acc = DB.accounts.find(x => x.student_id === sid); if (acc) { acc.name = name; acc.role = role; const patchData = { name, role }; if (pw) patchData.password = pw; await apiPatch('accounts', sid, patchData, 'student_id'); } } else { if (DB.accounts.some(x => x.student_id === sidv)) { alert('该学号已存在'); return; } const newAcc = { student_id: sidv, password: pw || '123456', role, name }; await apiPost('accounts', newAcc); DB.accounts.push(newAcc); } closeModal(); render(); } catch (e) { alert('操作失败: ' + e.message); } }
-async function delAcc(sid) { if (!isAdmin()) return; if (!confirm('删除该账号？')) return; try { await apiDelete('accounts', sid, 'student_id'); DB.accounts = DB.accounts.filter(x => x.student_id !== sid); render(); } catch (e) { alert('删除失败: ' + e.message); } }
+async function saveAcc(sid) {
+  if (!isAdmin()) return;
+  const name = document.getElementById('an').value.trim();
+  const sidv = document.getElementById('as').value.trim();
+  const role = document.getElementById('ar').value;
+  const pw = document.getElementById('ap').value;
+  if (!name || !sidv) { toast('请填写姓名与学号', 'warn'); return; }
+  if (!busyStart()) return;
+  try {
+		if (sid) {
+		  const acc = DB.accounts.find(x => x.student_id === sid);
+		  if (acc) { acc.name = name; acc.role = role; const patchData = { name, role }; if (pw) patchData.password = pw; await apiPatch('accounts', sid, patchData, 'student_id'); }
+		} else {
+		  if (DB.accounts.some(x => x.student_id === sidv)) { toast('该学号已存在', 'warn'); return; }
+		  const newAcc = { student_id: sidv, password: pw || '123456', role, name };
+		  await apiPost('accounts', newAcc);
+		  DB.accounts.push(newAcc);
+		  toast(`账号已创建${pw ? '' : '，默认密码 123456'}`, 'success');
+		}
+		closeModal();
+		render();
+  } catch (e) { toast('操作失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
+}
+async function delAcc(sid) {
+  if (!isAdmin()) return;
+  const acc = DB.accounts.find(x => x.student_id === sid);
+  confirmAction('删除账号', `确定删除账号「<b>${acc ? esc(acc.name) : sid}</b>」？`, '删除', true, async () => {
+		if (!busyStart()) return;
+		try {
+		  await apiDelete('accounts', sid, 'student_id');
+		  DB.accounts = DB.accounts.filter(x => x.student_id !== sid);
+		  render();
+		  toast('账号已删除', 'success');
+		} catch (e) { toast('删除失败: ' + e.message, 'error'); }
+		finally { busyEnd(); }
+  });
+}
 
-function vwNotice() { if (!isAdmin()) return ''; return `<div class="mt" style="font-size:16px">📢 公告与班级名</div><div class="card" style="margin-top:14px"><div class="form-line"><label>班级名称</label><input class="field" id="cn" value="${esc(DB.settings.class_name)}"></div><div class="form-line"><label>通知内容</label><textarea class="field" id="nt" rows="4">${esc(DB.settings.notice || '')}</textarea></div><button class="btn btn-primary btn-block" onclick="saveNotice()">保存</button></div>`; }
-async function saveNotice() { const className = document.getElementById('cn').value.trim(); const notice = document.getElementById('nt').value.trim(); try { await apiPatch('settings', 1, { class_name: className, notice: notice }); DB.settings.class_name = className; DB.settings.notice = notice; alert('已保存'); render(); } catch (e) { alert('保存失败: ' + e.message); } }
+function vwNotice() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); return `<div class="mt" style="font-size:16px">📢 公告与班级名</div><div class="card" style="margin-top:14px"><div class="form-line"><label>班级名称</label><input class="field" id="cn" maxlength="30" value="${esc(DB.settings.class_name)}"></div><div class="form-line"><label>通知内容</label><textarea class="field" id="nt" rows="4" maxlength="300">${esc(DB.settings.notice || '')}</textarea></div><button class="btn btn-primary btn-block" onclick="saveNotice()">保存</button></div>`; }
+async function saveNotice() {
+  const className = document.getElementById('cn').value.trim();
+  const notice = document.getElementById('nt').value.trim();
+  if (!className) { toast('班级名称不能为空', 'warn'); return; }
+  const sid = DB.settings && DB.settings.id != null ? DB.settings.id : 1;
+  if (!busyStart()) return;
+  try {
+		await apiPatch('settings', sid, { class_name: className, notice: notice });
+		DB.settings.class_name = className;
+		DB.settings.notice = notice;
+		toast('已保存', 'success');
+		render();
+  } catch (e) { toast('保存失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
+}
 
-function vwLog() { if (!isAdmin()) return ''; const visitLogs = DB.logs.map(l => ({ ...l, type: '访问', action: '访问了平台' })); const opLogs = DB.oplogs.map(l => ({ ...l, type: '操作', action: l.action || '' })); const allLogs = [...visitLogs, ...opLogs].sort((a, b) => b.time - a.time).slice(0, 200); return `<div class="mt" style="font-size:16px">📋 全部日志</div><div class="card" style="margin-top:14px">${allLogs.length ? allLogs.map(l => `<div class="kv"><div class="k"><div class="n">${esc(l.type)} ${esc(l.action)}</div><div class="s">${esc(l.operator || l.nickname || '系统')} · ${l.detail ? esc(l.detail) : ''} · ${new Date(l.time).toLocaleString('zh-CN')}</div></div></div>`).join('') : '<div class="empty">暂无日志</div>'}</div>`; }
+function vwLog() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); const visitLogs = DB.logs.map(l => ({ ...l, type: '访问', action: '访问了平台' })); const opLogs = DB.oplogs.map(l => ({ ...l, type: '操作', action: l.action || '' })); const allLogs = [...visitLogs, ...opLogs].sort((a, b) => b.time - a.time).slice(0, 200); return `<div class="mt" style="font-size:16px">📋 全部日志</div><div class="card" style="margin-top:14px">${allLogs.length ? allLogs.map(l => `<div class="kv"><div class="k"><div class="n">${esc(l.type)} ${esc(l.action)}</div><div class="s">${esc(l.operator || l.nickname || '系统')} · ${l.detail ? esc(l.detail) : ''} · ${new Date(l.time).toLocaleString('zh-CN')}</div></div></div>`).join('') : emptyBox('📋', '暂无日志')}</div>`; }
 
 /* ===== 登录 ===== */
-function openLogin() { openModal('管理员登录', `<div class="form-line"><label>学号</label><input class="field" id="lgId" placeholder="如 20"></div><div class="form-line"><label>密码</label><input class="field" id="lgPw" type="password" placeholder="请输入密码"></div><button class="btn btn-primary btn-block" onclick="doLogin()">登录</button><div style="font-size:12px;color:var(--ink-soft);text-align:center;margin-top:10px">演示账号：总管理员 20 / 生活委员 32</div>`); }
+function openLogin() { openModal('管理员登录', `<div class="form-line"><label>学号</label><input class="field" id="lgId" placeholder="如 20" onkeydown="if(event.key==='Enter')doLogin()"></div><div class="form-line"><label>密码</label><input class="field" id="lgPw" type="password" placeholder="请输入密码" onkeydown="if(event.key==='Enter')doLogin()"></div><button class="btn btn-primary btn-block" onclick="doLogin()">登录</button><div style="font-size:12px;color:var(--ink-soft);text-align:center;margin-top:10px">演示账号：总管理员 20 / 生活委员 32</div>`); }
 let _loginFails = 0, _loginLockUntil = 0;
 async function doLogin() {
-  if (Date.now() < _loginLockUntil) { const wait = Math.ceil((_loginLockUntil - Date.now()) / 1000); alert(`尝试次数过多，请 ${wait} 秒后再试`); return; }
+  if (Date.now() < _loginLockUntil) { const wait = Math.ceil((_loginLockUntil - Date.now()) / 1000); toast(`尝试次数过多，请 ${wait} 秒后再试`, 'warn', 3000); return; }
   const id = document.getElementById('lgId').value.trim(); const pw = document.getElementById('lgPw').value.trim();
-  if (!id || !pw) { alert('请输入学号和密码'); return; }
+  if (!id || !pw) { toast('请输入学号和密码', 'warn'); return; }
   const btn = document.querySelector('#modalBody .btn-primary');
   if (btn) { btn.disabled = true; btn.textContent = '登录中…'; }
   try {
-	const acc = await apiGetOne('accounts', 'student_id', id, 'student_id,name,role,password');
-	if (!acc || acc.password !== pw) { _loginFails++; if (_loginFails >= 5) { _loginLockUntil = Date.now() + 30000; _loginFails = 0; } alert('学号或密码错误'); return; }
-	_loginFails = 0;
-	state.user = { studentId: acc.student_id, role: acc.role, name: acc.name };
-	closeModal();
-	logVisit(acc.name);
-	state.history = ['home'];
-	go('main', false);
-  } catch (e) { alert('登录失败: ' + e.message); } finally { if (btn) { btn.disabled = false; btn.textContent = '登录'; } }
+		const acc = await apiGetOne('accounts', 'student_id', id, 'student_id,name,role,password');
+		if (!acc || acc.password !== pw) { _loginFails++; if (_loginFails >= 5) { _loginLockUntil = Date.now() + 30000; _loginFails = 0; } toast('学号或密码错误', 'error'); return; }
+		_loginFails = 0;
+		state.user = { studentId: acc.student_id, role: acc.role, name: acc.name };
+		closeModal();
+		toast(`欢迎回来，${acc.name}`, 'success');
+		logVisit(acc.name);
+		state.history = ['home'];
+		go('main', false);
+  } catch (e) { toast('登录失败: ' + e.message, 'error'); } finally { if (btn) { btn.disabled = false; btn.textContent = '登录'; } }
 }
 function enterBrowse() { state.user = null; logVisit('访客'); state.noticeAck = false; state.history = ['home']; go('main', false); }
 
-function openImg(id) { const r = recordsOf(state.semester).find(x => x.id === id); if (!r || !r.invoice) { alert('该记录无发票图片'); return; } document.getElementById('imgBody').innerHTML = `<span class="x" onclick="closeModal()">×</span><h3>发票 / 收据</h3><img src="${esc(safeImgSrc(r.invoice))}"><p style="font-size:12px;color:var(--ink-soft);text-align:center;margin:10px 0 0">${r.date} · 经手：${esc(r.handler)}</p>`; openMask('imgMask'); }
+function openImg(id) { const r = recordsOf(state.semester).find(x => x.id === id); if (!r || !r.invoice) { toast('该记录无发票图片', 'info'); return; } document.getElementById('imgBody').innerHTML = `<span class="x" onclick="closeModal()">×</span><h3>发票 / 收据</h3><img src="${esc(safeImgSrc(r.invoice))}"><p style="font-size:12px;color:var(--ink-soft);text-align:center;margin:10px 0 0">${r.date} · 经手：${esc(r.handler)}</p>`; openMask('imgMask'); }
 
 function openModal(title, body) { document.getElementById('modalBody').innerHTML = `<span class="x" onclick="closeModal()">×</span><h3>${title}</h3>${body}`; openMask('modal'); }
 function openMask(id) { document.getElementById(id).classList.add('show'); }
 function closeModal() { document.getElementById('modal').classList.remove('show'); document.getElementById('imgMask').classList.remove('show'); }
+
+/* Esc 键关闭模态框 */
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ===== 静默数据刷新（页面重新可见 / 定时），数据变化时才提示 ===== */
+let _lastLoad = 0;
+async function silentRefresh() {
+  if (state._refreshing || !DB.semesters.length) return;
+  if (document.getElementById('modal').classList.contains('show')) return;
+  if (document.getElementById('imgMask').classList.contains('show')) return;
+  if (state.view === 'edit' || state.view === 'feedback') return;
+  state._refreshing = true;
+  topbar('loading');
+  try {
+		const snap = JSON.stringify([DB.semesters, DB.records, DB.applications, DB.feedbacks, DB.settings]);
+		const ok = await loadAllData(true);
+		if (ok) {
+		  _lastLoad = Date.now();
+		  const after = JSON.stringify([DB.semesters, DB.records, DB.applications, DB.feedbacks, DB.settings]);
+		  if (after !== snap) {
+				render();
+				toast('数据已更新', 'info');
+		  }
+		}
+  } catch (e) { }
+  finally { state._refreshing = false; topbar('done'); }
+}
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && Date.now() - _lastLoad > 20000) silentRefresh();
+});
+setInterval(() => { if (Date.now() - _lastLoad > 60000) silentRefresh(); }, 30000);
 
 /* ================================================================
    6. 启动
    ================================================================ */
 window.onload = async function() {
   loadTheme();
-  document.getElementById('content').innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--ink-soft)">⏳ 正在连接云端数据库...</div>';
+  document.getElementById('content').innerHTML = `
+		<div class="skel-page">
+		  <div class="skel skel-logo"></div>
+		  <div class="skel skel-title"></div>
+		  <div class="skel skel-line"></div>
+		  <div class="skel-row"><div class="skel skel-card"></div><div class="skel skel-card"></div></div>
+		  <div class="skel skel-block"></div>
+		  <div style="text-align:center;margin-top:22px;font-size:12.5px;color:var(--ink-soft)">正在连接云端数据库…</div>
+		</div>`;
   const ok = await loadAllData();
-  if (ok) { go('home', false); console.log('🚀 班费平台启动成功！版本 ' + APP_VERSION); }
+  if (ok) {
+		_lastLoad = Date.now();
+		go('home', false);
+		console.log('🚀 班费平台启动成功！版本 ' + APP_VERSION);
+  }
 };
 </script>
 </body>
