@@ -99,6 +99,7 @@
 - **Workbuddy Hy3**：搭建项目初始框架与基础功能结构
 - **Claude Sonnet 5**：UI 设计优化与视觉调整
 - **Claude Sonnet 5 + Kimi K2.6**：安全检查与 Bug 排查
+- **Workbuddy Hy4 + DeepSeek-V4-Flash**：进行PC端的自适应设计和丰富UI动画
 
 同时感谢以下云服务平台提供的基础设施支持：
 
