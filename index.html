@@ -72,7 +72,7 @@
 		font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;
 		font-feature-settings:"tnum" 1;letter-spacing:.005em;
 		transition:background .3s,color .3s}
-  .app{max-width:460px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;transition:background .3s}
+  .app{max-width:1200px;margin:0 auto;padding: 0 16px;min-height:100vh;background:var(--bg);position:relative;transition:background .3s}
 
   /* ===== 顶部导航栏 ===== */
   .navbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;height:60px;padding:0 6px;
@@ -581,6 +581,108 @@
 		*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 		.flow,.stamp-mini,.dot{animation:none}
   }
+
+  /* =============================================================
+     补丁：方向感知 + 滚动揭示 + 水波纹 + 导航阴影 + 返回顶部
+     ============================================================= */
+
+  /* 方向感知滑入 */
+  .content-enter.from-right { transform: translateX(30px); }
+  .content-enter.from-left { transform: translateX(-30px); }
+  .content-enter.from-right.active,
+  .content-enter.from-left.active { transform: none; }
+
+  /* 滚动揭示 */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .5s cubic-bezier(.34, 1.56, .64, 1),
+                transform .6s cubic-bezier(.34, 1.56, .64, 1);
+    transition-delay: calc(var(--i, 0) * 55ms);
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* 水波纹 */
+  .btn, .chip, .tab, .entry, .menu-item, .nav-back, .env-icon {
+    position: relative;
+    overflow: hidden;
+  }
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: .16;
+    pointer-events: none;
+    transform: scale(0);
+    animation: rippleOut .62s cubic-bezier(.34, 1.56, .64, 1) forwards;
+  }
+  @keyframes rippleOut {
+    0% { transform: scale(0); opacity: .18; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+
+  /* 导航栏滚动阴影 */
+  .navbar.is-scrolled {
+    box-shadow: 0 12px 32px -24px rgba(30, 24, 14, .9);
+  }
+
+  /* 返回顶部按钮 */
+  .to-top {
+    position: fixed;
+    right: 22px;
+    bottom: 26px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    cursor: pointer;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: 0 12px 30px -14px rgba(30, 24, 14, .55);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(16px) scale(.9);
+    transition: opacity .32s cubic-bezier(.34, 1.56, .64, 1),
+                transform .42s cubic-bezier(.34, 1.56, .64, 1),
+                color .25s, border-color .25s, background .3s, box-shadow .3s;
+  }
+  .to-top svg { width: 19px; height: 19px; }
+  .to-top.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+  .to-top:hover {
+    color: var(--orange);
+    border-color: var(--orange);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px -14px rgba(193, 99, 62, .7);
+  }
+  @media (max-width:639px) { .to-top { display: none; } }
+  @media (min-width:640px) { .to-top { display: flex; } }
+
+  /* 减少动效偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity:1 !important; transform:none !important; }
+    .content-enter { opacity:1 !important; transform:none !important; }
+    .ripple { display:none !important; }
+  }
+
+  /* ===== 移动端适配 ===== */
+  @media (max-width: 767px) {
+    .app {
+      max-width: 100% !important;
+      padding: 0 16px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -597,6 +699,11 @@
 		<div class="nav-right" id="navRight"></div>
   </nav>
   <div id="content" class="content-enter"></div>
+
+  <!-- 返回顶部按钮 -->
+  <button class="to-top" id="toTop" aria-label="返回顶部" title="返回顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V6"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
 </div>
 
 <!-- 通用模态框 -->
@@ -615,8 +722,8 @@
 /* ================================================================
    1. 版本信息
    ================================================================ */
-const APP_VERSION = 'v2.3.0';
-const APP_DATE = '2026年9月5日';
+const APP_VERSION = 'v3.1.0';
+const APP_DATE = '2026年9月6日';
 
 /* ================================================================
    2. Supabase 云端配置
@@ -743,7 +850,7 @@ const ROLE_KEEPER = '生活委员';
 const ROLE_COMMITTEE = '班委';
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
-const safeImgSrc = s => (/^(https?:|data:image\/)/i.test(String(s || ''))) ? s : '';
+// 移除 safeImgSrc 不再使用，保留字段但不影响
 const fmtMoney = n => { const num = Number(n || 0); const s = Math.abs(num).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); return num < 0 ? '-' + s : s; };
 const emptyBox = (ico, txt) => `<div class="empty"><span class="empty-ico">${ico}</span>${txt}</div>`;
 
@@ -869,7 +976,10 @@ async function loadAllData(silent = false) {
   }
 }
 
+/* ===== 补丁：方向感知（修改 go / back / popstate / render） ===== */
+
 function go(view, push = true) {
+  window._dir = 'fwd'; // 新增
   if (push) state.history.push(state.view);
   state.view = view;
   if (view === 'records' || view === 'main') {
@@ -885,6 +995,7 @@ function go(view, push = true) {
 
 /* 浏览器物理返回键同步 SPA 视图 */
 window.addEventListener('popstate', function () {
+  window._dir = 'back'; // 新增
   if (state.history.length > 1) {
 		state.view = state.history.pop();
   } else {
@@ -894,6 +1005,7 @@ window.addEventListener('popstate', function () {
 });
 
 function back() {
+  window._dir = 'back'; // 新增
   if (state.history.length > 1) {
 		history.back();
   } else {
@@ -990,7 +1102,7 @@ function openAbout() {
 }
 
 /* ================================================================
-   4. 渲染函数
+   4. 渲染函数（修改 newContent.className 以支持方向）
    ================================================================ */
 function render() {
   const navBack = document.getElementById('navBack');
@@ -1059,11 +1171,13 @@ function render() {
   const V = { home: vwHome, main: vwMain, records: vwRecords, edit: vwEdit, admin: vwAdmin, semester: vwSemester, account: vwAccount, notice: vwNotice, log: vwLog, inbox: vwInbox, feedback: vwFeedback };
   const html = (V[state.view] || vwHome)();
 
-  // ---- 重建 #content 元素触发入场动画 ----
+  // ---- 重建 #content 元素触发入场动画，并添加方向类 ----
   const oldContent = document.getElementById('content');
   const newContent = document.createElement('div');
   newContent.id = 'content';
-  newContent.className = 'content-enter';
+  // 根据 window._dir 添加方向类
+  const dir = window._dir || 'fwd';
+  newContent.className = 'content-enter' + (dir === 'back' ? ' from-left' : ' from-right');
   newContent.innerHTML = html;
   oldContent.parentNode.replaceChild(newContent, oldContent);
 
@@ -1095,7 +1209,7 @@ function logout() {
 }
 
 /* ================================================================
-   5. 各视图
+   5. 各视图（发票相关展示已移除）
    ================================================================ */
 function vwHome() {
   return `
@@ -1142,10 +1256,10 @@ function semSelect() {
   return `<div class="sem-switch"><label>当前学期</label><select class="sem" onchange="switchSem(this.value)">${opts}</select></div>`;
 }
 
+/* 修改 flowHTML：移除发票标签和点击查看图片 */
 function flowHTML(r, idx) {
   const d = r.date ? r.date.slice(8) : '--', m = r.date ? r.date.slice(5, 7) : '--';
   const sign = r.type === 'income' ? '+' : '-';
-  const invTag = r.invoice ? `<span class="tag inv">发票</span>` : '';
   const pend = r.pending_delete ? `<span class="tag pending">⏳ 待删除</span>` : '';
   let ops = '';
   if (!r.pending_delete && canManageFlow()) {
@@ -1156,12 +1270,13 @@ function flowHTML(r, idx) {
 		  ops += `<button class="btn btn-red btn-xs" onclick="event.stopPropagation();applyDelete('${r.id}')">删除</button>`;
 		}
   }
-  const tap = r.invoice ? `onclick="openImg('${r.id}')"` : (isVisitor() ? '' : `onclick="editRecord('${r.id}')"`);
+  // 移除发票点击，仅保留编辑点击（非访客）
+  const tap = (isVisitor() ? '' : `onclick="editRecord('${r.id}')"`);
   const delay = typeof idx === 'number' ? ` style="animation-delay:${Math.min(idx, 14) * 28}ms"` : '';
   return `<div class="flow" ${tap}${delay}>
   <div class="date"><span class="d">${d}</span><span style="font-size:9px;display:block;color:var(--ink-soft)">${m}月</span></div>
   <div class="body"><div class="purpose">${esc(r.purpose)}</div>
-		<div class="meta"><span class="tag ${r.type}">${r.type === 'income' ? '收入' : '支出'}</span>${invTag}${pend}经手：${esc(r.handler)}</div></div>
+		<div class="meta"><span class="tag ${r.type}">${r.type === 'income' ? '收入' : '支出'}</span>${pend}经手：${esc(r.handler)}</div></div>
   <div class="amt ${r.type}">${sign}¥${fmtMoney(r.amount)}</div>
   ${ops ? `<div class="ops">${ops}</div>` : ''}
   </div>`;
@@ -1410,7 +1525,7 @@ async function saveRecord() {
 		if (state.editingId) {
 		  const old = DB.records.find(r => r.id === state.editingId);
 		  if (!old) throw new Error('记录不存在');
-		  // 保留原有发票，不再硬编码清空（Bug 修复）
+		  // 保留原有发票（字段保留但不再用于展示）
 		  const updated = { ...old, date, type, purpose, amount, handler, updated_at: Date.now() };
 		  await apiPatch('records', state.editingId, updated);
 		  const idx = DB.records.findIndex(r => r.id === state.editingId);
@@ -1764,7 +1879,10 @@ function vwAdmin() {
   </div>`;
 }
 
+/* ===== 数据导出（增加确认） ===== */
 function exportData() {
+  if (!confirm('确定导出为HTML文件吗？')) return;
+
   const now = new Date();
   const dateStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
   const fileName = `班费数据_${dateStr}.html`;
@@ -1800,12 +1918,12 @@ function exportData() {
 }
 function openExportedFile() { if (window._exportedBlobUrl) { window.open(window._exportedBlobUrl, '_blank'); } else { toast('文件链接已失效，请重新导出', 'warn'); } closeModal(); }
 
+/* ===== 数据管理（已移除“恢复示例数据”按钮） ===== */
 function openDataMgr() {
   openModal('数据管理', `
   <p style="font-size:13px;color:var(--ink-soft)">清空后所有流水记录将被删除，操作不可撤销。学期、账号、设置将保留。</p>
   <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
 		<button class="btn btn-red btn-block" onclick="clearRecords()">清空全部流水记录</button>
-		<button class="btn btn-ghost btn-block" onclick="restoreSample()">恢复示例数据</button>
 		<button class="btn btn-ghost btn-block" onclick="closeModal()">关闭</button>
   </div>`);
 }
@@ -1822,34 +1940,7 @@ async function clearRecords() {
 		finally { busyEnd(); }
   });
 }
-async function restoreSample() {
-  confirmAction('恢复示例数据', '将<b>清空当前全部记录</b>并写入示例数据，确定继续？', '恢复示例', true, async () => {
-		if (!busyStart()) return;
-		try {
-		  const sem = curSem();
-		  if (!sem) { toast('请先在学期管理中添加学期', 'warn'); return; }
-		  await apiDeleteAll('records');
-		  const base = Date.now();
-		  const mk = (i, date, type, purpose, amount, handler) => ({ id: uid() + i.toString(36), semester_id: sem.id, date, type, purpose, amount, handler, invoice: null, pending_delete: false, created_at: base, updated_at: base });
-		  const sample = [
-				mk(1, '2025-09-05', 'income', '上学期结余结转', 5000, '生活委员'),
-				mk(2, '2025-09-12', 'income', '班费收缴（每人50元×45人）', 2250, '生活委员'),
-				mk(3, '2025-09-20', 'expense', '班级绿植采购', 168, '王小明'),
-				mk(4, '2025-10-08', 'expense', '运动会班级横幅', 96, '李华'),
-				mk(5, '2025-10-22', 'expense', '期中奖品与文具', 240, '生活委员'),
-				mk(6, '2025-11-15', 'income', '校园义卖班级分成', 530, '张伟'),
-				mk(7, '2025-12-03', 'expense', '班级联欢会零食', 388, '赵敏'),
-				mk(8, '2025-12-20', 'expense', '期末复习资料打印', 152, '生活委员')
-		  ];
-		  await apiPost('records', sample);
-		  DB.records.push(...sample);
-		  await addOpLog('恢复示例', `恢复了示例数据（${sample.length} 条，挂载到当前学期「${sem.name}」）`);
-		  toast('示例数据已恢复', 'success');
-		  render();
-		} catch (e) { toast('恢复失败: ' + e.message, 'error'); }
-		finally { busyEnd(); }
-  });
-}
+/* 已删除 restoreSample() 函数及其所有硬编码示例数据 */
 
 /* ===== 学期管理 ===== */
 function vwSemester() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); return `<div class="mt" style="font-size:16px">📅 学期管理</div><div class="card" style="margin-top:14px">${DB.semesters.map(s => `<div class="kv"><div class="k"><div class="n">${esc(s.name)} ${s.is_current ? '<span class="tag income">当前</span>' : ''}</div><div class="s">起始余额 ¥${fmtMoney(s.start_balance)} · ${recordsOf(s.id).length} 条记录</div></div><button class="btn btn-ghost btn-xs" onclick="editSem('${s.id}')">编辑</button><button class="btn btn-ghost btn-xs" onclick="setCurSem('${s.id}')">设为当前</button><button class="btn btn-red btn-xs" onclick="delSem('${s.id}')">删除</button></div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addSem()">+ 新增学期</button></div>`; }
@@ -1966,8 +2057,8 @@ async function saveNotice() {
 
 function vwLog() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); const visitLogs = DB.logs.map(l => ({ ...l, type: '访问', action: '访问了平台' })); const opLogs = DB.oplogs.map(l => ({ ...l, type: '操作', action: l.action || '' })); const allLogs = [...visitLogs, ...opLogs].sort((a, b) => b.time - a.time).slice(0, 200); return `<div class="mt" style="font-size:16px">📋 全部日志</div><div class="card" style="margin-top:14px">${allLogs.length ? allLogs.map(l => `<div class="kv"><div class="k"><div class="n">${esc(l.type)} ${esc(l.action)}</div><div class="s">${esc(l.operator || l.nickname || '系统')} · ${l.detail ? esc(l.detail) : ''} · ${new Date(l.time).toLocaleString('zh-CN')}</div></div></div>`).join('') : emptyBox('📋', '暂无日志')}</div>`; }
 
-/* ===== 登录 ===== */
-function openLogin() { openModal('管理员登录', `<div class="form-line"><label>学号</label><input class="field" id="lgId" placeholder="如 20" onkeydown="if(event.key==='Enter')doLogin()"></div><div class="form-line"><label>密码</label><input class="field" id="lgPw" type="password" placeholder="请输入密码" onkeydown="if(event.key==='Enter')doLogin()"></div><button class="btn btn-primary btn-block" onclick="doLogin()">登录</button><div style="font-size:12px;color:var(--ink-soft);text-align:center;margin-top:10px">演示账号：总管理员 20 / 生活委员 32</div>`); }
+/* ===== 登录（已删除演示小字） ===== */
+function openLogin() { openModal('管理员登录', `<div class="form-line"><label>学号</label><input class="field" id="lgId" placeholder="如 20" onkeydown="if(event.key==='Enter')doLogin()"></div><div class="form-line"><label>密码</label><input class="field" id="lgPw" type="password" placeholder="请输入密码" onkeydown="if(event.key==='Enter')doLogin()"></div><button class="btn btn-primary btn-block" onclick="doLogin()">登录</button>`); }
 let _loginFails = 0, _loginLockUntil = 0;
 async function doLogin() {
   if (Date.now() < _loginLockUntil) { const wait = Math.ceil((_loginLockUntil - Date.now()) / 1000); toast(`尝试次数过多，请 ${wait} 秒后再试`, 'warn', 3000); return; }
@@ -1989,7 +2080,8 @@ async function doLogin() {
 }
 function enterBrowse() { state.user = null; logVisit('访客'); state.noticeAck = false; state.history = ['home']; go('main', false); }
 
-function openImg(id) { const r = recordsOf(state.semester).find(x => x.id === id); if (!r || !r.invoice) { toast('该记录无发票图片', 'info'); return; } document.getElementById('imgBody').innerHTML = `<span class="x" onclick="closeModal()">×</span><h3>发票 / 收据</h3><img src="${esc(safeImgSrc(r.invoice))}"><p style="font-size:12px;color:var(--ink-soft);text-align:center;margin:10px 0 0">${r.date} · 经手：${esc(r.handler)}</p>`; openMask('imgMask'); }
+/* 移除 openImg 函数（发票查看） */
+// openImg 已删除
 
 function openModal(title, body) { document.getElementById('modalBody').innerHTML = `<span class="x" onclick="closeModal()">×</span><h3>${title}</h3>${body}`; openMask('modal'); }
 function openMask(id) { document.getElementById(id).classList.add('show'); }
@@ -2027,6 +2119,89 @@ document.addEventListener('visibilitychange', () => {
 setInterval(() => { if (Date.now() - _lastLoad > 60000) silentRefresh(); }, 30000);
 
 /* ================================================================
+   补丁：滚动揭示、水波纹、导航栏阴影、返回顶部控制
+   ================================================================ */
+
+// 滚动揭示
+let _revealIO = null;
+function initReveal(root) {
+  if (!root) return;
+  const targets = [];
+  const collect = (el) => {
+    let i = 0;
+    Array.from(el.children).forEach(ch => {
+      if (ch.classList.contains('page') || ch.classList.contains('hidden')) return;
+      ch.classList.add('reveal');
+      ch.style.setProperty('--i', String(i++));
+      targets.push(ch);
+    });
+  };
+  collect(root);
+  if (!targets.length) return;
+  if (!('IntersectionObserver' in window) ||
+      (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+    targets.forEach(t => t.classList.add('in-view'));
+    return;
+  }
+  if (_revealIO) _revealIO.disconnect();
+  _revealIO = new IntersectionObserver((entries, obs) => {
+    entries.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.add('in-view'); obs.unobserve(en.target); }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -6% 0px' });
+  targets.forEach(t => _revealIO.observe(t));
+}
+
+// 监听 #content 变化重新初始化
+const contentObserver = new MutationObserver(() => {
+  const root = document.getElementById('content');
+  if (root) initReveal(root);
+});
+contentObserver.observe(document.getElementById('content'), { childList: true, subtree: true });
+
+// 水波纹
+document.addEventListener('pointerdown', function(e) {
+  if (e.button != null && e.button !== 0) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const el = e.target && e.target.closest
+    ? e.target.closest('.btn,.chip,.tab,.entry,.menu-item,.nav-back,.env-icon')
+    : null;
+  if (!el || el.disabled) return;
+  const rect = el.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height) * 1.15;
+  const ink = document.createElement('span');
+  ink.className = 'ripple';
+  ink.style.width = ink.style.height = size + 'px';
+  ink.style.left = (e.clientX - rect.left - size / 2) + 'px';
+  ink.style.top = (e.clientY - rect.top - size / 2) + 'px';
+  el.appendChild(ink);
+  setTimeout(() => ink.remove(), 660);
+}, { passive: true });
+
+// 导航栏滚动阴影 + 返回顶部按钮控制
+(function() {
+  const nav = document.querySelector('.navbar');
+  const toTop = document.getElementById('toTop');
+  if (toTop) {
+    toTop.addEventListener('click', () => {
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  }
+  let ticking = false;
+  window.addEventListener('scroll', function() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
+      if (nav) nav.classList.toggle('is-scrolled', y > 8);
+      if (toTop) toTop.classList.toggle('show', y > 460);
+      ticking = false;
+    });
+  }, { passive: true });
+})();
+
+/* ================================================================
    6. 启动
    ================================================================ */
 window.onload = async function() {
@@ -2043,7 +2218,8 @@ window.onload = async function() {
   const ok = await loadAllData();
   if (ok) {
 		_lastLoad = Date.now();
-		go('home', false);
+	                go('home', false);
+                                setTimeout(() => initReveal(document.getElementById('content')), 100);
 		console.log('🚀 班费平台启动成功！版本 ' + APP_VERSION);
   }
 };
