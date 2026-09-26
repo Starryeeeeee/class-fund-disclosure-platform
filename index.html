@@ -122,7 +122,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 4px;
+    /* 图标往内收：4px → 6px */
+    padding: 0 6px;
   }
   .switch .slider .icon-sun,
   .switch .slider .icon-moon {
@@ -196,6 +197,23 @@
   .mt{font-family:var(--font-display);font-size:19px;font-weight:600;text-align:center;margin:4px 0 6px;letter-spacing:-.005em}
   .mt .cls{color:var(--orange)}
   .sub{font-size:13px;color:var(--ink-soft);text-align:center}
+
+  /* ============================================================
+     启动加载页（写死在 HTML 里，不依赖 JS 注入）
+     ============================================================ */
+  .boot-loading{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:calc(100vh - 108px);
+    gap:18px;
+  }
+  .boot-text{
+    font-size:13px;
+    color:var(--ink-soft);
+    letter-spacing:.02em;
+  }
 
   .card{
 		background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
@@ -329,7 +347,7 @@
   .loader-bars.lg{ --bar-width:4px;   --bar-height:20px; --bar-gap:4px; --bar-radius:2px; }
   .loader-bars.on-primary{ --bar-color: #fff; }
 
-  /* 加载动画 2 · 九宫格（上传发票） */
+  /* 加载动画 2 · 九宫格 */
   .loader-grid{
     --sq-size: 6px;
     --sq-gap: 3px;
@@ -536,16 +554,6 @@
   .toast-warn{border-left-color:var(--yellow)}
   .toast .t-ico{flex-shrink:0;font-size:15px;line-height:1}
 
-  .skel{background:linear-gradient(100deg,var(--card-soft) 35%,var(--card) 50%,var(--card-soft) 65%);background-size:280% 100%;animation:shimmer 1.4s ease infinite;border-radius:var(--radius);border:1px solid var(--line)}
-  @keyframes shimmer{from{background-position:120% 0}to{background-position:-80% 0}}
-  .skel-page{padding:48px 6px}
-  .skel-logo{width:76px;height:76px;margin:0 auto 18px}
-  .skel-title{height:24px;width:62%;margin:0 auto 12px;border-radius:4px}
-  .skel-line{height:13px;width:42%;margin:0 auto 36px;border-radius:4px}
-  .skel-row{display:flex;gap:12px;margin-bottom:14px}
-  .skel-card{flex:1;height:122px}
-  .skel-block{height:150px;margin-top:18px}
-
   #topbar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--orange),var(--yellow));z-index:200;opacity:0;transition:width .35s ease,opacity .35s ease;border-radius:0 2px 2px 0;pointer-events:none}
   #topbar.loading{opacity:1;width:82%}
   #topbar.done{width:100%;opacity:0}
@@ -580,7 +588,17 @@
 		<div class="nav-title" id="navTitle">班费公示平台</div>
 		<div class="nav-right" id="navRight"></div>
   </nav>
-  <div id="content" class="content-enter"></div>
+  <!-- 启动加载动画：写死在 HTML 里，页面一解析就显示，无需等 JS -->
+  <div id="content">
+    <div class="boot-loading">
+      <span class="loader-grid lg" style="--sq-color:var(--orange)">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </span>
+      <div class="boot-text">正在连接云端数据库…</div>
+    </div>
+  </div>
 </div>
 
 <div class="mask" id="modal" onclick="if(event.target===this)closeModal()">
@@ -593,7 +611,7 @@
 <div id="toastWrap"></div>
 
 <script>
-const APP_VERSION = 'v2.8.1';
+const APP_VERSION = 'v2.8.2';
 const APP_DATE = '2026年9月26日';
 
 const SUPABASE_URL = 'https://ejvzxlslfdweqavturmi.supabase.co';
@@ -976,7 +994,6 @@ function render() {
   else if (state.view === 'feedback') title = '我要反馈';
   document.getElementById('navTitle').textContent = title;
 
-  /* 昼夜切换：用新开关替换原来的胶囊 */
   const isDarkMode = document.body.classList.contains('dark-mode');
   let right = `
 		<label class="switch" aria-label="切换昼夜模式">
@@ -2021,17 +2038,11 @@ document.addEventListener('visibilitychange', () => {
 });
 setInterval(() => { if (Date.now() - _lastLoad > 60000) silentRefresh(); }, 30000);
 
+/* ================================================================
+   启动：初始加载动画已写在 HTML 里，这里只负责拉数据 + 跳转首页
+   ================================================================ */
 window.onload = async function() {
   loadTheme();
-  document.getElementById('content').innerHTML = `
-		<div class="skel-page">
-		  <div class="skel skel-logo"></div>
-		  <div class="skel skel-title"></div>
-		  <div class="skel skel-line"></div>
-		  <div class="skel-row"><div class="skel skel-card"></div><div class="skel skel-card"></div></div>
-		  <div class="skel skel-block"></div>
-		  <div style="text-align:center;margin-top:22px;font-size:12.5px;color:var(--ink-soft)">正在连接云端数据库…</div>
-		</div>`;
   const ok = await loadAllData();
   if (ok) {
 		_lastLoad = Date.now();
