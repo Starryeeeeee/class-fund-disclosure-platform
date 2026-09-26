@@ -148,9 +148,6 @@
   .mt .cls{color:var(--orange)}
   .sub{font-size:13px;color:var(--ink-soft);text-align:center}
 
-  /* 蓝色矩形分隔 */
-  .blue-bar{width:96px;height:8px;background:var(--blue);margin:18px 0 14px;border-radius:0}
-
   /* 启动加载 */
   .boot-loading{
 	display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -211,9 +208,6 @@
 	border-radius: 0 0 8px 8px;
 	position: relative;
   }
-  .folder.sunflower .folder-tab{ background: var(--sunflower); }
-  .folder.sunflower .folder-strip{ background: var(--sunflower); }
-  .folder.sunflower .folder-body{ background: var(--yellow-soft); }
   .folder-foot{
 	text-align: right;
 	margin-top: 6px;
@@ -222,7 +216,6 @@
 	font-weight: 500;
 	cursor: pointer;
   }
-  .folder.sunflower .folder-foot{ color: var(--sunflower-dark); }
   .folder-foot:active{ opacity: .6; }
 
   /* 铅笔箭头分隔符 */
@@ -285,16 +278,17 @@
 	--lf-line: #1A0F08;
   }
   .login-form > p{
-	font-family: "Inter", "PingFang SC", sans-serif;
+	font-family: var(--font-hand);
 	color: #fff;
-	font-weight: 700;
-	font-size: 18px;
+	font-weight: 500;
+	font-size: 19px;
 	margin: 0 0 2px;
 	display: flex;
 	flex-direction: column;
 	position: relative;
 	padding-left: 40px;
-	line-height: 1.3;
+	line-height: 1.35;
+	letter-spacing: .04em;
 	text-shadow: 0 1px 2px rgba(74,47,30,.28);
   }
   .login-form .quote-icon{
@@ -309,6 +303,7 @@
 	font-weight: 500;
 	font-size: 13.5px;
 	margin-top: 2px;
+	letter-spacing: 0;
 	transition: color .4s;
 	text-shadow: none;
   }
@@ -363,7 +358,7 @@
   .sticky-notice-wrap{
 	position: relative;
 	max-width: 420px;
-	margin: 10px 0 22px;
+	margin: 30px 0 22px;
   }
   .sticky-notice-wrap .tape{
 	position: absolute;
@@ -423,9 +418,9 @@
 	white-space: pre-wrap;
   }
   .sticky-notice .ns-ack{
-	text-align: left;
+	text-align: right;
 	margin-top: 14px;
-	padding-left: 4px;
+	padding-right: 4px;
   }
   .sticky-notice .ns-ack button{
 	background: var(--orange);
@@ -437,12 +432,13 @@
 	padding: 7px 16px;
 	border-radius: 6px;
 	cursor: pointer;
-	transition: background .15s, transform .12s;
-	box-shadow: 0 1px 2px rgba(163,79,48,.2);
+	transition: transform .12s, box-shadow .12s, background .15s;
+	box-shadow: 3px 3px 0 0 var(--orange-dark);
   }
   .sticky-notice .ns-ack button:active{
 	background: var(--orange-dark);
-	transform: scale(.97);
+	transform: translate(3px, 3px);
+	box-shadow: 0 0 0 0;
   }
 
   /* 并排按钮行 */
@@ -595,7 +591,7 @@
 	box-shadow: 0 0 0 3px rgba(193,99,62,.14);
   }
 
-  /* 管理员/班委变体（合并） */
+  /* 管理员变体 */
   .modal.m-admin .m-tab{ background: #B27551; }
   .modal.m-admin .m-strip{ background: #B27551; }
   .modal.m-admin .m-body{ background: #F5E9E0; }
@@ -605,14 +601,13 @@
   }
   .modal.m-admin .m-body .btn-primary{
 	background: #B27551;
-	box-shadow: 0 1px 2px rgba(178,117,81,.15), 0 6px 16px -8px rgba(178,117,81,.55);
+	box-shadow: 3px 3px 0 0 #8C5A3F;
   }
-  .modal.m-admin .m-body .btn-primary:active{ background: #96603F; }
-
-  /* 设置面板变体 */
-  .modal.m-settings .m-tab{ background: #5C7C93; }
-  .modal.m-settings .m-strip{ background: #5C7C93; }
-  .modal.m-settings .m-body{ background: #EAF0F3; }
+  .modal.m-admin .m-body .btn-primary:active{
+	background: #96603F;
+	transform: translate(3px, 3px);
+	box-shadow: 0 0 0 0;
+  }
 
   /* 导出弹窗变体 */
   .modal.m-export .m-tab{ background: var(--sunflower); }
@@ -622,9 +617,9 @@
   body.dark-mode .modal.m-admin .m-tab{ background: #8C5A3F; }
   body.dark-mode .modal.m-admin .m-strip{ background: #8C5A3F; }
   body.dark-mode .modal.m-admin .m-body{ background: #2E2620; }
-  body.dark-mode .modal.m-settings .m-tab{ background: #4A6478; }
-  body.dark-mode .modal.m-settings .m-strip{ background: #4A6478; }
-  body.dark-mode .modal.m-settings .m-body{ background: #24323D; }
+  body.dark-mode .modal.m-admin .m-body .btn-primary{
+	box-shadow: 3px 3px 0 0 #4A2E22;
+  }
   body.dark-mode .modal.m-export .m-tab{ background: #A87520; }
   body.dark-mode .modal.m-export .m-strip{ background: #A87520; }
   body.dark-mode .modal.m-export .m-body{ background: #3D3422; }
@@ -717,22 +712,15 @@
 	position: relative;
 	aspect-ratio: 1;
 	border-radius: 50%;
-	border: 2px solid transparent;
+	border: none;
 	cursor: pointer;
-	transition: transform .15s, border-color .15s;
+	transition: transform .15s, box-shadow .15s;
 	padding: 0;
-	background-clip: content-box;
-	background-origin: content-box;
+	box-shadow: 0 1px 3px rgba(0,0,0,.18);
   }
   .theme-swatch:active{ transform: scale(.9); }
   .theme-swatch.active{
-	border-color: var(--ink);
-	padding: 3px;
-	background-clip: padding-box;
-  }
-  .theme-swatch .inner{
-	width: 100%; height: 100%; border-radius: 50%;
-	box-shadow: 0 1px 3px rgba(0,0,0,.15);
+	box-shadow: 0 0 0 3px var(--card), 0 0 0 5px var(--ink), 0 1px 3px rgba(0,0,0,.18);
   }
 
   /* 分段控件 */
@@ -815,8 +803,8 @@
   .btn-block{width:100%}
   .btn-sm{padding:9px 14px;font-size:13px;border-radius:var(--radius-sm)}
   .btn-xs{padding:4px 8px;font-size:11px;border-radius:4px;font-weight:500}
-  .btn-feedback{background:var(--sunflower);color:#fff;border-radius:var(--radius-sm);padding:10px 18px;font-size:14px;box-shadow:0 2px 8px rgba(240,178,62,.28)}
-  .btn-feedback:active{background:var(--sunflower);opacity:.7;transform:scale(.97)}
+  .btn-feedback{background:var(--orange);color:#fff;border-radius:var(--radius-sm);padding:10px 18px;font-size:14px;box-shadow:0 1px 2px rgba(163,79,48,.15), 0 6px 16px -8px rgba(163,79,48,.55)}
+  .btn-feedback:active{background:var(--orange-dark);transform:scale(.97)}
   .btn:disabled{cursor:not-allowed;opacity:.92}
 
   /* 加载动画 */
@@ -1352,9 +1340,8 @@ function openSettings(){
 	return `<button class="theme-swatch ${isActive ? 'active' : ''}"
 					data-theme-id="${id}"
 					onclick="selectTheme('${id}')"
-					title="${esc(t.name)}">
-	  <span class="inner" style="background:${t.main};"></span>
-	</button>`;
+					style="background:${t.main};"
+					title="${esc(t.name)}"></button>`;
   }).join('');
 
   openModal('设置', `
@@ -1399,7 +1386,7 @@ function openSettings(){
 		<div class="row"><span>仓库</span><a href="https://github.com/starryeeeeee/class-fund-disclosure-platform" target="_blank">GitHub ↗</a></div>
 	  </div>
 	</div>
-  `, 'm-settings');
+  `);
 }
 
 function selectTheme(id){
@@ -1599,10 +1586,10 @@ const curSem = () => {
 
 function stats(semId) {
   const recs = DB.records.filter(r => r.semester_id === semId);
-  const income = recs.filter(r => r.type === 'income' && !r.pending_delete).reduce((s, r) => s + r.amount, 0);
-  const expense = recs.filter(r => r.type === 'expense' && !r.pending_delete).reduce((s, r) => s + r.amount, 0);
+  const income = recs.filter(r => r.type === 'income' && !r.pending_delete).reduce((s, r) => s + Number(r.amount || 0), 0);
+  const expense = recs.filter(r => r.type === 'expense' && !r.pending_delete).reduce((s, r) => s + Number(r.amount || 0), 0);
   const sem = DB.semesters.find(s => s.id === semId);
-  return { income, expense, balance: (sem ? sem.start_balance : 0) + income - expense };
+  return { income, expense, balance: Number(sem ? sem.start_balance : 0) + income - expense };
 }
 const historyTotal = () => DB.semesters.reduce((s, sem) => s + stats(sem.id).balance, 0);
 const recordsOf = semId => DB.records.filter(r => r.semester_id === semId);
@@ -1791,7 +1778,6 @@ function render() {
 		navBack.classList.add('hidden');
   }
 
-  /* 工具按钮：仅在离开首页后显示 */
   const fab = document.getElementById('toolFab');
   if (fab) fab.classList.toggle('hidden', isHome);
   if (isHome) closeToolFab();
@@ -1931,7 +1917,7 @@ function vwHome() {
 }
 
 function noticeCard() {
-  if (state.noticeAck || !DB.settings.notice) return '';
+  if (!DB.settings.notice) return '';
   return `
 	<div class="sticky-notice-wrap">
 	  <span class="tape"></span>
@@ -1939,7 +1925,7 @@ function noticeCard() {
 		<div class="ns-content">
 		  <div class="ns-label">通知</div>
 		  <div class="ns-text">${esc(DB.settings.notice).replace(/\n/g, '<br>')}</div>
-		  <div class="ns-ack"><button onclick="state.noticeAck=true;render()">我已知悉</button></div>
+		  ${state.noticeAck ? '' : `<div class="ns-ack"><button onclick="state.noticeAck=true;render()">我已知悉</button></div>`}
 		</div>
 	  </div>
 	</div>
@@ -2004,7 +1990,7 @@ function renderPublicFeedbacks() {
   if (!publicFbs.length) return '';
   const feedbackTab = isAdmin() ? 'feedbacks' : 'myfeedbacks';
   return `
-	<div class="folder sunflower">
+	<div class="folder" style="margin-bottom:0;">
 	  <div class="folder-tab">公开反馈</div>
 	  <div class="folder-strip"></div>
 	  <div class="folder-body">
@@ -2056,14 +2042,13 @@ function vwMain() {
 
   let feedbackBtn = '';
   if (!isAdmin() && (isVisitor() || isLoggedIn())) {
-		feedbackBtn = `<div style="display:flex;justify-content:flex-end;margin:0 0 6px;"><button class="btn btn-feedback" onclick="go('feedback')">💬 我要反馈</button></div>`;
+		feedbackBtn = `<div style="display:flex;justify-content:flex-end;margin:0 0 3px;"><button class="btn btn-feedback" onclick="go('feedback')">💬 我要反馈</button></div>`;
   }
 
   return `
   <div class="mt">欢迎来到 <span class="cls">${esc(DB.settings.class_name)}</span> 班费公示平台</div>
   ${noticeCard()}
   ${func}
-  <div class="blue-bar"></div>
   ${semSelect()}
   ${statsHTML(sem.id)}
 
