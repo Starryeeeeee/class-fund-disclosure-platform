@@ -144,9 +144,12 @@
   }
 
   #content{padding:24px 18px 56px;min-height:calc(100vh - 60px)}
-  .mt{font-family:var(--font-display);font-size:19px;font-weight:600;text-align:center;margin:4px 0 6px;letter-spacing:-.005em}
+  .mt{font-family:var(--font-display);font-size:20px;font-weight:700;text-align:center;margin:4px 0 6px;letter-spacing:-.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .mt .cls{color:var(--orange)}
   .sub{font-size:13px;color:var(--ink-soft);text-align:center}
+
+  /* 蓝色矩形分隔 */
+  .blue-bar{width:96px;height:8px;background:var(--blue);margin:18px 0 14px;border-radius:0}
 
   /* 启动加载 */
   .boot-loading{
@@ -226,7 +229,7 @@
   .pencil-divider{
 	display: flex;
 	align-items: center;
-	margin: 22px 0 14px;
+	margin: 34px 0 24px;
   }
   .pencil-divider .arrows{
 	width: 128px;
@@ -356,7 +359,7 @@
 	box-shadow: 0 0 0 0 var(--lf-line);
   }
 
-  /* 便利贴（外层胶带 + 内层 clip-path 便签） */
+  /* 便利贴 */
   .sticky-notice-wrap{
 	position: relative;
 	max-width: 420px;
@@ -478,7 +481,7 @@
 	box-shadow: 0 0 0 0;
   }
 
-  /* 统计栏（方案 A 柔和阴影） */
+  /* 统计栏 */
   .stats{
 	display: flex;
 	margin-bottom: 16px;
@@ -592,7 +595,7 @@
 	box-shadow: 0 0 0 3px rgba(193,99,62,.14);
   }
 
-  /* 管理员变体 */
+  /* 管理员/班委变体（合并） */
   .modal.m-admin .m-tab{ background: #B27551; }
   .modal.m-admin .m-strip{ background: #B27551; }
   .modal.m-admin .m-body{ background: #F5E9E0; }
@@ -606,20 +609,6 @@
   }
   .modal.m-admin .m-body .btn-primary:active{ background: #96603F; }
 
-  /* 班委变体 */
-  .modal.m-committee .m-tab{ background: #A6804B; }
-  .modal.m-committee .m-strip{ background: #A6804B; }
-  .modal.m-committee .m-body{ background: #F4ECD9; }
-  .modal.m-committee .m-body .field:focus{
-	border-color: #A6804B;
-	box-shadow: 0 0 0 3px rgba(166,128,75,.16);
-  }
-  .modal.m-committee .m-body .btn-primary{
-	background: #A6804B;
-	box-shadow: 0 1px 2px rgba(166,128,75,.15), 0 6px 16px -8px rgba(166,128,75,.55);
-  }
-  .modal.m-committee .m-body .btn-primary:active{ background: #8B6A3C; }
-
   /* 设置面板变体 */
   .modal.m-settings .m-tab{ background: #5C7C93; }
   .modal.m-settings .m-strip{ background: #5C7C93; }
@@ -630,13 +619,9 @@
   .modal.m-export .m-strip{ background: var(--sunflower); }
   .modal.m-export .m-body{ background: var(--yellow-soft); }
 
-  /* 深色弹窗 */
   body.dark-mode .modal.m-admin .m-tab{ background: #8C5A3F; }
   body.dark-mode .modal.m-admin .m-strip{ background: #8C5A3F; }
   body.dark-mode .modal.m-admin .m-body{ background: #2E2620; }
-  body.dark-mode .modal.m-committee .m-tab{ background: #7E6038; }
-  body.dark-mode .modal.m-committee .m-strip{ background: #7E6038; }
-  body.dark-mode .modal.m-committee .m-body{ background: #2A2619; }
   body.dark-mode .modal.m-settings .m-tab{ background: #4A6478; }
   body.dark-mode .modal.m-settings .m-strip{ background: #4A6478; }
   body.dark-mode .modal.m-settings .m-body{ background: #24323D; }
@@ -647,7 +632,6 @@
   body.dark-mode .modal .m-body{ color: var(--ink); }
   body.dark-mode .modal .m-body .form-line label{ color: var(--ink-soft); }
 
-  /* 深色输入框 */
   body.dark-mode .modal .m-body .field{
 	background: rgba(255,255,255,.05);
 	border: 1.5px solid rgba(255,255,255,.35);
@@ -665,6 +649,15 @@
 	  inset 0 1px 0 rgba(255,255,255,.25),
 	  inset 0 -1px 0 rgba(0,0,0,.15);
   }
+
+  /* 关于弹窗排版 */
+  .about-title{font-family:var(--font-hand);font-size:22px;font-weight:500;letter-spacing:.04em;margin:0 0 4px;line-height:1.35}
+  .about-sub{font-size:13px;color:var(--ink-soft);margin:0 0 22px}
+  .about-section{display:flex;flex-direction:column;gap:14px}
+  .about-row{display:flex;align-items:baseline;gap:16px}
+  .about-row .lbl{font-size:12.5px;color:var(--ink-soft);flex-shrink:0;width:64px;letter-spacing:.02em}
+  .about-row .val{font-size:14px;color:var(--ink);line-height:1.55;text-align:left;flex:1;word-break:break-word}
+  .about-row .val a{color:var(--orange-dark);text-decoration:none;font-weight:500}
 
   /* 导出选项 */
   .export-options{ display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
@@ -715,7 +708,6 @@
 	margin-bottom: 10px;
 	letter-spacing: .02em;
   }
-  /* 主题色色板 */
   .theme-swatches{
 	display: grid;
 	grid-template-columns: repeat(6, 1fr);
@@ -743,7 +735,7 @@
 	box-shadow: 0 1px 3px rgba(0,0,0,.15);
   }
 
-  /* 分段控件（圆角 / 动效） */
+  /* 分段控件 */
   .segmented{
 	display: flex;
 	background: rgba(255,255,255,.6);
@@ -775,7 +767,6 @@
 	color: #fff;
   }
 
-  /* 重置按钮 */
   .reset-btn{
 	width: 100%;
 	display: inline-flex; align-items: center; justify-content: center;
@@ -792,7 +783,6 @@
   .reset-btn:hover{ background: rgba(184,83,71,.18); }
   .reset-btn:active{ transform: scale(.98); }
 
-  /* 关于块 */
   .settings-about{
 	font-size: 13px;
 	color: var(--ink-soft);
@@ -959,20 +949,30 @@
   .stamp-mini{animation:stampIn .5s cubic-bezier(.34,1.56,.64,1) both}
   @keyframes stampIn{0%{opacity:0;transform:rotate(-6deg) scale(2.1)}62%{opacity:.92;transform:rotate(-6deg) scale(.9)}100%{opacity:.75;transform:rotate(-6deg) scale(1)}}
 
+  /* Toast — 苹果风 */
   #toastWrap{position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:120;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;width:max-content;max-width:calc(100vw - 40px)}
-  .toast{display:flex;align-items:center;gap:8px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:var(--radius);padding:11px 16px;font-size:13.5px;font-weight:500;box-shadow:0 10px 32px -8px rgba(30,24,14,.28);opacity:0;transform:translateY(-14px) scale(.96);transition:opacity .3s ease,transform .36s cubic-bezier(.34,1.56,.64,1);max-width:100%}
+  .toast{display:flex;align-items:center;gap:9px;
+	background:rgba(255,255,255,.68);
+	-webkit-backdrop-filter:blur(24px) saturate(180%);
+	backdrop-filter:blur(24px) saturate(180%);
+	border-radius:18px;padding:12px 20px;
+	font-size:13.5px;font-weight:500;letter-spacing:.01em;color:var(--ink);
+	box-shadow:0 8px 32px -6px rgba(40,30,20,.18),0 2px 8px -2px rgba(40,30,20,.1),inset 0 1px 0 rgba(255,255,255,.6);
+	opacity:0;transform:translateY(-10px) scale(.92);
+	transition:opacity .3s cubic-bezier(.34,1.4,.64,1),transform .38s cubic-bezier(.34,1.56,.64,1);
+	max-width:100%}
   .toast.show{opacity:1;transform:translateY(0) scale(1)}
-  .toast.hide{opacity:0;transform:translateY(-10px) scale(.97);transition:opacity .25s ease,transform .25s ease}
-  .toast-success{border-left-color:var(--income)}
-  .toast-error{border-left-color:var(--red)}
-  .toast-warn{border-left-color:var(--yellow)}
+  .toast.hide{opacity:0;transform:translateY(-6px) scale(.96);transition:opacity .26s ease,transform .26s ease}
   .toast .t-ico{flex-shrink:0;font-size:15px;line-height:1}
+  body.dark-mode .toast{
+	background:rgba(50,45,40,.66);
+	box-shadow:0 8px 32px -6px rgba(0,0,0,.5),0 2px 8px -2px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12);
+  }
 
   #topbar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--orange),var(--yellow));z-index:200;opacity:0;transition:width .35s ease,opacity .35s ease;border-radius:0 2px 2px 0;pointer-events:none}
   #topbar.loading{opacity:1;width:82%}
   #topbar.done{width:100%;opacity:0}
 
-  /* 悬浮返回顶部（右下角） */
   #backTop{
 	position: fixed;
 	right: 18px;
@@ -1022,7 +1022,7 @@
 	display: block;
   }
 
-  /* 悬浮工具栏（左下角） */
+  /* 悬浮工具栏 */
   .tool-fab{
 	position: fixed;
 	left: 18px;
@@ -1123,9 +1123,7 @@
   .empty .empty-ico{font-size:32px;opacity:.45;display:block;margin-bottom:6px;line-height:1}
 
   body.dark-mode .btn-red:active{background:#4A2E2A}
-  body.dark-mode .toast{box-shadow:0 10px 32px -8px rgba(0,0,0,.6)}
 
-  /* 减少动效 */
   body.reduce-motion *,
   body.reduce-motion *::before,
   body.reduce-motion *::after {
@@ -1173,15 +1171,13 @@
   </div>
 </div>
 
-<!-- 悬浮返回顶部（右下角） -->
 <button id="backTop" onclick="scrollToTop()" aria-label="返回顶部" title="返回顶部">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
 	<polyline points="6 14 12 8 18 14"/>
   </svg>
 </button>
 
-<!-- 悬浮工具栏（左下角） -->
-<div class="tool-fab" id="toolFab">
+<div class="tool-fab hidden" id="toolFab">
   <button class="tool-item i1" onclick="openInboxFromFab()" aria-label="信箱">
 	<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
 	  <path d="M3 7l9 6 9-6"/>
@@ -1216,9 +1212,6 @@
 const APP_VERSION = 'v2.16.0';
 const APP_DATE = '2026年9月26日';
 
-/* ================================================================
-   启动加载文案
-   ================================================================ */
 const BOOT_TEXTS = [
   '正在连接云端数据库',
   '正在读取班级信息',
@@ -1234,7 +1227,6 @@ function startBootTicker(){
 	if (!msgEl) { stopBootTicker(); return; }
 	_bootIdx++;
 	if (_bootIdx >= BOOT_TEXTS.length) {
-	  /* 循环一轮结束，停止并固定在第一条 */
 	  stopBootTicker();
 	  msgEl.textContent = BOOT_TEXTS[0];
 	  return;
@@ -1247,9 +1239,6 @@ function stopBootTicker(){
 }
 startBootTicker();
 
-/* ================================================================
-   滚动返回顶部
-   ================================================================ */
 function scrollToTop(){
   try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
   catch(e) { window.scrollTo(0, 0); }
@@ -1261,9 +1250,6 @@ window.addEventListener('scroll', () => {
   else btn.classList.remove('show');
 }, { passive: true });
 
-/* ================================================================
-   悬浮工具栏
-   ================================================================ */
 function toggleToolFab(){
   const fab = document.getElementById('toolFab');
   if (fab) fab.classList.toggle('open');
@@ -1283,9 +1269,6 @@ function openInboxFromFab(){
   go('inbox');
 }
 
-/* ================================================================
-   主题色 / 圆角 / 动效
-   ================================================================ */
 const THEMES = {
   orange: {
 	name: '暖橙',
@@ -1357,9 +1340,6 @@ function loadSettings(){
   applyMotion(motion);
 }
 
-/* ================================================================
-   设置面板
-   ================================================================ */
 function openSettings(){
   closeToolFab();
   const primaryId = localStorage.getItem('theme_primary') || 'orange';
@@ -1425,7 +1405,6 @@ function openSettings(){
 function selectTheme(id){
   localStorage.setItem('theme_primary', id);
   applyPrimaryTheme(id);
-  /* 更新色板选中态 */
   document.querySelectorAll('.theme-swatch').forEach(el => {
 	if (el.dataset.themeId === id) el.classList.add('active');
 	else el.classList.remove('active');
@@ -1716,7 +1695,6 @@ function toggleTheme() {
   document.body.classList.toggle('dark-mode');
   const isDark = document.body.classList.contains('dark-mode');
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
-  /* 昼夜切换后需要重新应用主题色（因为主题色分浅色/暗色两套） */
   const primaryId = localStorage.getItem('theme_primary') || 'orange';
   applyPrimaryTheme(primaryId);
 }
@@ -1731,7 +1709,7 @@ function toast(msg, type = 'info', dur = 2400) {
   let wrap = document.getElementById('toastWrap');
   if (!wrap) { wrap = document.createElement('div'); wrap.id = 'toastWrap'; document.body.appendChild(wrap); }
   const el = document.createElement('div');
-  el.className = 'toast toast-' + type;
+  el.className = 'toast';
   el.innerHTML = `<span class="t-ico">${TOAST_ICONS[type] || TOAST_ICONS.info}</span><span>${esc(msg)}</span>`;
   wrap.appendChild(el);
   requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
@@ -1780,25 +1758,20 @@ function animateNums() {
 
 function openAbout() {
   openModal('关于', `
-		<div style="margin-bottom:16px;">
-		  <div style="font-size:20px;font-weight:700;letter-spacing:-.01em;margin-bottom:4px;">${esc(DB.settings.class_name)}</div>
-		  <div style="font-size:13px;color:var(--ink-soft);">班费公示平台</div>
-		</div>
+		<div class="about-title">${esc(DB.settings.class_name)}</div>
+		<div class="about-sub">班费公示平台</div>
 		<div class="about-section">
-		  <div><span class="label">版本</span><span class="value">${APP_VERSION}</span></div>
-		  <div><span class="label">最近更新</span><span class="value">${APP_DATE}</span></div>
-		  <div><span class="label">技术栈</span><span class="value">HTML + CSS + JavaScript + Supabase</span></div>
-		  <div><span class="label">了解更多</span><span class="value"><a href="https://github.com/starryeeeeee/class-fund-disclosure-platform" target="_blank" style="color:var(--orange-dark);text-decoration:none;">点击跳转至GitHub仓库</a></span></div>
+		  <div class="about-row"><span class="lbl">版本</span><span class="val">${APP_VERSION}</span></div>
+		  <div class="about-row"><span class="lbl">最近更新</span><span class="val">${APP_DATE}</span></div>
+		  <div class="about-row"><span class="lbl">技术栈</span><span class="val">HTML + CSS + JavaScript + Supabase</span></div>
+		  <div class="about-row"><span class="lbl">了解更多</span><span class="val"><a href="https://github.com/starryeeeeee/class-fund-disclosure-platform" target="_blank">点击跳转至 GitHub 仓库</a></span></div>
 		</div>
-		<div style="display:flex;gap:10px;margin-top:16px;">
+		<div style="display:flex;gap:10px;margin-top:20px;">
 		  <button class="btn btn-primary btn-block" onclick="closeModal()">我知道了</button>
 		</div>
   `);
 }
 
-/* ================================================================
-   渲染
-   ================================================================ */
 function render() {
   const navBack = document.getElementById('navBack');
   const navLabel = document.getElementById('navBackLabel');
@@ -1817,6 +1790,11 @@ function render() {
   } else {
 		navBack.classList.add('hidden');
   }
+
+  /* 工具按钮：仅在离开首页后显示 */
+  const fab = document.getElementById('toolFab');
+  if (fab) fab.classList.toggle('hidden', isHome);
+  if (isHome) closeToolFab();
 
   let title = '班费公示平台';
   if (state.view === 'home') title = '班费公示平台';
@@ -1923,9 +1901,6 @@ function logout() {
   go('home', false);
 }
 
-/* ================================================================
-   各视图
-   ================================================================ */
 function vwHome() {
   return `
   <div class="home-wrap">
@@ -2081,13 +2056,14 @@ function vwMain() {
 
   let feedbackBtn = '';
   if (!isAdmin() && (isVisitor() || isLoggedIn())) {
-		feedbackBtn = `<div style="display:flex;justify-content:flex-end;margin:12px 0 8px;"><button class="btn btn-feedback" onclick="go('feedback')">💬 我要反馈</button></div>`;
+		feedbackBtn = `<div style="display:flex;justify-content:flex-end;margin:0 0 6px;"><button class="btn btn-feedback" onclick="go('feedback')">💬 我要反馈</button></div>`;
   }
 
   return `
   <div class="mt">欢迎来到 <span class="cls">${esc(DB.settings.class_name)}</span> 班费公示平台</div>
   ${noticeCard()}
   ${func}
+  <div class="blue-bar"></div>
   ${semSelect()}
   ${statsHTML(sem.id)}
 
@@ -2150,7 +2126,6 @@ function vwRecords() {
   </div>`;
 }
 
-/* 导出选项弹窗 */
 function openExportDialog() {
   if (!isLoggedIn()) { toast('请先登录后再导出', 'warn'); return; }
   openModal('导出数据', `
@@ -2177,7 +2152,6 @@ function openExportDialog() {
   `, 'm-export');
 }
 
-/* 导出执行 */
 function exportRecords(format) {
   const sem = curSem();
   if (!sem) { toast('没有学期数据', 'warn'); return; }
@@ -2480,7 +2454,7 @@ function clearInvoiceField() {
 }
 
 function vwEdit() {
-  if (!canManageFlow()) { toast('当前身份无权限操作', 'warn'); back(); return ''; }
+  if (!canManageFlow()) { toast('当前身份无权限操作', 'warn'); go('main', false); return ''; }
   const editing = !!state.editingId;
   const r = editing ? recordsOf(state.semester).find(x => x.id === state.editingId) : null;
   const today = new Date().toISOString().slice(0, 10);
@@ -3029,20 +3003,14 @@ async function saveNotice() {
 
 function vwLog() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); const visitLogs = DB.logs.map(l => ({ ...l, type: '访问', action: '访问了平台' })); const opLogs = DB.oplogs.map(l => ({ ...l, type: '操作', action: l.action || '' })); const allLogs = [...visitLogs, ...opLogs].sort((a, b) => b.time - a.time).slice(0, 200); return `<div class="mt" style="font-size:16px">📋 全部日志</div><div class="card" style="margin-top:14px">${allLogs.length ? allLogs.map(l => `<div class="kv"><div class="k"><div class="n">${esc(l.type)} ${esc(l.action)}</div><div class="s">${esc(l.operator || l.nickname || '系统')} · ${l.detail ? esc(l.detail) : ''} · ${new Date(l.time).toLocaleString('zh-CN')}</div></div></div>`).join('') : emptyBox('📋', '暂无日志')}</div>`; }
 
-/* ================================================================
-   登录弹窗
-   ================================================================ */
 function openLogin(mode) {
   mode = mode || 'admin';
-  const isCommittee = mode === 'committee';
-  const title = isCommittee ? '班委登录' : '管理员登录';
-  const variant = isCommittee ? 'm-committee' : 'm-admin';
-
+  const title = mode === 'committee' ? '班委登录' : '管理员登录';
   openModal(title, `
 	<div class="form-line"><label>学号</label><input class="field" id="lgId" placeholder="如 20" onkeydown="if(event.key==='Enter')doLogin()"></div>
 	<div class="form-line"><label>密码</label><input class="field" id="lgPw" type="password" placeholder="请输入密码" onkeydown="if(event.key==='Enter')doLogin()"></div>
 	<button class="btn btn-primary btn-block" id="loginBtn" onclick="doLogin()">登录</button>
-  `, variant);
+  `, 'm-admin');
 }
 
 let _loginFails = 0, _loginLockUntil = 0;
@@ -3083,7 +3051,7 @@ function openImg(id) {
 	<div class="m-tab">发票 / 收据</div>
 	<div class="m-strip"></div>
 	<div class="m-body">
-	  <img src="${esc(src)}">
+	  <img src="${esc(src)}" style="max-width:100%;display:block;border-radius:6px;">
 	  <p style="font-size:12px;color:var(--ink-soft);text-align:center;margin:10px 0 0">${r.date} · 经手：${esc(r.handler)}</p>
 	</div>
   `;
