@@ -9,8 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-<!-- 自定义字体-->
-<link rel="stylesheet" href="./subset/result.css">
+<link rel="stylesheet" href="./Subset/result.css">
 <style>
   :root{
 		--bg:#FAF8F3; --card:#FFFFFF; --card-soft:#F5F1E9;
@@ -25,13 +24,12 @@
 		--card-left-line:#E8824E;
 		--card-left-line-feedback:#3B6BA5;
 		--stats-left-line:#D03028;
-		--radius:4px; --radius-sm:2px;
+		--radius:10px; --radius-sm:6px;
 		--shadow-card:0 1px 0 rgba(0,0,0,.04), 0 2px 8px -2px rgba(0,0,0,.08);
 		--shadow-btn:0 1px 2px rgba(43,36,24,.06);
 		--shadow-modal:0 30px 70px -20px rgba(30,24,14,.35);
 		--font-sans:'Inter',-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
 		--font-display:'Source Serif 4','Inter',"PingFang SC","Hiragino Sans GB","Microsoft YaHei",serif;
-		/* 自定义字体*/
 		--font-hand:'AliHYAiHei-Beta','PingFang SC','Microsoft YaHei',sans-serif;
   }
   body.dark-mode {
@@ -68,7 +66,7 @@
   .nav-slot{width:84px;flex:0 0 auto;display:flex;align-items:center;min-height:1px}
   .nav-slot.left{justify-content:flex-start}
   .nav-slot.right{justify-content:flex-end}
-  .nav-back{display:inline-flex;align-items:center;gap:3px;color:var(--blue);font-size:14.5px;font-weight:500;background:none;border:none;padding:8px 6px;margin-left:2px;cursor:pointer;font-family:inherit;border-radius:2px;transition:opacity .15s,background .15s}
+  .nav-back{display:inline-flex;align-items:center;gap:3px;color:var(--blue);font-size:14.5px;font-weight:500;background:none;border:none;padding:8px 6px;margin-left:2px;cursor:pointer;font-family:inherit;border-radius:6px;transition:opacity .15s,background .15s}
   .nav-back:active{opacity:.6;background:rgba(92,124,147,.08)}
   .nav-back svg{width:17px;height:17px;flex-shrink:0}
   .nav-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
@@ -78,37 +76,118 @@
 		color:var(--ink);letter-spacing:.04em;text-align:center}
   .nav-right{flex:1;display:flex;align-items:center;justify-content:flex-end;gap:12px;padding-right:8px}
 
-  .theme-toggle-wrap{
-		display:inline-flex;align-items:center;position:relative;
-		width:44px;height:22px;
-		background:var(--line);border-radius:999px;
-		cursor:pointer;transition:background .4s ease;
-		flex-shrink:0;border:none;padding:0;outline:none;
-		box-sizing:border-box;
-  }
-  body.dark-mode .theme-toggle-wrap{background:#3D3934}
-  .theme-toggle-thumb{
-		position:absolute;top:2px;left:2px;
-		width:18px;height:18px;border-radius:50%;
-		background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12);
-		transition:left .4s cubic-bezier(.34,1.56,.64,1),background .4s ease;
-		display:flex;align-items:center;justify-content:center;font-size:10px;line-height:1
-  }
-  body.dark-mode .theme-toggle-thumb{left:calc(100% - 20px);background:#2A2724}
-  .theme-toggle-thumb .icon{position:absolute;transition:opacity .4s ease,transform .4s ease}
-  .theme-toggle-thumb .icon-sun{opacity:1;transform:scale(1)}
-  .theme-toggle-thumb .icon-moon{opacity:0;transform:scale(.5)}
-  body.dark-mode .theme-toggle-thumb .icon-sun{opacity:0;transform:scale(.5)}
-  body.dark-mode .theme-toggle-thumb .icon-moon{opacity:1;transform:scale(1)}
-  .theme-toggle-icons{
-		position:absolute;top:0;left:0;width:100%;height:100%;
-		pointer-events:none;display:flex;align-items:center;
-		justify-content:space-between;padding:0 5px;box-sizing:border-box
-  }
-  .theme-toggle-icons .icon-fixed{font-size:9px;opacity:.5;transition:opacity .4s ease;line-height:1;color:var(--ink-soft)}
-  body.dark-mode .theme-toggle-icons .icon-fixed{color:#A69B8E}
+  /* ============================================================
+     昼夜切换开关（Uiverse / metanef 改造，配色适配本平台）
+     ============================================================ */
+  .switch {
+    --container-width: 40px;
+    --container-height: 22px;
+    --width: 7px;
+    --hover-width: 11px;
+    --offset: 3px;
+    --radius-btn: 6px;
 
-  .env-icon{position:relative;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:2px;cursor:pointer;color:var(--blue);transition:background .15s,opacity .15s}
+    --bg-light: #EAE3D6;
+    --bg-dark: #3D3934;
+    --accent-light: #C1633E;
+    --accent-dark: #7BA3B8;
+    --icon-muted: #938D80;
+
+    --shadow-inset-light: inset 2px 2px 4px #D3CCBE, inset -2px -2px 4px #FFFFFF;
+    --shadow-inset-dark: inset 2px 2px 4px #121419, inset -2px -2px 4px #22262f;
+
+    --transition-duration: 0.45s;
+    --short-transition-duration: 0.2s;
+
+    position: relative;
+    display: inline-block;
+    width: var(--container-width);
+    height: var(--container-height);
+    flex-shrink: 0;
+  }
+  .switch .checkbox {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+  .switch .slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: var(--bg-light);
+    box-shadow: var(--shadow-inset-light);
+    transition: background-color var(--transition-duration), box-shadow var(--transition-duration);
+    border-radius: var(--radius-btn);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px;
+  }
+  .switch .slider .icon-sun,
+  .switch .slider .icon-moon {
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity var(--transition-duration) ease-out, transform var(--transition-duration) ease-out, color var(--transition-duration) ease-out;
+  }
+  .switch .slider .icon-sun {
+    color: var(--accent-light);
+    opacity: 0;
+    transform: scale(0);
+  }
+  .switch .slider .icon-moon {
+    color: var(--icon-muted);
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  .switch .checkbox:checked + .slider .icon-sun {
+    color: var(--icon-muted);
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  .switch .checkbox:checked + .slider .icon-moon {
+    color: var(--accent-dark);
+    opacity: 0;
+    transform: scale(0);
+  }
+  .switch .slider::before {
+    position: absolute;
+    content: "";
+    top: var(--offset);
+    bottom: var(--offset);
+    width: var(--width);
+    border-radius: 4px;
+    left: var(--offset);
+    background-color: var(--accent-light);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    transition: transform var(--short-transition-duration), width var(--short-transition-duration), border-radius var(--short-transition-duration), background-color var(--short-transition-duration);
+    z-index: 2;
+  }
+  .switch .checkbox:checked + .slider {
+    background-color: var(--bg-dark);
+    box-shadow: var(--shadow-inset-dark);
+  }
+  .switch .checkbox:checked + .slider::before {
+    background-color: var(--accent-dark);
+    transform: translateX(calc(var(--container-width) - var(--offset) * 2 - var(--width)));
+  }
+  .switch:hover .checkbox:not(:checked) + .slider::before {
+    width: var(--hover-width);
+    border-radius: 4px 50% 50% 4px;
+  }
+  .switch:hover .checkbox:checked + .slider::before {
+    width: var(--hover-width);
+    transform: translateX(calc(var(--container-width) - var(--offset) * 2 - var(--hover-width)));
+    border-radius: 50% 4px 4px 50%;
+  }
+  .switch .checkbox:focus-visible + .slider {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+  }
+
+  .env-icon{position:relative;display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;cursor:pointer;color:var(--blue);transition:background .15s,opacity .15s}
   .env-icon:active{opacity:.6;background:rgba(92,124,147,.08)}
   .env-icon svg{width:18px;height:18px}
   .dot{position:absolute;top:0;right:0;min-width:14px;height:14px;border-radius:7px;background:var(--red);color:#fff;font-size:9px;font-weight:700;line-height:14px;text-align:center;padding:0 3px;box-shadow:0 0 0 2px var(--bg)}
@@ -123,7 +202,7 @@
 		padding:20px 18px 20px 22px;box-shadow:var(--shadow-card);position:relative;
 		transition:background .3s,border-color .3s
   }
-  .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--card-left-line);border-radius:0;opacity:.6}
+  .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--card-left-line);border-radius:var(--radius) 0 0 var(--radius);opacity:.6}
   .card::after{content:'';position:absolute;left:3px;top:0;bottom:0;width:1px;background:var(--card-left-line);opacity:.2}
   body.dark-mode .card::before{opacity:.5}
   body.dark-mode .card::after{opacity:.15}
@@ -135,13 +214,13 @@
 		transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),box-shadow 0.35s ease,border-color 0.35s ease,background 0.3s ease;
 		will-change: transform;
   }
-  .entry::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:0;opacity:.55}
+  .entry::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:var(--radius) 0 0 var(--radius);opacity:.55}
   .entry.admin::before{background:var(--orange)}
   .entry.browse::before{background:var(--blue)}
   .entry:active{transform:scale(.97);box-shadow:0 1px 2px rgba(0,0,0,.06)}
   .entry.admin:hover {transform: translateY(-8px);box-shadow: 0 14px 45px rgba(193, 99, 62, 0.18),0 0 0 2.5px rgba(193, 99, 62, 0.15);border-color: var(--orange);}
   .entry.browse:hover {transform: translateY(-8px);box-shadow: 0 14px 45px rgba(92, 124, 147, 0.18),0 0 0 2.5px rgba(92, 124, 147, 0.15);border-color: var(--blue);}
-  .entry .ico{width:44px;height:44px;margin:0 auto 14px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center}
+  .entry .ico{width:44px;height:44px;margin:0 auto 14px;border-radius:8px;display:flex;align-items:center;justify-content:center}
   .entry.admin .ico{background:var(--orange)}
   .entry.browse .ico{background:var(--blue)}
   .entry .ico svg{width:22px;height:22px}
@@ -154,11 +233,11 @@
 		transition:background .15s,border-color .25s,transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s
   }
   @media (hover:hover){.menu-item:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 8px 22px -8px rgba(92,124,147,.28)}}
-  .menu-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue);border-radius:0;opacity:.5}
+  .menu-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue);border-radius:var(--radius) 0 0 var(--radius);opacity:.5}
   .menu-item:active{background:var(--card-soft)}
 
   .stats{display:flex;gap:0;margin-bottom:16px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-card);padding:20px 6px;position:relative;transition:background .3s,border-color .3s}
-  .stats::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--stats-left-line);border-radius:0;opacity:.6}
+  .stats::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--stats-left-line);border-radius:var(--radius) 0 0 var(--radius);opacity:.6}
   .stats::after{content:'';position:absolute;left:3px;top:0;bottom:0;width:1px;background:var(--stats-left-line);opacity:.2}
   body.dark-mode .stats::before{opacity:.5}
   body.dark-mode .stats::after{opacity:.15}
@@ -172,13 +251,13 @@
   .history{text-align:center;font-size:12px;color:var(--ink-soft);margin:-2px 0 20px}
 
   .feedback-item{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px;position:relative;transition:background .3s,border-color .3s}
-  .feedback-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--card-left-line-feedback);border-radius:0;opacity:.5}
+  .feedback-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--card-left-line-feedback);border-radius:var(--radius) 0 0 var(--radius);opacity:.5}
   .feedback-item::after{content:'';position:absolute;left:3px;top:0;bottom:0;width:1px;background:var(--card-left-line-feedback);opacity:.15}
   body.dark-mode .feedback-item::before{opacity:.4}
   body.dark-mode .feedback-item::after{opacity:.12}
 
   .modal{background:var(--card);border-radius:var(--radius);padding:22px;width:100%;max-width:380px;border:1px solid var(--line);max-height:88vh;overflow:auto;box-shadow:var(--shadow-modal);position:relative;transition:background .3s,border-color .3s}
-  .modal::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--orange);border-radius:0;opacity:.6}
+  .modal::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--orange);border-radius:var(--radius) 0 0 var(--radius);opacity:.6}
   .modal::after{content:'';position:absolute;left:3px;top:0;bottom:0;width:1px;background:var(--orange);opacity:.2}
   body.dark-mode .modal::before{opacity:.5}
   body.dark-mode .modal::after{opacity:.15}
@@ -208,17 +287,96 @@
   .btn-red:disabled{opacity:.55;cursor:not-allowed;transform:none}
   .btn-block{width:100%}
   .btn-sm{padding:9px 14px;font-size:13px;border-radius:var(--radius-sm)}
-  .btn-xs{padding:4px 8px;font-size:11px;border-radius:2px;font-weight:500}
-  .btn-feedback{background:var(--blue);color:#fff;border-radius:2px;padding:10px 18px;font-size:14px;box-shadow:0 2px 8px rgba(92,124,147,.25)}
+  .btn-xs{padding:4px 8px;font-size:11px;border-radius:4px;font-weight:500}
+  .btn-feedback{background:var(--blue);color:#fff;border-radius:var(--radius-sm);padding:10px 18px;font-size:14px;box-shadow:0 2px 8px rgba(92,124,147,.25)}
   .btn-feedback:active{background:var(--blue);opacity:.7;transform:scale(.97)}
   .btn-outline{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  .btn:disabled{cursor:not-allowed;opacity:.92}
 
-  /* ===== 发票上传 ===== */
+  /* 加载动画 1 · 三竖条（按钮内） */
+  .loader-bars{
+    --bar-color: currentColor;
+    --bar-width: 2px;
+    --bar-height: 8px;
+    --bar-gap: 2.5px;
+    --bar-radius: 1px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--bar-gap);
+    vertical-align: middle;
+    height: calc(var(--bar-height) * 1.7);
+    flex-shrink: 0;
+  }
+  .loader-bars > span{
+    display: block;
+    width: var(--bar-width);
+    height: var(--bar-height);
+    background: var(--bar-color);
+    border-radius: var(--bar-radius);
+    animation: loader-bars 0.9s infinite ease-in-out;
+  }
+  .loader-bars > span:nth-child(1){ animation-delay: -0.32s; }
+  .loader-bars > span:nth-child(2){ animation-delay: -0.16s; }
+  .loader-bars > span:nth-child(3){ animation-delay: 0s; }
+  @keyframes loader-bars{
+    0%, 80%, 100% { height: var(--bar-height); opacity:.55; }
+    40%           { height: calc(var(--bar-height) * 1.7); opacity:1; }
+  }
+  .loader-bars.xs{ --bar-width:2px;   --bar-height:8px;  --bar-gap:2.5px; --bar-radius:1px; }
+  .loader-bars.sm{ --bar-width:2.5px; --bar-height:10px; --bar-gap:2.5px; }
+  .loader-bars.md{ --bar-width:3px;   --bar-height:13px; --bar-gap:3px; }
+  .loader-bars.lg{ --bar-width:4px;   --bar-height:20px; --bar-gap:4px; --bar-radius:2px; }
+  .loader-bars.on-primary{ --bar-color: #fff; }
+
+  /* 加载动画 2 · 九宫格（上传发票） */
+  .loader-grid{
+    --sq-size: 6px;
+    --sq-gap: 3px;
+    --sq-radius: 1.5px;
+    --sq-color: currentColor;
+    display: inline-grid;
+    grid-template-columns: repeat(3, var(--sq-size));
+    grid-template-rows: repeat(3, var(--sq-size));
+    gap: var(--sq-gap);
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+  .loader-grid > span{
+    display: block;
+    width: var(--sq-size);
+    height: var(--sq-size);
+    background: var(--sq-color);
+    border-radius: var(--sq-radius);
+    opacity: .3;
+    transform: scale(.55);
+    animation: sq-wave 1.15s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+  .loader-grid > span:nth-child(1){ animation-delay: 0s; }
+  .loader-grid > span:nth-child(2){ animation-delay: 0.09s; }
+  .loader-grid > span:nth-child(3){ animation-delay: 0.18s; }
+  .loader-grid > span:nth-child(4){ animation-delay: 0.09s; }
+  .loader-grid > span:nth-child(5){ animation-delay: 0.18s; }
+  .loader-grid > span:nth-child(6){ animation-delay: 0.27s; }
+  .loader-grid > span:nth-child(7){ animation-delay: 0.18s; }
+  .loader-grid > span:nth-child(8){ animation-delay: 0.27s; }
+  .loader-grid > span:nth-child(9){ animation-delay: 0.36s; }
+  @keyframes sq-wave{
+    0%, 65%, 100% { opacity: .3;  transform: scale(.55); }
+    30%           { opacity: 1;   transform: scale(1);   }
+  }
+  .loader-grid.sm{ --sq-size: 4px; --sq-gap: 2.5px; --sq-radius: 1px; }
+  .loader-grid.md{ --sq-size: 6px; --sq-gap: 3px;   --sq-radius: 1.5px; }
+  .loader-grid.lg{ --sq-size: 8px; --sq-gap: 4px;   --sq-radius: 2px; }
+
+  /* 发票上传 */
   .inv-drop{
 		display:flex;flex-direction:column;align-items:center;justify-content:center;
 		border:1.5px dashed var(--line);border-radius:var(--radius-sm);
 		padding:18px 12px;cursor:pointer;text-align:center;
-		transition:border-color .15s,background .15s;background:var(--card-soft)
+		transition:border-color .15s,background .15s;background:var(--card-soft);
+		min-height:96px;
   }
   .inv-drop:hover{border-color:var(--blue);background:var(--blue-soft)}
   .inv-drop .inv-tip{font-size:12px;color:var(--ink-soft);margin-top:6px}
@@ -226,7 +384,7 @@
   .inv-preview{position:relative;display:inline-block}
   .inv-preview img{max-width:180px;max-height:180px;border-radius:var(--radius-sm);border:1px solid var(--line);display:block;object-fit:cover}
   .inv-preview .inv-remove{
-		position:absolute;top:4px;right:4px;
+		position:absolute;top:6px;right:6px;
 		width:22px;height:22px;border-radius:50%;
 		background:rgba(0,0,0,.55);color:#fff;border:none;
 		cursor:pointer;font-size:14px;line-height:1;
@@ -235,11 +393,15 @@
   }
   .inv-preview .inv-remove:hover{background:rgba(184,83,71,.9)}
   .inv-meta{font-size:12px;color:var(--ink-soft);margin-top:6px}
-  .inv-loading{font-size:12px;color:var(--blue);margin-top:6px}
+  .inv-loading{
+		display:flex;flex-direction:column;align-items:center;gap:10px;
+		font-size:13px;color:var(--blue);
+		justify-content:center;padding:6px 0;
+  }
 
   .notice{background:var(--yellow-soft);border:1px solid #EDDFB3;border-left:3px solid var(--yellow);border-radius:var(--radius-sm);padding:16px 17px;margin-bottom:18px;transition:background .3s,border-color .3s}
   body.dark-mode .notice{border-color:#4D3D2A;border-left-color:#D4AB5A}
-  .notice .label{display:inline-block;font-size:11.5px;font-weight:700;color:#8A6A22;background:rgba(255,255,255,.55);padding:3px 10px;border-radius:2px;margin-bottom:9px;letter-spacing:.02em}
+  .notice .label{display:inline-block;font-size:11.5px;font-weight:700;color:#8A6A22;background:rgba(255,255,255,.55);padding:3px 10px;border-radius:4px;margin-bottom:9px;letter-spacing:.02em}
   body.dark-mode .notice .label{color:#D9AD5A;background:rgba(0,0,0,.25)}
   .notice .text{font-size:14px;color:#6B5A30;line-height:1.6;white-space:pre-wrap}
   body.dark-mode .notice .text{color:#C4B08A}
@@ -263,7 +425,7 @@
   .flow .body{flex:1;min-width:0}
   .flow .purpose{font-size:14px;font-weight:600;letter-spacing:-.005em;word-break:break-word}
   .flow .meta{font-size:12px;color:var(--ink-soft);margin-top:2px}
-  .flow .meta .tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:2px;margin-right:4px;font-weight:500}
+  .flow .meta .tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:3px;margin-right:4px;font-weight:500}
   .tag.income{background:var(--income-soft);color:var(--income)}
   .tag.expense{background:var(--expense-soft);color:var(--expense)}
   .tag.inv{background:var(--blue-soft);color:var(--blue)}
@@ -279,7 +441,7 @@
 
   .filters{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
   .filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  .chip{padding:7px 14px;border-radius:2px;font-size:12.5px;font-weight:500;cursor:pointer;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);transition:background .15s,color .15s,border-color .15s,background .3s,border-color .3s}
+  .chip{padding:7px 14px;border-radius:var(--radius-sm);font-size:12.5px;font-weight:500;cursor:pointer;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);transition:background .15s,color .15s,border-color .15s,background .3s,border-color .3s}
   .chip.on{background:var(--orange);color:#fff;border-color:var(--orange)}
   .field{flex:1;min-width:120px;font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 11px;transition:border-color .15s,box-shadow .15s,background .3s,color .3s}
   .field:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
@@ -288,7 +450,7 @@
   .search-wrap .field{padding-left:38px}
 
   .menu{display:flex;flex-direction:column;gap:10px}
-  .menu-item .mi-ico{width:40px;height:40px;border-radius:2px;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .3s}
+  .menu-item .mi-ico{width:40px;height:40px;border-radius:8px;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .3s}
   .menu-item .mi-ico svg{width:19px;height:19px;color:var(--blue)}
   .menu-item .mi-t{font-weight:600;font-size:14.5px;letter-spacing:-.005em}
   .menu-item .mi-d{font-size:12px;color:var(--ink-soft);margin-top:2px}
@@ -309,7 +471,7 @@
 
   .feedback-item .header{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-soft);margin-bottom:6px}
   .feedback-item .content{font-size:15px;line-height:1.6}
-  .feedback-item .reply{background:var(--blue-soft);border-radius:2px;padding:12px 14px;margin-top:10px;font-size:14px;color:var(--blue);transition:background .3s}
+  .feedback-item .reply{background:var(--blue-soft);border-radius:var(--radius-sm);padding:12px 14px;margin-top:10px;font-size:14px;color:var(--blue);transition:background .3s}
 
   .mask{position:fixed;inset:0;background:rgba(30,26,18,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;visibility:hidden;opacity:0;transition:opacity .25s ease,visibility 0s linear .32s}
   .mask.show{visibility:visible;opacity:1;transition:opacity .25s ease}
@@ -318,7 +480,7 @@
   .modal .x{transition:color .15s,transform .25s;border-radius:50%;padding:0 4px;float:right;cursor:pointer;color:var(--ink-soft);font-size:22px;line-height:1}
   .modal .x:hover{color:var(--ink);transform:rotate(90deg)}
   .modal h3{margin:0 0 16px;font-size:18px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;justify-content:space-between}
-  .modal img{max-width:100%;border-radius:2px;border:1px solid var(--line)}
+  .modal img{max-width:100%;border-radius:var(--radius-sm);border:1px solid var(--line)}
   .modal .char-count{text-align:right;font-size:12px;color:var(--ink-soft);margin-top:4px}
   .modal .about-section{margin:12px 0;font-size:14px;line-height:2}
   .modal .about-section .label{color:var(--ink-soft);font-size:12px;display:inline-block;min-width:70px}
@@ -337,7 +499,7 @@
   .hidden{display:none!important}
 
   .tab-bar{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:8px;transition:border-color .3s}
-  .tab{font-size:14px;font-weight:500;padding:6px 14px;border-radius:2px;cursor:pointer;color:var(--ink-soft);transition:all .15s;flex:1;text-align:center}
+  .tab{font-size:14px;font-weight:500;padding:6px 14px;border-radius:var(--radius-sm);cursor:pointer;color:var(--ink-soft);transition:all .15s;flex:1;text-align:center}
   .tab.active{background:var(--orange);color:#fff}
   .tab:active{opacity:.6}
 
@@ -378,8 +540,8 @@
   @keyframes shimmer{from{background-position:120% 0}to{background-position:-80% 0}}
   .skel-page{padding:48px 6px}
   .skel-logo{width:76px;height:76px;margin:0 auto 18px}
-  .skel-title{height:24px;width:62%;margin:0 auto 12px;border-radius:3px}
-  .skel-line{height:13px;width:42%;margin:0 auto 36px;border-radius:3px}
+  .skel-title{height:24px;width:62%;margin:0 auto 12px;border-radius:4px}
+  .skel-line{height:13px;width:42%;margin:0 auto 36px;border-radius:4px}
   .skel-row{display:flex;gap:12px;margin-bottom:14px}
   .skel-card{flex:1;height:122px}
   .skel-block{height:150px;margin-top:18px}
@@ -392,7 +554,7 @@
   .modal::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:3px}
   .modal::-webkit-scrollbar-track{background:transparent}
 
-  .btn:focus-visible,.chip:focus-visible,.tab:focus-visible,.entry:focus-visible,.menu-item:focus-visible,.nav-back:focus-visible,.env-icon:focus-visible,.theme-toggle-wrap:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .btn:focus-visible,.chip:focus-visible,.tab:focus-visible,.entry:focus-visible,.menu-item:focus-visible,.nav-back:focus-visible,.env-icon:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 
   .empty .empty-ico{font-size:32px;opacity:.45;display:block;margin-bottom:6px;line-height:1}
 
@@ -402,7 +564,7 @@
 
   @media (prefers-reduced-motion: reduce){
 		*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-		.flow,.stamp-mini,.dot{animation:none}
+		.flow,.stamp-mini,.dot,.loader-bars>span,.loader-grid>span{animation:none}
   }
 </style>
 </head>
@@ -431,19 +593,18 @@
 <div id="toastWrap"></div>
 
 <script>
-const APP_VERSION = 'v2.6.0';
+const APP_VERSION = 'v2.8.1';
 const APP_DATE = '2026年9月26日';
 
-/* Supabase 云端配置 */
 const SUPABASE_URL = 'https://ejvzxlslfdweqavturmi.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdnp4bHNsZmR3ZXFhdnR1cm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTU2MzYsImV4cCI6MjEwMzIzMTYzNn0.4UUWXysA20Bi-pwBfcfKMi50Op22530443zKgBxlZwo';
 
-/* 发票：限制原始文件大小（压缩前），压缩后 base64 字符串直接写进 records.invoice */
-const INVOICE_MAX_SIZE = 5 * 1024 * 1024; // 5MB
-const INVOICE_MAX_DIM = 1200;             // 压缩后最长边像素
-const INVOICE_QUALITY = 0.72;             // JPEG 质量
+const INVOICE_MAX_SIZE = 5 * 1024 * 1024;
+const INVOICE_MAX_DIM = 1200;
+const INVOICE_QUALITY = 0.72;
 
-/* ---------- Supabase REST 封装 ---------- */
+const LOADER_MIN_MS = 450;
+
 async function apiGet(table, selectFields = '*') {
   const url = `${SUPABASE_URL}/rest/v1/${table}?select=${selectFields}&apikey=${SUPABASE_KEY}`;
   const r = await fetch(url, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } });
@@ -497,7 +658,32 @@ async function apiDeleteAll(table) {
   try { return await r.json(); } catch { return null; }
 }
 
-/* ---------- 图片压缩：canvas → JPEG dataURL，直接存库 ---------- */
+const LOADER_BARS_HTML = '<span class="loader-bars xs on-primary"><span></span><span></span><span></span></span>';
+const LOADER_GRID_HTML = '<span class="loader-grid md" style="--sq-color:var(--blue)"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span>';
+
+async function runWithLoader(btn, loadingHTML, task, minMs = LOADER_MIN_MS) {
+  const origHTML = btn ? btn.innerHTML : '';
+  const t0 = Date.now();
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = loadingHTML;
+  }
+  try {
+    const result = await task();
+    const elapsed = Date.now() - t0;
+    if (elapsed < minMs) {
+      await new Promise(r => setTimeout(r, minMs - elapsed));
+    }
+    return result;
+  } catch (e) {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = origHTML;
+    }
+    throw e;
+  }
+}
+
 function compressImage(file, maxDim = INVOICE_MAX_DIM, quality = INVOICE_QUALITY) {
   return new Promise((resolve, reject) => {
 		if (!file || !file.type || !file.type.startsWith('image/')) return reject(new Error('仅支持图片文件'));
@@ -518,7 +704,6 @@ function compressImage(file, maxDim = INVOICE_MAX_DIM, quality = INVOICE_QUALITY
 				const canvas = document.createElement('canvas');
 				canvas.width = w; canvas.height = h;
 				const ctx = canvas.getContext('2d');
-				/* 先铺白底，避免 PNG 透明区域转 JPEG 后变黑 */
 				ctx.fillStyle = '#ffffff';
 				ctx.fillRect(0, 0, w, h);
 				ctx.drawImage(img, 0, 0, w, h);
@@ -531,7 +716,6 @@ function compressImage(file, maxDim = INVOICE_MAX_DIM, quality = INVOICE_QUALITY
   });
 }
 
-/* ---------- 工具函数 ---------- */
 const ROLE_ADMIN = '总管理员';
 const ROLE_KEEPER = '生活委员';
 const ROLE_COMMITTEE = '班委';
@@ -545,7 +729,6 @@ let _busy = false;
 function busyStart() { if (_busy) return false; _busy = true; return true; }
 function busyEnd() { _busy = false; }
 
-/* ---------- 全局数据 & 状态 ---------- */
 let DB = { semesters: [], accounts: [], records: [], applications: [], feedbacks: [], logs: [], oplogs: [], settings: { class_name: '高二(1)班', notice: '' } };
 let state = {
   view: 'home',
@@ -558,7 +741,6 @@ let state = {
   filters: { type: 'all', month: 'all', keyword: '', start: '', end: '' },
   history: ['home'],
   inboxTab: 'applications',
-  /* 发票编辑态：_invUrl=已有发票，_invDataUrl=新压缩好的发票 */
   _invUrl: null,
   _invDataUrl: null,
   _invLoading: false
@@ -683,7 +865,6 @@ function loadTheme() {
   if (saved === 'dark') { document.body.classList.add('dark-mode'); }
 }
 
-/* ---------- Toast 通知 ---------- */
 const TOAST_ICONS = { success: '✅', error: '⚠️', warn: '💡', info: '🔔' };
 function toast(msg, type = 'info', dur = 2400) {
   let wrap = document.getElementById('toastWrap');
@@ -719,7 +900,6 @@ function confirmAction(title, msgHtml, okLabel, danger, onOk) {
   if (btn) btn.onclick = () => { closeModal(); onOk(); };
 }
 
-/* 统计数字滚动动画 */
 function animateNums() {
   document.querySelectorAll('#content .stat .v[data-v]').forEach(el => {
 		const target = parseFloat(el.dataset.v) || 0;
@@ -796,17 +976,21 @@ function render() {
   else if (state.view === 'feedback') title = '我要反馈';
   document.getElementById('navTitle').textContent = title;
 
+  /* 昼夜切换：用新开关替换原来的胶囊 */
+  const isDarkMode = document.body.classList.contains('dark-mode');
   let right = `
-		<div class="theme-toggle-wrap" onclick="toggleTheme()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTheme();}" role="button" tabindex="0" aria-label="切换昼夜模式">
-		  <div class="theme-toggle-thumb">
-				<span class="icon icon-sun">☀️</span>
-				<span class="icon icon-moon">🌙</span>
-		  </div>
-		  <div class="theme-toggle-icons">
-				<span class="icon-fixed">☀️</span>
-				<span class="icon-fixed">🌙</span>
-		  </div>
-		</div>
+		<label class="switch" aria-label="切换昼夜模式">
+		  <input type="checkbox" class="checkbox" ${isDarkMode ? 'checked' : ''} onchange="toggleTheme()">
+		  <span class="slider">
+				<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+				  <circle cx="12" cy="12" r="4"/>
+				  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+				</svg>
+				<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+				  <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+				</svg>
+		  </span>
+		</label>
   `;
 
   if (!isVisitor()) {
@@ -947,7 +1131,6 @@ function renderPublicFeedbacks() {
 
 function vwMain() {
   const sem = curSem();
-  /* 无学期时：管理员仍能进后台，其他角色只看到提示 */
   if (!sem) {
 		if (isAdmin()) {
 		  return `<div class="mt">还没有学期数据</div><div class="sub">请先到管理后台创建一个学期</div>
@@ -1035,7 +1218,6 @@ function setType(t) { state.filters.type = t; refreshRecords(); }
 function setMonth(m) { state.filters.month = m; refreshRecords(); }
 function resetDate() { state.filters.start = ''; state.filters.end = ''; refreshRecords(); }
 
-/* 局部刷新列表，保持搜索框焦点 */
 function refreshRecords() {
   if (state.view !== 'records') return;
   const card = document.getElementById('recordsListCard');
@@ -1051,7 +1233,7 @@ function switchSem(id) {
   render();
 }
 
-/* ---------- 反馈 ---------- */
+/* 反馈 */
 function vwFeedback() {
   const isLoggedInUser = !!state.user;
   let formHtml = `<div class="mt" style="font-size:16px">💬 我要反馈</div><div class="card" style="margin-top:14px">`;
@@ -1099,7 +1281,7 @@ async function submitFeedback() {
   finally { busyEnd(); }
 }
 
-/* ---------- 记录编辑（含发票） ---------- */
+/* 记录编辑（含发票） */
 function newRecord() {
   state.editingId = null;
   state._invUrl = null;
@@ -1118,10 +1300,9 @@ function editRecord(id) {
   go('edit');
 }
 
-/* 发票字段 HTML（三态：处理中 / 已有 / 无） */
 function invoiceFieldHTML() {
   if (state._invLoading) {
-    return `<div class="inv-meta inv-loading">⏳ 正在压缩图片…</div>`;
+    return `<div class="inv-loading">${LOADER_GRID_HTML}<span>正在压缩图片…</span></div>`;
   }
   const current = state._invDataUrl || state._invUrl;
   if (current) {
@@ -1214,7 +1395,7 @@ function vwEdit() {
 		</div>
 		<div style="display:flex;gap:10px;margin-top:6px">
 		<button class="btn btn-ghost btn-block" onclick="back()">取消</button>
-		<button class="btn btn-primary btn-block" onclick="saveRecord()">保存</button>
+		<button class="btn btn-primary btn-block" id="saveRecordBtn" onclick="saveRecord()">保存</button>
 		</div>
   </div>`;
 }
@@ -1237,43 +1418,45 @@ async function saveRecord() {
   const semester_id = sem.id;
 
   if (!busyStart()) return;
+
+  const btn = document.getElementById('saveRecordBtn');
   try {
-		/* 最终发票：新选的 dataURL 优先，其次保留原有 */
-		const finalInvoice = state._invDataUrl || state._invUrl || null;
+    await runWithLoader(btn, LOADER_BARS_HTML + '<span>保存中…</span>', async () => {
+      const finalInvoice = state._invDataUrl || state._invUrl || null;
 
-		if (state.editingId) {
-		  const old = DB.records.find(r => r.id === state.editingId);
-		  if (!old) throw new Error('记录不存在');
-		  const updated = { ...old, date, type, purpose, amount, handler, invoice: finalInvoice, updated_at: Date.now() };
-		  await apiPatch('records', state.editingId, updated);
-		  const idx = DB.records.findIndex(r => r.id === state.editingId);
-		  if (idx >= 0) DB.records[idx] = updated;
-		  await addOpLog('修改记录', `修改了记录 "${old.purpose}" 金额 ¥${fmtMoney(old.amount)} → ¥${fmtMoney(amount)}`);
-		} else {
-		  const newRec = {
-				id: uid(), semester_id, date, type, purpose, amount, handler,
-				invoice: finalInvoice, pending_delete: false,
-				created_at: Date.now(), updated_at: Date.now()
-		  };
-		  await apiPost('records', newRec);
-		  DB.records.push(newRec);
-		  await addOpLog('添加记录', `添加记录 "${purpose}" 金额 ¥${fmtMoney(amount)}${finalInvoice ? '（含发票）' : ''}`);
-		}
+      if (state.editingId) {
+        const old = DB.records.find(r => r.id === state.editingId);
+        if (!old) throw new Error('记录不存在');
+        const updated = { ...old, date, type, purpose, amount, handler, invoice: finalInvoice, updated_at: Date.now() };
+        await apiPatch('records', state.editingId, updated);
+        const idx = DB.records.findIndex(r => r.id === state.editingId);
+        if (idx >= 0) DB.records[idx] = updated;
+        await addOpLog('修改记录', `修改了记录 "${old.purpose}" 金额 ¥${fmtMoney(old.amount)} → ¥${fmtMoney(amount)}`);
+      } else {
+        const newRec = {
+          id: uid(), semester_id, date, type, purpose, amount, handler,
+          invoice: finalInvoice, pending_delete: false,
+          created_at: Date.now(), updated_at: Date.now()
+        };
+        await apiPost('records', newRec);
+        DB.records.push(newRec);
+        await addOpLog('添加记录', `添加记录 "${purpose}" 金额 ¥${fmtMoney(amount)}${finalInvoice ? '（含发票）' : ''}`);
+      }
+    });
 
-		state.editingId = null;
-		state._invDataUrl = null;
-		state._invUrl = null;
-		state._invLoading = false;
-
-		toast('已保存', 'success');
-		go(state._editFrom === 'records' ? 'records' : 'main', false);
+    state.editingId = null;
+    state._invDataUrl = null;
+    state._invUrl = null;
+    state._invLoading = false;
+    toast('已保存', 'success');
+    go(state._editFrom === 'records' ? 'records' : 'main', false);
   } catch (e) {
-		toast('保存失败: ' + e.message, 'error');
-		console.error(e);
+    toast('保存失败: ' + e.message, 'error');
+    console.error(e);
   } finally { busyEnd(); }
 }
 
-/* ---------- 删除申请 ---------- */
+/* 删除申请 */
 function applyDelete(id) {
   if (!canManageFlow()) { toast('当前身份无权限操作', 'warn'); return; }
   state.applyingId = id;
@@ -1327,7 +1510,7 @@ function adminDelete(id, e) {
   });
 }
 
-/* ---------- 信箱 ---------- */
+/* 信箱 */
 function vwInbox() {
   if (!state.user) return emptyBox('🔐', '请先登录');
   let activeTab = state.inboxTab || 'applications';
@@ -1488,7 +1671,7 @@ function renderMyFeedbacks() {
   `).join('');
 }
 
-/* ---------- 审批操作 ---------- */
+/* 审批操作 */
 async function approveApp(id) {
   if (!isAdmin()) { toast('无权限', 'warn'); return; }
   const a = DB.applications.find(x => x.id === id);
@@ -1533,7 +1716,7 @@ async function doReject(id) {
   finally { busyEnd(); }
 }
 
-/* ---------- 管理后台 ---------- */
+/* 管理后台 */
 function vwAdmin() {
   if (!isAdmin()) { toast('当前身份无权限操作', 'warn'); go('main', false); return ''; }
   const recCnt = DB.records.filter(r => !r.pending_delete).length;
@@ -1648,7 +1831,7 @@ async function restoreSample() {
   });
 }
 
-/* ---------- 学期管理 ---------- */
+/* 学期管理 */
 function vwSemester() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); return `<div class="mt" style="font-size:16px">📅 学期管理</div><div class="card" style="margin-top:14px">${DB.semesters.map(s => `<div class="kv"><div class="k"><div class="n">${esc(s.name)} ${s.is_current ? '<span class="tag income">当前</span>' : ''}</div><div class="s">起始余额 ¥${fmtMoney(s.start_balance)} · ${recordsOf(s.id).length} 条记录</div></div><button class="btn btn-ghost btn-xs" onclick="editSem('${s.id}')">编辑</button><button class="btn btn-ghost btn-xs" onclick="setCurSem('${s.id}')">设为当前</button><button class="btn btn-red btn-xs" onclick="delSem('${s.id}')">删除</button></div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addSem()">+ 新增学期</button></div>`; }
 function addSem() { openModal('新增学期', `<div class="form-line"><label>学期名称</label><input class="field" id="sn" placeholder="如：高二下"></div><div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" min="0" placeholder="0"></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem(null)">创建</button></div>`); }
 function editSem(id) { const s = DB.semesters.find(x => x.id === id); if (!s) return; openModal('编辑学期', `<div class="form-line"><label>学期名称</label><input class="field" id="sn" value="${esc(s.name)}"></div><div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" min="0" value="${s.start_balance}"></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem('${id}')">保存</button></div>`); }
@@ -1673,7 +1856,6 @@ async function saveSem(id) {
   } catch (e) { toast('操作失败: ' + e.message, 'error'); }
   finally { busyEnd(); }
 }
-/* 先关旧再开新，避免服务端残留多个 is_current=true */
 async function setCurSem(id) {
   switchSem(id);
   const staleIds = DB.semesters.filter(s => s.is_current && s.id !== id).map(s => s.id);
@@ -1705,7 +1887,7 @@ async function delSem(id) {
   });
 }
 
-/* ---------- 账号管理 ---------- */
+/* 账号管理 */
 function vwAccount() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); return `<div class="mt" style="font-size:16px">👤 账号管理</div><div class="card" style="margin-top:14px">${DB.accounts.map(a => `<div class="kv"><div class="k"><div class="n">${esc(a.name)}</div><div class="s">学号 ${esc(a.student_id)} · ${a.role}</div></div><button class="btn btn-ghost btn-xs" onclick="editAcc('${a.student_id}')">编辑</button><button class="btn btn-red btn-xs" onclick="delAcc('${a.student_id}')">删除</button></div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addAcc()">+ 新增账号</button></div>`; }
 function addAcc() { if (!isAdmin()) return; accForm(null); }
 function editAcc(sid) { if (!isAdmin()) return; accForm(sid); }
@@ -1768,26 +1950,35 @@ async function saveNotice() {
 
 function vwLog() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); const visitLogs = DB.logs.map(l => ({ ...l, type: '访问', action: '访问了平台' })); const opLogs = DB.oplogs.map(l => ({ ...l, type: '操作', action: l.action || '' })); const allLogs = [...visitLogs, ...opLogs].sort((a, b) => b.time - a.time).slice(0, 200); return `<div class="mt" style="font-size:16px">📋 全部日志</div><div class="card" style="margin-top:14px">${allLogs.length ? allLogs.map(l => `<div class="kv"><div class="k"><div class="n">${esc(l.type)} ${esc(l.action)}</div><div class="s">${esc(l.operator || l.nickname || '系统')} · ${l.detail ? esc(l.detail) : ''} · ${new Date(l.time).toLocaleString('zh-CN')}</div></div></div>`).join('') : emptyBox('📋', '暂无日志')}</div>`; }
 
-/* ---------- 登录 / 图片预览 ---------- */
-function openLogin() { openModal('管理员登录', `<div class="form-line"><label>学号</label><input class="field" id="lgId" placeholder="如 20" onkeydown="if(event.key==='Enter')doLogin()"></div><div class="form-line"><label>密码</label><input class="field" id="lgPw" type="password" placeholder="请输入密码" onkeydown="if(event.key==='Enter')doLogin()"></div><button class="btn btn-primary btn-block" onclick="doLogin()">登录</button>`); }
+/* 登录 / 图片预览 */
+function openLogin() {
+  openModal('管理员登录', `<div class="form-line"><label>学号</label><input class="field" id="lgId" placeholder="如 20" onkeydown="if(event.key==='Enter')doLogin()"></div><div class="form-line"><label>密码</label><input class="field" id="lgPw" type="password" placeholder="请输入密码" onkeydown="if(event.key==='Enter')doLogin()"></div><button class="btn btn-primary btn-block" id="loginBtn" onclick="doLogin()">登录</button>`);
+}
 let _loginFails = 0, _loginLockUntil = 0;
 async function doLogin() {
   if (Date.now() < _loginLockUntil) { const wait = Math.ceil((_loginLockUntil - Date.now()) / 1000); toast(`尝试次数过多，请 ${wait} 秒后再试`, 'warn', 3000); return; }
   const id = document.getElementById('lgId').value.trim(); const pw = document.getElementById('lgPw').value.trim();
   if (!id || !pw) { toast('请输入学号和密码', 'warn'); return; }
-  const btn = document.querySelector('#modalBody .btn-primary');
-  if (btn) { btn.disabled = true; btn.textContent = '登录中…'; }
+  const btn = document.getElementById('loginBtn');
   try {
-		const acc = await apiGetOne('accounts', 'student_id', id, 'student_id,name,role,password');
-		if (!acc || acc.password !== pw) { _loginFails++; if (_loginFails >= 5) { _loginLockUntil = Date.now() + 30000; _loginFails = 0; } toast('学号或密码错误', 'error'); return; }
-		_loginFails = 0;
-		state.user = { studentId: acc.student_id, role: acc.role, name: acc.name };
-		closeModal();
-		toast(`欢迎回来，${acc.name}`, 'success');
-		logVisit(acc.name);
-		state.history = ['home'];
-		go('main', false);
-  } catch (e) { toast('登录失败: ' + e.message, 'error'); } finally { if (btn) { btn.disabled = false; btn.textContent = '登录'; } }
+    await runWithLoader(btn, LOADER_BARS_HTML + '<span>登录中…</span>', async () => {
+      const acc = await apiGetOne('accounts', 'student_id', id, 'student_id,name,role,password');
+      if (!acc || acc.password !== pw) {
+        _loginFails++;
+        if (_loginFails >= 5) { _loginLockUntil = Date.now() + 30000; _loginFails = 0; }
+        throw new Error('学号或密码错误');
+      }
+      _loginFails = 0;
+      state.user = { studentId: acc.student_id, role: acc.role, name: acc.name };
+    });
+    closeModal();
+    toast(`欢迎回来，${state.user.name}`, 'success');
+    logVisit(state.user.name);
+    state.history = ['home'];
+    go('main', false);
+  } catch (e) {
+    toast(e.message, 'error');
+  }
 }
 function enterBrowse() { state.user = null; logVisit('访客'); state.noticeAck = false; state.history = ['home']; go('main', false); }
 
@@ -1806,7 +1997,6 @@ function closeModal() { document.getElementById('modal').classList.remove('show'
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-/* ---------- 静默刷新（页面重新可见 / 定时），数据变化时才提示 ---------- */
 let _lastLoad = 0;
 async function silentRefresh() {
   if (state._refreshing || !DB.semesters.length) return;
@@ -1831,7 +2021,6 @@ document.addEventListener('visibilitychange', () => {
 });
 setInterval(() => { if (Date.now() - _lastLoad > 60000) silentRefresh(); }, 30000);
 
-/* ---------- 启动 ---------- */
 window.onload = async function() {
   loadTheme();
   document.getElementById('content').innerHTML = `
