@@ -23,7 +23,7 @@
 ## 🎨 UI 设计特点
 
 - **莫奈色系主题**：6 套低饱和配色（暖橙 / 青绿 / 雾蓝 / 藕紫 / 陶土 / 墨绿），实时预览、一键切换，影响文件夹卡片、主按钮、色板标签等
-- **手写体标题**：汉仪阿里巴巴手写体用于导航标题、文件夹标签、弹窗标题、关于页班级名、登录页「欢迎回来」
+- **更新字体**：阿里汉仪智能体（AliHYAiHei-Beta）用于导航标题、文件夹标签、弹窗标题、关于页班级名、登录页「欢迎回来」
 - **苹果风 Toast**：全圆角、毛玻璃、缩放淡出，替换传统左侧竖线样式
 - **卡片圆角可调**：小 / 中 / 大三档切换
 - **动效开关**：一键开启或关闭全部过渡动画
@@ -38,7 +38,7 @@
 
 - 前端：HTML + 内嵌 CSS + JavaScript（单文件 SPA）
 - 数据库：Supabase (PostgreSQL + PostgREST)
-- 字体：Google Fonts（Inter / Source Serif 4）+ 汉仪阿里巴巴（依托cn-font-split 工具分包）
+- 字体：Google Fonts（Inter / Source Serif 4）+ 阿里汉仪智能体AliHYAiHei-Beta（依托cn-font-split 工具分包）
 - 构建工具：Node.js + cn-font-split
 - 部署：GitHub Pages / Cloudflare Pages
 
@@ -120,7 +120,7 @@
 同时感谢以下开源项目、工具与平台：
 
 **字体处理**
-- **cn-font-split**：中文字体分包工具，将汉仪阿里巴巴手写体按字符拆分，显著减小 Web 加载体积
+- **cn-font-split**：中文字体分包工具，将AliHYAiHei-Beta按字符拆分，显著减小 Web 加载体积
 - **Node.js**：提供构建与脚本运行环境
 
 **设计灵感**
