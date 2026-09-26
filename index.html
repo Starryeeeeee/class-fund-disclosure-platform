@@ -332,8 +332,11 @@
 
   /* ===== 首页 ===== */
   .home-wrap{padding-top:48px}
-  .logo{width:58px;height:58px;margin:0 auto 22px;border-radius:var(--radius);background:var(--yellow-soft);display:flex;align-items:center;justify-content:center;border:1px solid var(--line);transition:background .3s,border-color .3s}
+  /* 修改了 logo 样式：适配 img 标签，去掉了背景框，尺寸变大 */
+  .logo{width:76px;height:76px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;transition:transform .3s ease;}
   .logo svg{width:28px;height:28px}
+  .logo img{width:100%;height:100%;object-fit:contain;display:block;}
+  
   .home-desc{text-align:center;color:var(--ink-soft);font-size:13px;letter-spacing:.01em;margin:10px 0 34px}
   .entry-row{display:flex;gap:12px}
   .foot{text-align:center;color:var(--ink-faint);font-size:11.5px;margin-top:34px;letter-spacing:.01em}
@@ -548,7 +551,7 @@
   .skel{background:linear-gradient(100deg,var(--card-soft) 35%,var(--card) 50%,var(--card-soft) 65%);background-size:280% 100%;animation:shimmer 1.4s ease infinite;border-radius:var(--radius);border:1px solid var(--line)}
   @keyframes shimmer{from{background-position:120% 0}to{background-position:-80% 0}}
   .skel-page{padding:48px 6px}
-  .skel-logo{width:58px;height:58px;margin:0 auto 22px}
+  .skel-logo{width:76px;height:76px;margin:0 auto 18px}
   .skel-title{height:24px;width:62%;margin:0 auto 12px;border-radius:3px}
   .skel-line{height:13px;width:42%;margin:0 auto 36px;border-radius:3px}
   .skel-row{display:flex;gap:12px;margin-bottom:14px}
@@ -1100,7 +1103,7 @@ function logout() {
 function vwHome() {
   return `
   <div class="home-wrap">
-		<div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#CC9C3F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18v12H3z"/><path d="M3 7l9 6 9-6"/><path d="M7 11h.01M12 13h.01M17 11h.01"/></svg></div>
+		<div class="logo"><img src="logo.gif" alt="班级Logo"></div>
 		<div class="home-title">${esc(DB.settings.class_name)} 班费公示平台</div>
 		<div class="home-desc">随时查看班费流向📋🤩公开透明</div>
 		<div class="entry-row">
