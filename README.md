@@ -1,4 +1,5 @@
-# Class Fund Disclosure Platform # 班费公示平台
+# Class Fund Disclosure Platform
+# 班费公示平台
 
 这是一个基于 Supabase 云数据库的班级班费公开工具，支持多角色权限、流水记账、删除审批、学期管理、反馈系统等功能。
 
