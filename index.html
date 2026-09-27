@@ -666,9 +666,16 @@ function applyPrimaryTheme(themeId){
   const t = THEMES[themeId] || THEMES.orange;
   const isDark = document.body.classList.contains('dark-mode');
   const c = isDark ? t.dark : t.light;
+
+  // 设置到 <html> 上（亮色模式下生效）
+  document.documentElement.style.setProperty('--orange', c.main);
+  document.documentElement.style.setProperty('--orange-dark', c.dark);
+  document.documentElement.style.setProperty('--orange-soft', c.soft);
+
+  // 同时设置到 <body> 上（暗色模式下 body.dark-mode 会覆盖 html，需要覆盖回来）
   document.body.style.setProperty('--orange', c.main);
-  document.body.style.style.setProperty('--orange-dark', c.dark);
-  document.body.style.style.setProperty('--orange-soft', c.soft);
+  document.body.style.setProperty('--orange-dark', c.dark);
+  document.body.style.setProperty('--orange-soft', c.soft);
 }
 
 const RADIUS_MAP = { sm: '6px', md: '10px', lg: '14px' };
