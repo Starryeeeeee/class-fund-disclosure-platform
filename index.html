@@ -937,7 +937,7 @@
 <div id="toastWrap"></div>
 
 <script>
-const APP_VERSION = 'v3.3.2';
+const APP_VERSION = 'v3.3.3';
 const APP_DATE = '2026年10月1日';
 const MIN_BOOT_MS = 2000; // 最短启动时间
 
@@ -1523,16 +1523,37 @@ async function loadAllData(silent = false) {
 
   for (let attempt = 1; attempt <= maxAttempt; attempt++) {
 	try {
-	  const results = await Promise.allSettled([
+	  /* 分批请求：避免 8 个请求同时发送抢占主线程，导致启动动画掉帧 */
+	  const batch1 = await Promise.allSettled([
 		apiGet('semesters'),
-		apiGet('accounts', 'student_id,name,role'),
 		apiGet('records'),
-		apiGet('applications'),
-		apiGet('feedbacks'),
-		apiGet('logs'),
-		apiGet('oplogs'),
 		apiGet('settings')
 	  ]);
+	  await new Promise(r => setTimeout(r, 120));
+
+	  const batch2 = await Promise.allSettled([
+		apiGet('accounts', 'student_id,name,role'),
+		apiGet('applications'),
+		apiGet('feedbacks')
+	  ]);
+	  await new Promise(r => setTimeout(r, 120));
+
+	  const batch3 = await Promise.allSettled([
+		apiGet('logs'),
+		apiGet('oplogs')
+	  ]);
+
+	  /* 按原顺序重排：[semesters, accounts, records, applications, feedbacks, logs, oplogs, settings] */
+	  const results = [
+		batch1[0], // semesters
+		batch2[0], // accounts
+		batch1[1], // records
+		batch2[1], // applications
+		batch2[2], // feedbacks
+		batch3[0], // logs
+		batch3[1], // oplogs
+		batch1[2]  // settings
+	  ];
 
 	  const critical = ['semesters', 'records', 'settings'];
 	  const names = ['semesters','accounts','records','applications','feedbacks','logs','oplogs','settings'];
