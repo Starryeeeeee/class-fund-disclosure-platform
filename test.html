@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>极简测试2 · 原版粒子</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:#FAF8F3;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .boot-loader-orig{
+    position: relative;
+    width: 2.5em;
+    height: 2.5em;
+    transform: rotate(165deg);
+    font-size: 16px;
+    display: inline-block;
+  }
+  .boot-loader-orig::before,
+  .boot-loader-orig::after{
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    display: block;
+    width: 0.5em; height: 0.5em;
+    border-radius: 0.25em;
+    transform: translate(-50%, -50%);
+  }
+  .boot-loader-orig::before { animation: bootOrigBefore 2s infinite; }
+  .boot-loader-orig::after  { animation: bootOrigAfter  2s infinite; }
+  @keyframes bootOrigBefore {
+    0%   { width: 0.5em; box-shadow: 1em -0.5em rgba(201,136,120,.85), -1em 0.5em rgba(143,169,178,.85); }
+    35%  { width: 2.5em; box-shadow: 0 -0.5em rgba(201,136,120,.85),    0 0.5em rgba(143,169,178,.85); }
+    70%  { width: 0.5em; box-shadow: -1em -0.5em rgba(201,136,120,.85), 1em 0.5em rgba(143,169,178,.85); }
+    100% { box-shadow: 1em -0.5em rgba(201,136,120,.85), -1em 0.5em rgba(143,169,178,.85); }
+  }
+  @keyframes bootOrigAfter {
+    0%   { height: 0.5em; box-shadow: 0.5em 1em rgba(143,168,144,.85),  -0.5em -1em rgba(201,170,112,.85); }
+    35%  { height: 2.5em; box-shadow: 0.5em 0 rgba(143,168,144,.85),    -0.5em 0 rgba(201,170,112,.85); }
+    70%  { height: 0.5em; box-shadow: 0.5em -1em rgba(143,168,144,.85), -0.5em 1em rgba(201,170,112,.85); }
+    100% { box-shadow: 0.5em 1em rgba(143,168,144,.85),  -0.5em -1em rgba(201,170,112,.85); }
+  }
+</style>
+</head>
+<body>
+  <div class="boot-loader-orig"></div>
+</body>
+</html>
