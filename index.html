@@ -111,6 +111,8 @@
 		background:rgba(250,248,243,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
 		border-bottom:1px solid var(--line);transition:background .3s,border-color .3s}
   body.dark-mode .navbar{background:rgba(28,26,24,.88)}
+  /* 启动页期间关闭毛玻璃，提升移动端性能 */
+  body.booting .navbar{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg);}
   .nav-slot{width:84px;flex:0 0 auto;display:flex;align-items:center;min-height:1px}
   .nav-slot.left{justify-content:flex-start}
   .nav-slot.right{justify-content:flex-end}
@@ -271,7 +273,6 @@
 	opacity:.3;
 	transform:scale(.55);
 	animation:bootSqWave 1.15s ease-in-out infinite;
-	will-change:transform,opacity;
   }
   .boot-loader-grid > span:nth-child(1){ animation-delay: 0s; }
   .boot-loader-grid > span:nth-child(2){ animation-delay: 0.09s; }
@@ -291,7 +292,8 @@
   body.slow-device .boot-loader-orig{ display: none; }
   body.slow-device .boot-loader-grid{ display: inline-grid; }
 
-  .boot-text{display:flex;align-items:center;gap:1px;font-size:13px;color:var(--ink-soft);letter-spacing:.02em;}
+  /* 启动文字使用系统字体，避免字体加载重排 */
+  .boot-text{display:flex;align-items:center;gap:1px;font-size:13px;color:var(--ink-soft);letter-spacing:.02em;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;}
   .boot-dots{ display:inline-flex; margin-left:1px; }
   .boot-dots i{display:inline-block;font-style:normal;line-height:1;animation:bootDot 1.2s infinite ease-in-out;}
   .boot-dots i:nth-child(2){ animation-delay:.18s; }
@@ -819,7 +821,7 @@
   }
 </style>
 </head>
-<body>
+<body class="booting">
 <script>
 /* 提前应用暗色偏好 + 慢设备检测，防止闪烁 & 决定启动动画 */
 (function(){
@@ -916,8 +918,8 @@
 <div id="toastWrap"></div>
 
 <script>
-const APP_VERSION = 'v3.3.0';
-const APP_DATE = '2026年9月30日';
+const APP_VERSION = 'v3.3.1';
+const APP_DATE = '2026年10月1日';
 const MIN_BOOT_MS = 2000; // 最短启动时间
 
 const BOOT_TEXTS = [
@@ -3411,6 +3413,8 @@ window.onload = async function() {
 	  await new Promise(r => setTimeout(r, MIN_BOOT_MS - elapsed));
 	}
 	_lastLoad = Date.now();
+	/* 移除启动标记，恢复 navbar 毛玻璃 */
+	document.body.classList.remove('booting');
 	stopBootTicker();
 	go(state.user ? 'main' : 'home', false);
 	console.log('🚀 班费平台启动成功！版本 ' + APP_VERSION);
