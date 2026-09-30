@@ -340,7 +340,7 @@
   .logo{width:64px;height:64px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center}
   .logo img{width:100%;height:100%;object-fit:contain;display:block}
   .home-title{font-family:var(--font-hand);text-align:center;font-size:21px;font-weight:400;letter-spacing:.06em;line-height:1.4;}
-  .home-desc{text-align:center;color:var(--ink-soft);font-size:12.5px;margin
+  .home-desc{text-align:center;color:var(--ink-soft);font-size:12.5px;margin:6px 0 22px}
 
   .login-form{--lf-bg: #A8795A;--lf-line: #4A2F1E;--lf-btn-bg: #FBF6EF;--lf-btn-fg: #4A2F1E;padding: 16px 16px 14px;background: var(--lf-bg);display: flex;flex-direction: column;align-items: flex-start;justify-content: center;gap: 12px;border-radius: 5px;border: 2px solid var(--lf-line);box-shadow: 4px 4px 0 0 var(--lf-line);max-width: 296px;margin: 0 auto;width: 100%;transition: background .4s, border-color .4s, box-shadow .4s;}
   body.dark-mode .login-form{--lf-bg: #8A6045;--lf-line: #1A0F08;}
@@ -937,7 +937,7 @@
 <div id="toastWrap"></div>
 
 <script>
-const APP_VERSION = 'v3.3.2';
+const APP_VERSION = 'v3.3.3';
 const APP_DATE = '2026年10月1日';
 const MIN_BOOT_MS = 2000; // 最短启动时间
 
@@ -1523,16 +1523,37 @@ async function loadAllData(silent = false) {
 
   for (let attempt = 1; attempt <= maxAttempt; attempt++) {
 	try {
-	  const results = await Promise.allSettled([
+	  /* 分批请求：避免 8 个请求同时发送抢占主线程，导致启动动画掉帧 */
+	  const batch1 = await Promise.allSettled([
 		apiGet('semesters'),
-		apiGet('accounts', 'student_id,name,role'),
 		apiGet('records'),
-		apiGet('applications'),
-		apiGet('feedbacks'),
-		apiGet('logs'),
-		apiGet('oplogs'),
 		apiGet('settings')
 	  ]);
+	  await new Promise(r => setTimeout(r, 120));
+
+	  const batch2 = await Promise.allSettled([
+		apiGet('accounts', 'student_id,name,role'),
+		apiGet('applications'),
+		apiGet('feedbacks')
+	  ]);
+	  await new Promise(r => setTimeout(r, 120));
+
+	  const batch3 = await Promise.allSettled([
+		apiGet('logs'),
+		apiGet('oplogs')
+	  ]);
+
+	  /* 按原顺序重排：[semesters, accounts, records, applications, feedbacks, logs, oplogs, settings] */
+	  const results = [
+		batch1[0], // semesters
+		batch2[0], // accounts
+		batch1[1], // records
+		batch2[1], // applications
+		batch2[2], // feedbacks
+		batch3[0], // logs
+		batch3[1], // oplogs
+		batch1[2]  // settings
+	  ];
 
 	  const critical = ['semesters', 'records', 'settings'];
 	  const names = ['semesters','accounts','records','applications','feedbacks','logs','oplogs','settings'];
@@ -3393,7 +3414,6 @@ setInterval(() => { if (Date.now() - _lastLoad > 60000) silentRefresh(); }, 3000
    启动
    ============================================================ */
 window.onload = async function() {
-  return;
   const t0 = Date.now();
   loadTheme();
   loadSettings();
