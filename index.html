@@ -59,6 +59,8 @@
 		--sticky-tape-line:rgba(180,150,80,.32);
 		--sticky-label:#8A6A22;
 		--sticky-text:#6B5A30;
+		--cls-fixed:#C1633E;
+		--cls-fixed-dark:#D67A55;
   }
   body.dark-mode {
 		--bg: #1C1A18; --card: #2A2724; --card-soft: #33302C;
@@ -92,6 +94,8 @@
 		--sticky-tape-line:rgba(220,190,110,.25);
 		--sticky-label:#D9AD5A;
 		--sticky-text:#C4B08A;
+		--cls-fixed:#C1633E;
+		--cls-fixed-dark:#D67A55;
   }
 
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -129,7 +133,6 @@
   .theme-switch .theme-switch-input{position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;}
   .theme-switch svg{ display:block; width:100%; height:auto; overflow:visible; }
 
-  /* 容器/背景/月亮斑点/滑块 走轻微回弹 */
   .theme-switch #container,
   .theme-switch #patches,
   .theme-switch #button{
@@ -140,7 +143,6 @@
   .theme-switch .theme-switch-input:checked + svg #container{ fill: #2b4360; }
   .theme-switch .theme-switch-input:checked + svg #button{ transform: translate(28px, 2.333px); }
 
-  /* 太阳：亮起时 0°，暗时顺时针 45° 淡出 */
   .theme-switch #sun{
 	opacity: 1;
 	transform: rotate(0deg);
@@ -153,7 +155,6 @@
 	transform: rotate(45deg);
   }
 
-  /* 月亮：暗时 0°，亮起时从 -45° 转正淡入 */
   .theme-switch #moon{
 	opacity: 0;
 	transform: rotate(-45deg);
@@ -166,7 +167,6 @@
 	transform: rotate(0deg);
   }
 
-  /* 云：亮时可见，切暗时先淡出 */
   .theme-switch #cloud{
 	opacity: 1;
 	transition: opacity .3s ease;
@@ -175,7 +175,6 @@
 	opacity: 0;
   }
 
-  /* 星星：切暗时最后出现 */
   .theme-switch #stars{
 	opacity: 0;
 	transition: opacity .35s ease .1s;
@@ -188,21 +187,29 @@
 
   #content{padding:24px 18px 56px;min-height:calc(100vh - 60px)}
   .mt{font-family:var(--font-display);font-size:20px;font-weight:700;text-align:center;margin:4px 0 6px;letter-spacing:-.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .mt .cls{color:var(--orange)}
+  /* 班级名称固定色，不跟随主题色 */
+  .mt .cls{color:var(--cls-fixed)}
+  body.dark-mode .mt .cls{color:var(--cls-fixed-dark)}
   .sub{font-size:13px;color:var(--ink-soft);text-align:center}
 
-  /* ==================== 启动页加载器（莫兰迪粒子） ==================== */
+  /* ==================== 启动页加载器 ====================
+	 - 默认（快设备）：原版 box-shadow，含"连线感"
+	 - 慢设备（body.slow-device）：九宫格方块波浪
+	 ==================================================== */
   .boot-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 108px);gap:22px;}
-  .boot-loader{
+
+  /* --- 原版 box-shadow 启动动画 --- */
+  .boot-loader-orig{
 	position: relative;
 	width: 2.5em;
 	height: 2.5em;
 	transform: rotate(165deg);
 	font-size: 16px;
+	display: inline-block;
 	flex-shrink: 0;
   }
-  .boot-loader::before,
-  .boot-loader::after{
+  .boot-loader-orig::before,
+  .boot-loader-orig::after{
 	content: "";
 	position: absolute;
 	top: 50%; left: 50%;
@@ -211,38 +218,78 @@
 	border-radius: 0.25em;
 	transform: translate(-50%, -50%);
   }
-  .boot-loader::before { animation: bootBefore 2s infinite; }
-  .boot-loader::after  { animation: bootAfter  2s infinite; }
-
-  /* 亮色：莫兰迪原色，透明度 .85 */
-  @keyframes bootBefore {
+  .boot-loader-orig::before { animation: bootOrigBefore 2s infinite; }
+  .boot-loader-orig::after  { animation: bootOrigAfter  2s infinite; }
+  @keyframes bootOrigBefore {
 	0%   { width: 0.5em; box-shadow: 1em -0.5em rgba(201,136,120,.85), -1em 0.5em rgba(143,169,178,.85); }
 	35%  { width: 2.5em; box-shadow: 0 -0.5em rgba(201,136,120,.85),    0 0.5em rgba(143,169,178,.85); }
 	70%  { width: 0.5em; box-shadow: -1em -0.5em rgba(201,136,120,.85), 1em 0.5em rgba(143,169,178,.85); }
 	100% { box-shadow: 1em -0.5em rgba(201,136,120,.85), -1em 0.5em rgba(143,169,178,.85); }
   }
-  @keyframes bootAfter {
+  @keyframes bootOrigAfter {
 	0%   { height: 0.5em; box-shadow: 0.5em 1em rgba(143,168,144,.85),  -0.5em -1em rgba(201,170,112,.85); }
 	35%  { height: 2.5em; box-shadow: 0.5em 0 rgba(143,168,144,.85),    -0.5em 0 rgba(201,170,112,.85); }
 	70%  { height: 0.5em; box-shadow: 0.5em -1em rgba(143,168,144,.85), -0.5em 1em rgba(201,170,112,.85); }
 	100% { box-shadow: 0.5em 1em rgba(143,168,144,.85),  -0.5em -1em rgba(201,170,112,.85); }
   }
-
-  /* 暗色：四色提亮 + 透明度 .95，避免在暗背景上"发闷" */
-  body.dark-mode .boot-loader::before { animation-name: bootBeforeDark; }
-  body.dark-mode .boot-loader::after  { animation-name: bootAfterDark;  }
-  @keyframes bootBeforeDark {
+  /* 暗色提亮 */
+  body.dark-mode .boot-loader-orig::before { animation-name: bootOrigBeforeDark; }
+  body.dark-mode .boot-loader-orig::after  { animation-name: bootOrigAfterDark;  }
+  @keyframes bootOrigBeforeDark {
 	0%   { width: 0.5em; box-shadow: 1em -0.5em rgba(230,160,142,.95), -1em 0.5em rgba(170,200,212,.95); }
 	35%  { width: 2.5em; box-shadow: 0 -0.5em rgba(230,160,142,.95),    0 0.5em rgba(170,200,212,.95); }
 	70%  { width: 0.5em; box-shadow: -1em -0.5em rgba(230,160,142,.95), 1em 0.5em rgba(170,200,212,.95); }
 	100% { box-shadow: 1em -0.5em rgba(230,160,142,.95), -1em 0.5em rgba(170,200,212,.95); }
   }
-  @keyframes bootAfterDark {
+  @keyframes bootOrigAfterDark {
 	0%   { height: 0.5em; box-shadow: 0.5em 1em rgba(170,200,178,.95),  -0.5em -1em rgba(230,200,140,.95); }
 	35%  { height: 2.5em; box-shadow: 0.5em 0 rgba(170,200,178,.95),    -0.5em 0 rgba(230,200,140,.95); }
 	70%  { height: 0.5em; box-shadow: 0.5em -1em rgba(170,200,178,.95), -0.5em 1em rgba(230,200,140,.95); }
 	100% { box-shadow: 0.5em 1em rgba(170,200,178,.95),  -0.5em -1em rgba(230,200,140,.95); }
   }
+
+  /* --- 九宫格降级启动动画 --- */
+  .boot-loader-grid{
+	--sq-size: 8px;
+	--sq-gap: 4px;
+	--sq-radius: 2px;
+	--sq-color: #C1633E;
+	display: none; /* 默认隐藏，慢设备通过 body.slow-device 显示 */
+	grid-template-columns:repeat(3,var(--sq-size));
+	grid-template-rows:repeat(3,var(--sq-size));
+	gap:var(--sq-gap);
+	vertical-align:middle;
+	flex-shrink: 0;
+  }
+  body.dark-mode .boot-loader-grid{ --sq-color: #E8B452; }
+  .boot-loader-grid > span{
+	display:block;
+	width:var(--sq-size);
+	height:var(--sq-size);
+	background:var(--sq-color);
+	border-radius:var(--sq-radius);
+	opacity:.3;
+	transform:scale(.55);
+	animation:bootSqWave 1.15s ease-in-out infinite;
+	will-change:transform,opacity;
+  }
+  .boot-loader-grid > span:nth-child(1){ animation-delay: 0s; }
+  .boot-loader-grid > span:nth-child(2){ animation-delay: 0.09s; }
+  .boot-loader-grid > span:nth-child(3){ animation-delay: 0.18s; }
+  .boot-loader-grid > span:nth-child(4){ animation-delay: 0.09s; }
+  .boot-loader-grid > span:nth-child(5){ animation-delay: 0.18s; }
+  .boot-loader-grid > span:nth-child(6){ animation-delay: 0.27s; }
+  .boot-loader-grid > span:nth-child(7){ animation-delay: 0.18s; }
+  .boot-loader-grid > span:nth-child(8){ animation-delay: 0.27s; }
+  .boot-loader-grid > span:nth-child(9){ animation-delay: 0.36s; }
+  @keyframes bootSqWave{
+	0%,65%,100%{opacity:.3;transform:scale(.55)}
+	30%{opacity:1;transform:scale(1)}
+  }
+
+  /* 慢设备：隐藏原版，显示九宫格 */
+  body.slow-device .boot-loader-orig{ display: none; }
+  body.slow-device .boot-loader-grid{ display: inline-grid; }
 
   .boot-text{display:flex;align-items:center;gap:1px;font-size:13px;color:var(--ink-soft);letter-spacing:.02em;}
   .boot-dots{ display:inline-flex; margin-left:1px; }
@@ -353,18 +400,16 @@
   .modal .m-body .field{background: rgba(255,255,255,.75);border: 1px solid rgba(0,0,0,.06);color: var(--ink);}
   .modal .m-body .field:focus{background: #fff;border-color: var(--orange);box-shadow: 0 0 0 3px rgba(193,99,62,.14);}
 
-  .modal.m-admin .m-tab{ background: #B27551; }
-  .modal.m-admin .m-strip{ background: #B27551; }
-  .modal.m-admin .m-body{ background: #F5E9E0; }
-  .modal.m-admin .m-body .field:focus{border-color: #B27551;box-shadow: 0 0 0 3px rgba(178,117,81,.16);}
+  /* m-admin（登录弹窗）跟随主题色 */
+  .modal.m-admin .m-tab{ background: var(--orange); }
+  .modal.m-admin .m-strip{ background: var(--orange); }
+  .modal.m-admin .m-body{ background: var(--orange-soft); }
+  .modal.m-admin .m-body .field:focus{border-color: var(--orange);box-shadow: 0 0 0 3px rgba(193,99,62,.14);}
 
   .modal.m-export .m-tab{ background: var(--sunflower); }
   .modal.m-export .m-strip{ background: var(--sunflower); }
   .modal.m-export .m-body{ background: var(--yellow-soft); }
 
-  body.dark-mode .modal.m-admin .m-tab{ background: #8C5A3F; }
-  body.dark-mode .modal.m-admin .m-strip{ background: #8C5A3F; }
-  body.dark-mode .modal.m-admin .m-body{ background: #2E2620; }
   body.dark-mode .modal.m-export .m-tab{ background: #A87520; }
   body.dark-mode .modal.m-export .m-strip{ background: #A87520; }
   body.dark-mode .modal.m-export .m-body{ background: #3D3422; }
@@ -439,7 +484,7 @@
   .btn-feedback:active{background:var(--orange-dark);transform:translate(3px,3px);box-shadow:0 0 0 0}
   .btn:disabled{cursor:not-allowed;opacity:.92}
 
-  /* ===== 小按钮（.btn-xs）一律扁平：去掉硬阴影，只保留缩小的按压感 ===== */
+  /* 小按钮（.btn-xs）一律扁平：去掉硬阴影，只保留缩小的按压感 */
   .btn-xs,
   body.dark-mode .btn-xs{box-shadow:none !important;}
   .btn-xs:active,
@@ -489,7 +534,6 @@
 	50% { transform: scale(1.2, 1); }
   }
 
-  /* 兼容旧 loader-bars（暂保留，供遗留代码使用） */
   .loader-bars{--bar-color: currentColor;--bar-width: 2px;--bar-height: 8px;--bar-gap: 2.5px;--bar-radius: 1px;display:inline-flex;align-items:center;justify-content:center;gap:var(--bar-gap);vertical-align:middle;height:calc(var(--bar-height) * 1.7);flex-shrink:0}
   .loader-bars > span{display:block;width:var(--bar-width);height:var(--bar-height);background:var(--bar-color);border-radius:var(--bar-radius);animation: loader-bars 0.9s infinite ease-in-out}
   .loader-bars > span:nth-child(1){ animation-delay: -0.32s; }
@@ -525,6 +569,77 @@
   .inv-preview .inv-remove:hover{background:rgba(184,83,71,.9)}
   .inv-meta{font-size:12px;color:var(--ink-soft);margin-top:6px}
   .inv-loading{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:13px;color:var(--blue);justify-content:center;padding:6px 0}
+
+  /* 发票弹窗：米色边框（亮暗都加） */
+  .inv-modal-body{
+	padding: 12px;
+	border-radius: 8px;
+	background: #FBF4E0;
+	border: 1px solid rgba(180,150,80,.32);
+	box-sizing: border-box;
+  }
+  body.dark-mode .inv-modal-body{
+	background: #3A3324;
+	border-color: rgba(220,190,110,.28);
+  }
+  .inv-modal-body img{
+	max-width: 100%;
+	display: block;
+	border-radius: 6px;
+	cursor: zoom-in;
+	background: #fff;
+  }
+  .inv-modal-full-hint{
+	text-align: center;
+	font-size: 11.5px;
+	color: #8A6A22;
+	margin-top: 8px;
+	letter-spacing: .02em;
+  }
+  body.dark-mode .inv-modal-full-hint{ color: #D9AD5A; }
+
+  /* 全屏发票查看器 */
+  .inv-fullscreen{
+	position: fixed;
+	inset: 0;
+	z-index: 300;
+	background: rgba(20,18,15,.94);
+	display: none;
+	align-items: center;
+	justify-content: center;
+	padding: 16px;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+  }
+  .inv-fullscreen.show{ display: flex; }
+  .inv-fullscreen img{
+	max-width: 100%;
+	max-height: 100%;
+	display: block;
+	border-radius: 8px;
+	background: #fff;
+	cursor: zoom-out;
+	transition: transform .25s ease;
+  }
+  .inv-fullscreen .inv-fs-close{
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: rgba(255,255,255,.15);
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	font-size: 22px;
+	line-height: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	backdrop-filter: blur(6px);
+  }
+  .inv-fullscreen .inv-fs-close:active{ background: rgba(255,255,255,.28); }
 
   .sem-switch{display:flex;align-items:center;gap:10px;margin-bottom:16px}
   .sem-switch label{font-size:13px;color:var(--ink-soft);white-space:nowrap}
@@ -637,7 +752,7 @@
 
   .tool-fab{position: fixed;left: 18px;bottom: 26px;width: 44px;height: 44px;z-index: 40;pointer-events: none;}
   .tool-fab .tool-main,.tool-fab .tool-item{pointer-events: auto;}
-  .tool-main{position: absolute;left: 0; bottom: 0;width: 44px; height: 44px;border-radius: 50%;background: var(--orange);color: #fff;border: none;cursor: pointer;display: flex; align-items: center; justify-content: center;box-shadow:0 6px 18px -4px rgba(163,79,48,.55),0 2px 6px -2px rgba(163,79,48,.35);transition: background .15s;padding: 0;font-family: inherit;z-index: 2;}
+  .tool-main{position: absolute;left: 0; bottom: 0;width: 44px; height: 44px;border-radius: 50%;background: var(--orange);color: #fff;border: none;cursor: pointer;display: flex;align-items: center; justify-content: center;box-shadow:0 6px 18px -4px rgba(163,79,48,.55),0 2px 6px -2px rgba(163,79,48,.35);transition: background .15s;padding: 0;font-family: inherit;z-index: 2;}
   .tool-main:active{ background: var(--orange-dark); }
   .tool-main svg{width: 20px; height: 20px; overflow: visible;}
   .tool-main .bar{transform-origin: 12px 12px;transition: transform .4s cubic-bezier(.34,1.56,.64,1), opacity .25s;}
@@ -648,7 +763,7 @@
   .tool-fab.open .tool-main .bar-2{ opacity: 0; }
   .tool-fab.open .tool-main .bar-3{ transform: translateY(0) rotate(-45deg); }
 
-  .tool-item{position: absolute;left: 0; bottom: 0;width: 42px; height: 42px;border-radius: 50%;background: var(--card);color: var(--ink);border: 1.5px solid var(--line);cursor: pointer;display: flex; align-items: center; justify-content: center;box-shadow: 0 4px 12px -4px rgba(0,0,0,.18);padding: 0;font-family: inherit;opacity: 0;visibility: hidden;transform: translate(0,0) scale(.35);transition:opacity .2s,transform .35s cubic-bezier(.34,1.56,.64,1),visibility 0s linear .3s;z-index: 1;}
+  .tool-item{position: absolute;left: 0; bottom: 0;width: 42px; height: 42px;border-radius: 50%;background: var(--card);color: var(--ink);border: 1.5px solid var(--line);cursor: pointer;display: flex;align-items: center; justify-content: center;box-shadow: 0 4px 12px -4px rgba(0,0,0,.18);padding: 0;font-family: inherit;opacity: 0;visibility: hidden;transform: translate(0,0) scale(.35);transition:opacity .2s,transform .35s cubic-bezier(.34,1.56,.64,1),visibility 0s linear .3s;z-index: 1;}
   .tool-item svg{ width: 18px; height: 18px; }
   .tool-item:hover{ background: var(--card-soft); }
   .tool-fab.open .tool-item{opacity: 1; visibility: visible;transition:opacity .25s,transform .4s cubic-bezier(.34,1.56,.64,1) var(--delay,0s),visibility 0s linear 0s;}
@@ -656,6 +771,33 @@
   .tool-fab.open .tool-item.i2{--tx: 58px; --ty: -32px;transform: translate(58px, -32px) scale(1);transition-delay: .06s;}
   .tool-item.i1{ --tx: 22px; --ty: -62px; }
   .tool-item.i2{ --tx: 58px; --ty: -32px; }
+
+  /* 小红点（未读提示） */
+  .red-dot{
+	position: absolute;
+	top: -4px;
+	right: -4px;
+	min-width: 16px;
+	height: 16px;
+	padding: 0 4px;
+	border-radius: 8px;
+	background: #E05048;
+	color: #fff;
+	font-size: 10px;
+	font-weight: 700;
+	line-height: 16px;
+	text-align: center;
+	box-sizing: border-box;
+	box-shadow: 0 0 0 2px var(--card);
+	pointer-events: none;
+	z-index: 3;
+	font-variant-numeric: tabular-nums;
+	transition: opacity .2s ease;
+  }
+  .tool-main .red-dot{
+	box-shadow: 0 0 0 2px var(--orange);
+  }
+  .red-dot.hidden{ display: none; }
 
   .modal::-webkit-scrollbar{width:5px}
   .modal::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:3px}
@@ -668,7 +810,7 @@
   body.dark-mode .btn-red:active{background:#4A2E2A;transform:translate(3px,3px);box-shadow:0 0 0 0}
 
   body.reduce-motion *,body.reduce-motion *::before,body.reduce-motion *::after {animation-duration: .01ms !important;animation-iteration-count: 1 !important;transition-duration: .01ms !important;}
-  body.reduce-motion .loader-bars > span,body.reduce-motion .loader-grid > span,body.reduce-motion .boot-dots i,body.reduce-motion .boot-loader::before,body.reduce-motion .boot-loader::after,body.reduce-motion .btn-loader::before,body.reduce-motion .btn-loader::after {animation-duration: inherit !important;animation-iteration-count: infinite !important;}
+  body.reduce-motion .loader-bars > span,body.reduce-motion .loader-grid > span,body.reduce-motion .boot-dots i,body.reduce-motion .boot-loader-orig::before,body.reduce-motion .boot-loader-orig::after,body.reduce-motion .boot-loader-grid > span,body.reduce-motion .btn-loader::before,body.reduce-motion .btn-loader::after {animation-duration: inherit !important;animation-iteration-count: infinite !important;}
 
   @media (prefers-reduced-motion: reduce){
 		*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -679,11 +821,24 @@
 </head>
 <body>
 <script>
-/* 提前应用暗色偏好，防止加载闪烁（第二步：给 body 加 class，让 body.dark-mode 生效） */
+/* 提前应用暗色偏好 + 慢设备检测，防止闪烁 & 决定启动动画 */
 (function(){
   try {
+	/* 暗色偏好 */
 	if (localStorage.getItem('theme') === 'dark') {
 	  document.body.classList.add('dark-mode');
+	}
+	/* 慢设备检测：微信 + 老安卓（<8） + 老 iOS（<14） → 启动动画降级为九宫格 */
+	var ua = navigator.userAgent || '';
+	var isWeChat = /MicroMessenger/i.test(ua);
+	var isOldAndroid = false;
+	var mAndroid = ua.match(/Android\s([0-9]+)/i);
+	if (mAndroid) { isOldAndroid = parseInt(mAndroid[1], 10) < 8; }
+	var isOldIOS = false;
+	var mIOS = ua.match(/iPhone OS (\d+)_/i);
+	if (mIOS) { isOldIOS = parseInt(mIOS[1], 10) < 14; }
+	if (isWeChat || isOldAndroid || isOldIOS) {
+	  document.body.classList.add('slow-device');
 	}
   } catch(e){}
 })();
@@ -701,7 +856,12 @@
   </nav>
   <div id="content">
 	<div class="boot-loading">
-	  <span class="boot-loader" aria-hidden="true"></span>
+	  <span class="boot-loader-orig" aria-hidden="true"></span>
+	  <span class="boot-loader-grid" aria-hidden="true">
+		<span></span><span></span><span></span>
+		<span></span><span></span><span></span>
+		<span></span><span></span><span></span>
+	  </span>
 	  <div class="boot-text">
 		<span id="bootTextMsg">正在连接云端数据库</span><span class="boot-dots"><i>.</i><i>.</i><i>.</i></span>
 	  </div>
@@ -721,6 +881,7 @@
 	  <path d="M3 7l9 6 9-6"/>
 	  <rect x="3" y="5" width="18" height="14" rx="2"/>
 	</svg>
+	<span class="red-dot hidden" id="inboxDot"></span>
   </button>
   <button class="tool-item i2" onclick="openSettings()" aria-label="设置">
 	<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -734,6 +895,7 @@
 	  <line class="bar bar-2" x1="4" y1="12" x2="20" y2="12"/>
 	  <line class="bar bar-3" x1="4" y1="12" x2="20" y2="12"/>
 	</svg>
+	<span class="red-dot hidden" id="toolMainDot"></span>
   </button>
 </div>
 
@@ -743,12 +905,20 @@
 <div class="mask" id="imgMask" onclick="if(event.target===this)closeModal()">
   <div class="modal" id="imgBody"></div>
 </div>
+
+<!-- 全屏发票查看器 -->
+<div class="inv-fullscreen" id="invFullscreen" onclick="closeInvFullscreen()">
+  <button class="inv-fs-close" onclick="event.stopPropagation();closeInvFullscreen()" aria-label="关闭">×</button>
+  <img id="invFullscreenImg" src="" alt="发票全屏" onclick="event.stopPropagation();">
+</div>
+
 <div id="topbar"></div>
 <div id="toastWrap"></div>
 
 <script>
-const APP_VERSION = 'v3.1.0';
+const APP_VERSION = 'v3.3.0';
 const APP_DATE = '2026年9月30日';
+const MIN_BOOT_MS = 2000; // 最短启动时间
 
 const BOOT_TEXTS = [
   '正在连接云端数据库',
@@ -1142,7 +1312,6 @@ async function apiDeleteAll(table) {
   try { return await r.json(); } catch { return null; }
 }
 
-/* 按钮内加载：方块跳跃（替代旧的三条竖条） */
 const LOADER_BARS_HTML = '<span class="btn-loader" aria-hidden="true"></span>';
 const LOADER_GRID_HTML = '<span class="loader-grid md" style="--sq-color:var(--blue)"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span>';
 
@@ -1200,6 +1369,8 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>
 const safeImgSrc = s => (/^(https?:|data:image\/)/i.test(String(s || ''))) ? s : '';
 const fmtMoney = n => { const num = Number(n || 0); const s = Math.abs(num).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); return num < 0 ? '-' + s : s; };
 const emptyBox = (ico, txt) => `<div class="empty"><span class="empty-ico">${ico}</span>${txt}</div>`;
+const mdEscape = s => String(s || '').replace(/\n/g, ' ').replace(/([|*_\[\]`\\])/g, '\\$1');
+const truncate = (s, n) => { s = String(s || ''); return s.length > n ? s.slice(0, n) + '…' : s; };
 
 let _busy = false;
 function busyStart() { if (_busy) return false; _busy = true; return true; }
@@ -1242,7 +1413,6 @@ function stats(semId) {
   const sem = DB.semesters.find(s => s.id === semId);
   return { income, expense, balance: Number(sem ? sem.start_balance : 0) + income - expense };
 }
-/* 历史总账：首学期起始余额 + 所有学期收支（不重复累加每个学期的 start_balance） */
 const historyTotal = () => {
   if (!DB.semesters.length) return 0;
   const base = Number(DB.semesters[0].start_balance || 0);
@@ -1254,6 +1424,59 @@ const historyTotal = () => {
 };
 const recordsOf = semId => DB.records.filter(r => r.semester_id === semId);
 const monthOf = d => (d ? String(d).slice(0, 7) : '');
+
+/* ============================================================
+   小红点（未读提示）
+   ============================================================ */
+function getUnreadCount() {
+  if (!state.user) return 0;
+  const key = 'inbox_last_seen_' + state.user.studentId;
+  const lastSeen = Number(localStorage.getItem(key) || 0);
+  let count = 0;
+
+  if (isAdmin()) {
+	count += DB.applications.filter(a => a.status === 'pending' && (a.time || 0) > lastSeen).length;
+	count += DB.feedbacks.filter(f => f.status === 'pending' && (f.created_at || 0) > lastSeen).length;
+  } else if (isKeeper()) {
+	count += DB.applications.filter(a =>
+	  a.applicant_student_id === state.user.studentId &&
+	  a.status !== 'pending' &&
+	  (a.time || 0) > lastSeen
+	).length;
+	count += DB.feedbacks.filter(f =>
+	  f.submitter_id === state.user.studentId &&
+	  f.status === 'public' &&
+	  f.admin_reply &&
+	  (f.updated_at || f.created_at || 0) > lastSeen
+	).length;
+  } else {
+	count += DB.feedbacks.filter(f =>
+	  f.submitter_id === state.user.studentId &&
+	  f.status === 'public' &&
+	  f.admin_reply &&
+	  (f.updated_at || f.created_at || 0) > lastSeen
+	).length;
+  }
+  return count;
+}
+
+function updateRedDots() {
+  const count = getUnreadCount();
+  const show = count > 0;
+  const text = count > 9 ? '9+' : String(count);
+  const ids = ['inboxDot', 'toolMainDot'];
+  ids.forEach(id => {
+	const el = document.getElementById(id);
+	if (!el) return;
+	if (show) { el.textContent = text; el.classList.remove('hidden'); }
+	else { el.classList.add('hidden'); }
+  });
+}
+
+function markInboxSeen() {
+  if (!state.user) return;
+  try { localStorage.setItem('inbox_last_seen_' + state.user.studentId, String(Date.now())); } catch(e){}
+}
 
 async function addOpLog(action, detail) {
   if (!state.user) return;
@@ -1362,7 +1585,12 @@ async function loadAllData(silent = false) {
 async function retryLoad() {
   document.getElementById('content').innerHTML = `
 	<div class="boot-loading">
-	  <span class="boot-loader" aria-hidden="true"></span>
+	  <span class="boot-loader-orig" aria-hidden="true"></span>
+	  <span class="boot-loader-grid" aria-hidden="true">
+		<span></span><span></span><span></span>
+		<span></span><span></span><span></span>
+		<span></span><span></span><span></span>
+	  </span>
 	  <div class="boot-text">
 		<span id="bootTextMsg">正在重新连接云端数据库</span><span class="boot-dots"><i>.</i><i>.</i><i>.</i></span>
 	  </div>
@@ -1378,6 +1606,10 @@ async function retryLoad() {
 function go(view, push = true) {
   if (push) state.history.push(state.view);
   state.view = view;
+  /* 进入 inbox 时记录已读时间戳，红点消失 */
+  if (view === 'inbox' && state.user) {
+	markInboxSeen();
+  }
   render();
   try {
 		if (push) history.pushState({ v: view }, '', '#' + view);
@@ -1407,7 +1639,6 @@ function toggleTheme() {
 }
 
 function loadTheme() {
-  /* 兜底：body 开头的内联脚本已经提前加 class，这里只处理边界情况 */
   if (localStorage.getItem('theme') === 'dark' && !document.body.classList.contains('dark-mode')) {
 	document.body.classList.add('dark-mode');
   }
@@ -1472,7 +1703,6 @@ function openAbout() {
 		<div class="about-section">
 		  <div class="about-row"><span class="lbl">版本</span><span class="val">${APP_VERSION}</span></div>
 		  <div class="about-row"><span class="lbl">最近更新</span><span class="val">${APP_DATE}</span></div>
-		  <div class="about-row"><span class="lbl">技术栈</span><span class="val">HTML + CSS + JavaScript + Supabase</span></div>
 		  <div class="about-row"><span class="lbl">了解更多</span><span class="val"><a href="https://github.com/starryeeeeee/class-fund-disclosure-platform" target="_blank">点击跳转至 GitHub 仓库</a></span></div>
 		</div>
 		<div style="display:flex;gap:10px;margin-top:20px;">
@@ -1587,6 +1817,9 @@ function render() {
   oldContent.parentNode.replaceChild(newContent, oldContent);
 
   window.scrollTo(0, 0);
+
+  /* 更新红点 */
+  updateRedDots();
 
   requestAnimationFrame(() => {
 		requestAnimationFrame(() => {
@@ -1813,7 +2046,6 @@ function vwRecords() {
   const recs = getFilteredRecords();
   const monthChips = `<span class="chip ${f.month === 'all' ? 'on' : ''}" onclick="setMonth('all')">全部月份</span>` +
 		months.map(m => `<span class="chip ${f.month === m ? 'on' : ''}" onclick="setMonth('${m}')">${m.slice(5)}月</span>`).join('');
-  /* 顶部删除原"📚 当前学期：xxx"重复行，直接跟下拉框 */
   return `
   <div class="mt" style="font-size:16px;margin-bottom:14px">全部流水明细</div>
   ${semSelect()}
@@ -1863,6 +2095,22 @@ function openExportDialog() {
   `, 'm-export');
 }
 
+/* ---------- 通用：按月份分组 ---------- */
+function groupRecordsByMonth(recs) {
+  const map = {};
+  recs.forEach(r => {
+	const m = (r.date || '').slice(0, 7) || '未知';
+	if (!map[m]) map[m] = [];
+	map[m].push(r);
+  });
+  return Object.keys(map).sort((a, b) => b.localeCompare(a)).map(m => ({ month: m, records: map[m] }));
+}
+function fmtMonthLabel(m) {
+  if (m === '未知') return '未知月份';
+  const y = m.slice(0, 4), mo = Number(m.slice(5));
+  return `${y}年${mo}月`;
+}
+
 function exportRecords(format) {
   const sem = curSem();
   if (!sem) { toast('没有学期数据', 'warn'); return; }
@@ -1873,6 +2121,8 @@ function exportRecords(format) {
   const className = DB.settings.class_name;
   const exportTime = new Date().toLocaleString('zh-CN');
   const dateStr = new Date().toISOString().slice(0, 10);
+  const groups = groupRecordsByMonth(recs);
+  const shouldGroup = groups.length > 1;
 
   if (format === 'html') {
 	const rows = recs.map(r => `
@@ -1880,7 +2130,7 @@ function exportRecords(format) {
 		<td>${r.date || ''}</td>
 		<td>${esc(r.purpose)}</td>
 		<td><span style="color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '收入' : '支出'}</span></td>
-		<td style="text-align:right;font-weight:600;color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</td>
+		<td style="text-align:right;font-weight:600;color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};font-variant-numeric:tabular-nums;">${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</td>
 		<td>${esc(r.handler)}</td>
 	  </tr>
 	`).join('');
@@ -1916,64 +2166,131 @@ function exportRecords(format) {
   }
 
   if (format === 'md') {
-	let md = `# ${className} · ${sem.name} 流水\n\n`;
-	md += `> 导出时间：${exportTime}　共 ${recs.length} 条记录\n\n`;
-	md += `## 概览\n\n`;
+	const recCount = recs.length;
+	const dates = recs.map(r => r.date).filter(Boolean).sort();
+	const minDate = dates[0] || '';
+	const maxDate = dates[dates.length - 1] || '';
+	const maxIncomeRec = recs.filter(r => r.type === 'income').reduce((m, r) => Number(r.amount) > Number(m ? m.amount : 0) ? r : m, null);
+	const maxExpenseRec = recs.filter(r => r.type === 'expense').reduce((m, r) => Number(r.amount) > Number(m ? m.amount : 0) ? r : m, null);
+
+	let md = `# ${className} · ${sem.name} 班费流水\n\n`;
+	md += `> 导出时间：${exportTime}\n`;
+	md += `> 共 ${recCount} 条记录 · 时间范围 ${minDate || '—'} 至 ${maxDate || '—'}\n\n`;
+
+	md += `## 📊 概览\n\n`;
 	md += `| 项目 | 金额 |\n| --- | ---: |\n`;
 	md += `| 当前余额 | ¥${fmtMoney(semStats.balance)} |\n`;
 	md += `| 总收入 | ¥${fmtMoney(semStats.income)} |\n`;
-	md += `| 总支出 | ¥${fmtMoney(semStats.expense)} |\n\n`;
-	md += `## 流水明细\n\n`;
-	md += `| 日期 | 用途 | 类型 | 金额 | 经手人 |\n`;
-	md += `| --- | --- | --- | ---: | --- |\n`;
-	recs.forEach(r => {
-	  const sign = r.type === 'income' ? '+' : '-';
-	  md += `| ${r.date || ''} | ${String(r.purpose).replace(/\|/g, '\\|')} | ${r.type === 'income' ? '收入' : '支出'} | ${sign}¥${fmtMoney(r.amount)} | ${r.handler || ''} |\n`;
-	});
-	md += `\n---\n\n由班费公示平台导出 · 数据来源于云端\n`;
+	md += `| 总支出 | ¥${fmtMoney(semStats.expense)} |\n`;
+	if (maxIncomeRec) md += `| 最大单笔收入 | ¥${fmtMoney(maxIncomeRec.amount)}（${mdEscape(truncate(maxIncomeRec.purpose, 20))}） |\n`;
+	if (maxExpenseRec) md += `| 最大单笔支出 | ¥${fmtMoney(maxExpenseRec.amount)}（${mdEscape(truncate(maxExpenseRec.purpose, 20))}） |\n`;
+	md += `\n`;
+
+	const writeTable = (list) => {
+	  let t = `| 日期 | 用途 | 类型 | 金额 | 经手人 |\n`;
+	  t += `| --- | --- | --- | ---: | --- |\n`;
+	  list.forEach(r => {
+		const sign = r.type === 'income' ? '+' : '-';
+		t += `| ${r.date || ''} | ${mdEscape(truncate(r.purpose, 40))} | ${r.type === 'income' ? '收入' : '支出'} | ${sign}¥${fmtMoney(r.amount)} | ${mdEscape(r.handler || '')} |\n`;
+	  });
+	  return t;
+	};
+
+	if (shouldGroup) {
+	  groups.forEach(g => {
+		md += `## 📅 ${fmtMonthLabel(g.month)}\n\n`;
+		md += writeTable(g.records);
+		md += `\n`;
+	  });
+	} else {
+	  md += `## 📋 流水明细\n\n`;
+	  md += writeTable(recs);
+	  md += `\n`;
+	}
+
+	md += `---\n\n*本文档由班费公示平台 ${APP_VERSION} 生成*\n`;
 	downloadFile(md, `班费流水_${sem.name}_${dateStr}.md`, 'text/markdown');
 	toast('Markdown 已导出', 'success');
 	return;
   }
 
   if (format === 'pdf') {
-	const rows = recs.map(r => `
-	  <tr>
-		<td>${r.date || ''}</td>
-		<td>${esc(r.purpose)}</td>
-		<td>${r.type === 'income' ? '收入' : '支出'}</td>
-		<td style="text-align:right;color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};font-weight:600;">${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</td>
-		<td>${esc(r.handler)}</td>
-	  </tr>
-	`).join('');
+	const renderTable = (list) => {
+	  const rows = list.map(r => `
+		<tr>
+		  <td>${r.date || ''}</td>
+		  <td>${esc(r.purpose)}</td>
+		  <td>${r.type === 'income' ? '收入' : '支出'}</td>
+		  <td class="amt-cell" style="color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</td>
+		  <td>${esc(r.handler)}</td>
+		</tr>
+	  `).join('');
+	  return `<table>
+		<thead><tr><th style="width:12%;">日期</th><th style="width:38%;">用途</th><th style="width:10%;">类型</th><th style="width:20%;" class="amt-head">金额</th><th style="width:20%;">经手人</th></tr></thead>
+		<tbody>${rows}</tbody>
+	  </table>`;
+	};
+
+	let bodyHtml = '';
+	if (shouldGroup) {
+	  groups.forEach(g => {
+		bodyHtml += `<section class="month-section">
+		  <h3 class="month-title">📅 ${fmtMonthLabel(g.month)}</h3>
+		  ${renderTable(g.records)}
+		</section>`;
+	  });
+	} else {
+	  bodyHtml = renderTable(recs);
+	}
+
 	const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${esc(className)} · ${esc(sem.name)} 流水</title>
 	  <style>
 		*{margin:0;padding:0;box-sizing:border-box}
-		body{font-family:-apple-system,"PingFang SC",sans-serif;padding:24px;color:#2b2a27;}
-		h1{font-size:20px;color:#F0B23E;margin-bottom:4px;}
-		.sub{color:#938d80;font-size:12px;margin-bottom:16px;border-bottom:1px solid #eae3d6;padding-bottom:8px;}
-		.total-box{display:flex;justify-content:space-around;padding:12px 0;margin-bottom:16px;background:#faf8f3;border-radius:8px;}
-		.total-box .label{font-size:11px;color:#938d80;}
-		.total-box .value{font-size:16px;font-weight:700;}
-		.total-box .balance .value{color:#F0B23E;}
-		.total-box .income .value{color:#5E8F71;}
-		.total-box .expense .value{color:#B5694A;}
-		table{width:100%;border-collapse:collapse;font-size:12px;}
-		th{background:#f5f1e9;padding:8px;text-align:left;}
-		td{padding:6px 8px;border-bottom:1px solid #f0ebe2;}
-		.footer{text-align:center;color:#c9c2b4;font-size:11px;margin-top:20px;border-top:1px solid #eae3d6;padding-top:10px;}
-		@media print { @page { margin: 12mm; } }
+		@page{ margin: 15mm 12mm; }
+		body{font-family:-apple-system,"PingFang SC",sans-serif;color:#2b2a27;font-size:13px;line-height:1.6;}
+		.cover{border-bottom:2px solid #F0B23E;padding-bottom:16px;margin-bottom:20px;}
+		.cover h1{font-size:24px;color:#C1633E;margin-bottom:4px;font-weight:700;}
+		.cover .sem-name{font-size:15px;color:#5C7C93;margin-bottom:8px;font-weight:500;}
+		.cover .meta{font-size:12px;color:#938d80;}
+		.stats-row{display:flex;gap:12px;margin-bottom:24px;page-break-inside:avoid;}
+		.stats-row .sc{flex:1;background:#FBF6EF;border:1px solid #EAE3D6;border-radius:10px;padding:14px 12px;text-align:center;}
+		.stats-row .sc .label{font-size:11.5px;color:#938d80;margin-bottom:4px;letter-spacing:.02em;}
+		.stats-row .sc .value{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
+		.stats-row .sc.balance .value{color:#F0B23E;}
+		.stats-row .sc.income .value{color:#5E8F71;}
+		.stats-row .sc.expense .value{color:#B5694A;}
+		.month-section{margin-bottom:22px;}
+		.month-title{font-size:14px;font-weight:700;color:#8A6A22;margin-bottom:8px;padding-left:8px;border-left:3px solid #F0B23E;page-break-after:avoid;}
+		table{width:100%;border-collapse:collapse;font-size:12px;page-break-inside:auto;}
+		thead{display:table-header-group;}
+		tr{page-break-inside:avoid;}
+		th{background:#3d3934;color:#fff;padding:9px 10px;text-align:left;font-weight:600;font-size:12px;border:1px solid #2b2a27;}
+		th.amt-head{text-align:right;}
+		td{padding:8px 10px;border:1px solid #e0d8c8;font-size:12px;vertical-align:top;word-break:break-word;}
+		td.amt-cell{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;}
+		tr:nth-child(even) td{background:#FAF8F3;}
+		.footer{text-align:center;color:#c9c2b4;font-size:11px;margin-top:24px;padding-top:12px;border-top:1px solid #eae3d6;}
+		@media print{
+		  body{font-size:12px;}
+		  .stats-row{page-break-inside:avoid;}
+		  .month-section{page-break-inside:auto;}
+		}
 	  </style></head><body>
-	  <h1>${esc(className)} · ${esc(sem.name)}</h1>
-	  <div class="sub">导出时间：${exportTime}　共 ${recs.length} 条记录</div>
-	  <div class="total-box">
-		<div class="balance"><div class="label">当前余额</div><div class="value">¥${fmtMoney(semStats.balance)}</div></div>
-		<div class="income"><div class="label">总收入</div><div class="value">¥${fmtMoney(semStats.income)}</div></div>
-		<div class="expense"><div class="label">总支出</div><div class="value">¥${fmtMoney(semStats.expense)}</div></div>
+	  <div class="cover">
+		<h1>📚 ${esc(className)}</h1>
+		<div class="sem-name">${esc(sem.name)} 班费流水明细</div>
+		<div class="meta">导出时间：${exportTime}　·　共 ${recs.length} 条记录</div>
 	  </div>
-	  <table><thead><tr><th>日期</th><th>用途</th><th>类型</th><th style="text-align:right;">金额</th><th>经手人</th></tr></thead>
-	  <tbody>${rows}</tbody></table>
-	  <div class="footer">由班费公示平台导出 · 数据来源于云端</div>
+
+	  <div class="stats-row">
+		<div class="sc balance"><div class="label">当前余额</div><div class="value">¥${fmtMoney(semStats.balance)}</div></div>
+		<div class="sc income"><div class="label">总收入</div><div class="value">¥${fmtMoney(semStats.income)}</div></div>
+		<div class="sc expense"><div class="label">总支出</div><div class="value">¥${fmtMoney(semStats.expense)}</div></div>
+	  </div>
+
+	  ${bodyHtml}
+
+	  <div class="footer">由班费公示平台导出 · 数据来源于云端 · ${APP_VERSION}</div>
 	  </body></html>`;
 
 	const iframe = document.createElement('iframe');
@@ -2094,7 +2411,7 @@ function vwFeedback() {
 		</div>
 		<div class="form-line">
 		  <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
-			<input type="checkbox" id="fb_anon"> 匿名提交（管理员仍可看到你的学号）
+			<input type="checkbox" id="fb_anon"> 匿名提交
 		  </label>
 		</div>
 		<div style="display:flex;gap:10px;margin-top:6px">
@@ -2425,12 +2742,50 @@ function renderMyApplications() {
 		if (a.status === 'pending') statusHtml = `<span class="st pending">⏳ 待审</span>`;
 		else if (a.status === 'approved') statusHtml = `<span class="stamp-mini">已批准</span>`;
 		else if (a.status === 'rejected') statusHtml = `<span class="stamp-mini">已拒绝</span>`;
+		let ops = '';
+		if (a.status === 'pending') {
+		  ops = `<div class="ops" style="margin-top:8px;">
+			<button class="btn btn-ghost btn-xs" onclick="withdrawApp('${a.id}')">撤回申请</button>
+		  </div>`;
+		}
 		return `<div class="appr">
 		<div class="top"><span>${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</span>${statusHtml}</div>
 		<div class="reason">原因：${esc(a.reason)}</div>
 		${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
+		${ops}
 		</div>`;
   }).join('');
+}
+
+async function withdrawApp(id) {
+  if (!state.user) return;
+  const a = DB.applications.find(x => x.id === id);
+  if (!a) { toast('申请不存在', 'warn'); return; }
+  if (a.applicant_student_id !== state.user.studentId) { toast('无权限', 'warn'); return; }
+  if (a.status !== 'pending') { toast('该申请已被处理，无法撤回', 'warn'); return; }
+
+  confirmAction('撤回删除申请', `确定撤回对「<b>${esc(a.record ? a.record.purpose : '该记录')}</b>」的删除申请吗？撤回后该记录将恢复正常显示。`, '确认撤回', false, async () => {
+	if (!busyStart()) return;
+	try {
+	  /* 方案 X：直接删除申请记录，不留数据 */
+	  await apiDelete('applications', id);
+	  DB.applications = DB.applications.filter(x => x.id !== id);
+	  /* 记录恢复正常 */
+	  const rec = DB.records.find(x => x.id === a.record_id);
+	  if (rec) {
+		rec.pending_delete = false;
+		try { await apiPatch('records', a.record_id, { pending_delete: false }); } catch(e){ console.warn('恢复记录失败:', e); }
+	  }
+	  /* 写日志 */
+	  await addOpLog('撤回申请', `撤回了对记录 "${a.record ? a.record.purpose : a.record_id}" 的删除申请`);
+	  toast('已撤回', 'success');
+	  render();
+	} catch (e) {
+	  toast('撤回失败: ' + e.message, 'error');
+	} finally {
+	  busyEnd();
+	}
+  });
 }
 
 function renderAdminFeedbacks() {
@@ -2615,8 +2970,22 @@ async function clearRecords() {
 }
 
 function vwSemester() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); return `<div class="mt" style="font-size:16px">📅 学期管理</div><div class="card" style="margin-top:14px">${DB.semesters.map(s => `<div class="kv"><div class="k"><div class="n">${esc(s.name)} ${s.is_current ? '<span class="tag inv">当前</span>' : ''}</div><div class="s">起始余额 ¥${fmtMoney(s.start_balance)} · ${recordsOf(s.id).length} 条记录</div></div><button class="btn btn-ghost btn-xs" onclick="editSem('${s.id}')">编辑</button><button class="btn btn-ghost btn-xs" onclick="setCurSem('${s.id}')">设为当前</button><button class="btn btn-red btn-xs" onclick="delSem('${s.id}')">删除</button></div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addSem()">+ 新增学期</button></div>`; }
-function addSem() { openModal('新增学期', `<div class="form-line"><label>学期名称</label><input class="field" id="sn" placeholder="如：高二下"></div><div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" min="0" placeholder="0"></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem(null)">创建</button></div>`); }
-function editSem(id) { const s = DB.semesters.find(x => x.id === id); if (!s) return; openModal('编辑学期', `<div class="form-line"><label>学期名称</label><input class="field" id="sn" value="${esc(s.name)}"></div><div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" min="0" value="${s.start_balance}"></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem('${id}')">保存</button></div>`); }
+
+/* 新增学期：自动填入上一学期的期末余额 */
+function addSem() {
+  if (!isAdmin()) return;
+  let defaultBal = '';
+  if (DB.semesters.length > 0) {
+	const last = DB.semesters[DB.semesters.length - 1];
+	if (last) {
+	  const bal = stats(last.id).balance;
+	  defaultBal = bal;
+	}
+  }
+  const valAttr = (defaultBal === '' || defaultBal === null || isNaN(defaultBal)) ? '' : ` value="${defaultBal}"`;
+  openModal('新增学期', `<div class="form-line"><label>学期名称</label><input class="field" id="sn" placeholder="如：高二下"></div><div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" step="0.01" placeholder="0"${valAttr}><div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">已自动填入上一学期期末余额，可手动修改</div></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem(null)">创建</button></div>`);
+}
+function editSem(id) { const s = DB.semesters.find(x => x.id === id); if (!s) return; openModal('编辑学期', `<div class="form-line"><label>学期名称</label><input class="field" id="sn" value="${esc(s.name)}"></div><div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" step="0.01" value="${s.start_balance}"></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem('${id}')">保存</button></div>`); }
 async function saveSem(id) {
   const name = document.getElementById('sn').value.trim();
   const bal = parseFloat(document.getElementById('sb').value) || 0;
@@ -2624,7 +2993,6 @@ async function saveSem(id) {
   if (name.length > 30) { toast('学期名称不能超过30个字符', 'warn'); return; }
   if (!busyStart()) return;
   try {
-		/* 先请求云端，成功后再改本地 */
 		if (id) {
 		  await apiPatch('semesters', id, { name, start_balance: bal });
 		  const sem = DB.semesters.find(s => s.id === id);
@@ -2709,7 +3077,6 @@ async function saveAcc(sid) {
   if (!name) { toast('请填写姓名', 'warn'); return; }
   if (!busyStart()) return;
   try {
-		/* 先请求云端，成功后再改本地 */
 		await apiPatch('accounts', sid, { name, role }, 'student_id');
 		const acc = DB.accounts.find(x => x.student_id === sid);
 		if (acc) { acc.name = name; acc.role = role; }
@@ -2753,7 +3120,7 @@ async function saveNotice() {
 }
 
 /* ============================================================
-   日志（支持多选删除、清 30 天前、清空全部）
+   日志
    ============================================================ */
 function vwLog() {
   if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面');
@@ -2803,7 +3170,6 @@ async function deleteOldLogs(){
   confirmAction('清除 30 天前的日志', `将删除 <b>${total}</b> 条 30 天前的日志，操作不可恢复。`, '确认清除', true, async () => {
 	if (!busyStart()) return;
 	try {
-	  /* 过滤掉 local- 开头的假 ID，只删云端真实记录 */
 	  const cloudVisits = oldVisits.filter(l => !String(l.id).startsWith('local-'));
 	  const cloudOps = oldOps.filter(l => !String(l.id).startsWith('local-'));
 	  for (const l of cloudVisits) { await apiDelete('logs', l.id); }
@@ -2855,7 +3221,7 @@ async function deleteSelectedLogs(){
 }
 
 /* ============================================================
-   登录 / 登出（Supabase Auth）
+   登录 / 登出
    ============================================================ */
 function openLogin(){
   openModal('登录', `
@@ -2900,6 +3266,9 @@ function enterBrowse() {
   go('main', false);
 }
 
+/* ============================================================
+   发票查看（弹窗 + 全屏）
+   ============================================================ */
 function openImg(id) {
   const sem = curSem();
   const r = sem ? recordsOf(sem.id).find(x => x.id === id) : null;
@@ -2910,13 +3279,33 @@ function openImg(id) {
 	<button class="modal-close" onclick="closeModal()">×</button>
 	<div class="m-tab">发票 / 收据</div>
 	<div class="m-strip"></div>
-	<div class="m-body">
-	  <img src="${esc(src)}" style="max-width:100%;display:block;border-radius:6px;">
+	<div class="m-body" style="padding:16px 14px 14px;">
+	  <div class="inv-modal-body">
+		<img src="${esc(src)}" alt="发票" onclick="openInvFullscreen('${esc(src)}')">
+	  </div>
 	  <p style="font-size:12px;color:var(--ink-soft);text-align:center;margin:10px 0 0">${r.date} · 经手：${esc(r.handler)}</p>
+	  <p class="inv-modal-full-hint">💡 点击图片可全屏查看并缩放</p>
 	</div>
   `;
   document.getElementById('imgBody').className = 'modal';
   openMask('imgMask');
+}
+
+function openInvFullscreen(src) {
+  const s = safeImgSrc(src);
+  if (!s) return;
+  const box = document.getElementById('invFullscreen');
+  const img = document.getElementById('invFullscreenImg');
+  img.src = s;
+  img.style.transform = 'scale(1)';
+  box.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeInvFullscreen() {
+  const box = document.getElementById('invFullscreen');
+  box.classList.remove('show');
+  document.getElementById('invFullscreenImg').src = '';
+  document.body.style.overflow = '';
 }
 
 function openModal(title, body, variant) {
@@ -2938,7 +3327,15 @@ function closeModal() {
   closeToolFab();
 }
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+	if (document.getElementById('invFullscreen').classList.contains('show')) {
+	  closeInvFullscreen();
+	  return;
+	}
+	closeModal();
+  }
+});
 
 let _lastLoad = 0;
 async function silentRefresh() {
@@ -2955,10 +3352,11 @@ async function silentRefresh() {
 		  _lastLoad = Date.now();
 		  const after = JSON.stringify([DB.semesters, DB.records, DB.applications, DB.feedbacks, DB.settings]);
 		  if (after !== snap) {
-			/* 流水页只刷新列表，避免输入框失焦 */
 			if (state.view === 'records') { refreshRecords(); }
 			else { render(); }
 			toast('数据已更新', 'info');
+		  } else {
+			updateRedDots();
 		  }
 		}
   } catch (e) { }
@@ -2970,14 +3368,22 @@ document.addEventListener('visibilitychange', () => {
 setInterval(() => { if (Date.now() - _lastLoad > 60000) silentRefresh(); }, 30000);
 
 /* ============================================================
-   启动：先恢复 Auth 会话，再加载数据
+   启动
    ============================================================ */
 window.onload = async function() {
+  const t0 = Date.now();
   loadTheme();
   loadSettings();
 
   const msgEl = document.getElementById('bootTextMsg');
   if (msgEl) msgEl.textContent = '正在唤醒云端数据库（首次访问约需 3~10 秒）';
+
+  /* 慢加载提示（超过 3 秒还没加载好） */
+  const slowTimer = setTimeout(() => {
+	stopBootTicker();
+	const el = document.getElementById('bootTextMsg');
+	if (el) el.textContent = '云端响应较慢，请稍候……';
+  }, 3000);
 
   try {
 	const { data: { session } } = await sb.auth.getSession();
@@ -2996,7 +3402,14 @@ window.onload = async function() {
   }
 
   const ok = await loadAllData();
+  clearTimeout(slowTimer);
+
   if (ok) {
+	/* 假加载：保证启动页至少显示 MIN_BOOT_MS 毫秒 */
+	const elapsed = Date.now() - t0;
+	if (elapsed < MIN_BOOT_MS) {
+	  await new Promise(r => setTimeout(r, MIN_BOOT_MS - elapsed));
+	}
 	_lastLoad = Date.now();
 	stopBootTicker();
 	go(state.user ? 'main' : 'home', false);
