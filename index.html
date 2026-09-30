@@ -273,6 +273,7 @@
 	opacity:.3;
 	transform:scale(.55);
 	animation:bootSqWave 1.15s ease-in-out infinite;
+	will-change:transform,opacity;
   }
   .boot-loader-grid > span:nth-child(1){ animation-delay: 0s; }
   .boot-loader-grid > span:nth-child(2){ animation-delay: 0.09s; }
@@ -288,8 +289,13 @@
 	30%{opacity:1;transform:scale(1)}
   }
 
-  /* 慢设备：隐藏原版，显示九宫格 */
-  body.slow-device .boot-loader-orig{ display: none; }
+  /* 慢设备：隐藏原版，显示九宫格，并彻底取消原版动画（含伪元素），避免后台空转 */
+  body.slow-device .boot-loader-orig,
+  body.slow-device .boot-loader-orig::before,
+  body.slow-device .boot-loader-orig::after{
+	display: none !important;
+	animation: none !important;
+  }
   body.slow-device .boot-loader-grid{ display: inline-grid; }
 
   /* 启动文字使用系统字体，避免字体加载重排 */
@@ -305,6 +311,19 @@
   .card::after{content:'';position:absolute;left:3px;top:0;bottom:0;width:1px;background:var(--card-left-line);opacity:.2}
   body.dark-mode .card::before{opacity:.5}
   body.dark-mode .card::after{opacity:.15}
+
+  /* 错误提示框：亮暗双模式适配 */
+  .error-card{background:#fee;border-color:#fcc;}
+  .error-card h3{color:var(--ink);margin:0 0 10px;font-size:17px;}
+  .error-card .err-detail{color:#b00;font-size:14px;margin:0 0 10px;}
+  .error-card .err-hint{color:#8a6a6a;font-size:13px;line-height:1.7;margin:0;}
+  .error-card .btn-ghost{background:rgba(255,255,255,.85);color:#2B2A27;box-shadow:3px 3px 0 0 #C9C2B4;border-color:rgba(0,0,0,.06);}
+  .error-card .btn-ghost:active{background:#fff;transform:translate(3px,3px);box-shadow:0 0 0 0;}
+  body.dark-mode .error-card{background:#3A2222;border-color:#5A3030;}
+  body.dark-mode .error-card .err-detail{color:#F0A5A5;}
+  body.dark-mode .error-card .err-hint{color:#C9A6A6;}
+  body.dark-mode .error-card .btn-ghost{background:rgba(255,255,255,.12);color:#F0EAE3;box-shadow:3px 3px 0 0 #6B4848;border-color:rgba(255,255,255,.12);}
+  body.dark-mode .error-card .btn-ghost:active{background:rgba(255,255,255,.2);transform:translate(3px,3px);box-shadow:0 0 0 0;}
 
   .folder{margin-bottom: 16px;}
   .folder-tab{display: inline-block;padding: 5px 16px 7px;background: var(--orange);color: #fff;font-family: var(--font-hand);font-size: 14.5px;font-weight: 500;letter-spacing: .08em;line-height: 1.4;border-radius: 8px 8px 0 0;}
@@ -918,7 +937,7 @@
 <div id="toastWrap"></div>
 
 <script>
-const APP_VERSION = 'v3.3.1';
+const APP_VERSION = 'v3.3.2';
 const APP_DATE = '2026年10月1日';
 const MIN_BOOT_MS = 2000; // 最短启动时间
 
@@ -1569,10 +1588,10 @@ async function loadAllData(silent = false) {
   console.error('❌ 加载数据失败:', lastErr);
   if (!silent) {
 	document.getElementById('content').innerHTML = `
-	<div class="card" style="background:#fee;border-color:#fcc;">
+	<div class="card error-card">
 	  <h3>⚠️ 连接云端失败</h3>
-	  <p style="color:#b00;font-size:14px;">${esc(lastErr ? lastErr.message : '未知错误')}</p>
-	  <p style="color:var(--ink-soft);font-size:13px;line-height:1.7;">
+	  <p class="err-detail">${esc(lastErr ? lastErr.message : '未知错误')}</p>
+	  <p class="err-hint">
 		如果这是你今天第一次打开，可能是云端数据库刚从休眠中唤醒。<br>稍等几秒再试一次通常就能成功。
 	  </p>
 	  <div style="display:flex;gap:10px;margin-top:12px;">
@@ -1600,6 +1619,7 @@ async function retryLoad() {
   const ok = await loadAllData();
   if (ok) {
 	_lastLoad = Date.now();
+	document.body.classList.remove('booting');
 	stopBootTicker();
 	go(state.user ? 'main' : 'home', false);
   }
