@@ -111,7 +111,6 @@
 		background:rgba(250,248,243,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
 		border-bottom:1px solid var(--line);transition:background .3s,border-color .3s}
   body.dark-mode .navbar{background:rgba(28,26,24,.88)}
-  /* 启动页期间关闭毛玻璃，提升移动端性能 */
   body.booting .navbar{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg);}
   .nav-slot{width:84px;flex:0 0 auto;display:flex;align-items:center;min-height:1px}
   .nav-slot.left{justify-content:flex-start}
@@ -126,7 +125,7 @@
 		color:var(--ink);letter-spacing:.04em;text-align:center}
   .nav-right{flex:1;display:flex;align-items:center;justify-content:flex-end;gap:10px;padding-right:8px}
 
-  /* ==================== 胶囊开关（增强动效） ==================== */
+  /* ==================== 胶囊开关 ==================== */
   .theme-switch{
 	position: relative; display: inline-flex; align-items: center;
 	width: 56px; cursor: pointer; flex-shrink: 0;
@@ -134,7 +133,6 @@
   }
   .theme-switch .theme-switch-input{position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;}
   .theme-switch svg{ display:block; width:100%; height:auto; overflow:visible; }
-
   .theme-switch #container,
   .theme-switch #patches,
   .theme-switch #button{
@@ -144,7 +142,6 @@
   }
   .theme-switch .theme-switch-input:checked + svg #container{ fill: #2b4360; }
   .theme-switch .theme-switch-input:checked + svg #button{ transform: translate(28px, 2.333px); }
-
   .theme-switch #sun{
 	opacity: 1;
 	transform: rotate(0deg);
@@ -152,11 +149,7 @@
 	transform-origin: center;
 	transition: opacity .28s ease, transform .45s cubic-bezier(0.34, 1.4, 0.64, 1);
   }
-  .theme-switch .theme-switch-input:checked + svg #sun{
-	opacity: 0;
-	transform: rotate(45deg);
-  }
-
+  .theme-switch .theme-switch-input:checked + svg #sun{ opacity: 0; transform: rotate(45deg); }
   .theme-switch #moon{
 	opacity: 0;
 	transform: rotate(-45deg);
@@ -164,32 +157,15 @@
 	transform-origin: center;
 	transition: opacity .28s ease .06s, transform .45s cubic-bezier(0.34, 1.4, 0.64, 1);
   }
-  .theme-switch .theme-switch-input:checked + svg #moon{
-	opacity: 1;
-	transform: rotate(0deg);
-  }
-
-  .theme-switch #cloud{
-	opacity: 1;
-	transition: opacity .3s ease;
-  }
-  .theme-switch .theme-switch-input:checked + svg #cloud{
-	opacity: 0;
-  }
-
-  .theme-switch #stars{
-	opacity: 0;
-	transition: opacity .35s ease .1s;
-  }
-  .theme-switch .theme-switch-input:checked + svg #stars{
-	opacity: 1;
-  }
-
+  .theme-switch .theme-switch-input:checked + svg #moon{ opacity: 1; transform: rotate(0deg); }
+  .theme-switch #cloud{ opacity: 1; transition: opacity .3s ease; }
+  .theme-switch .theme-switch-input:checked + svg #cloud{ opacity: 0; }
+  .theme-switch #stars{ opacity: 0; transition: opacity .35s ease .1s; }
+  .theme-switch .theme-switch-input:checked + svg #stars{ opacity: 1; }
   .theme-switch .theme-switch-input:focus-visible + svg{outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 8px;}
 
   #content{padding:24px 18px 56px;min-height:calc(100vh - 60px)}
   .mt{font-family:var(--font-display);font-size:20px;font-weight:700;text-align:center;margin:4px 0 6px;letter-spacing:-.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  /* 班级名称固定色，不跟随主题色 */
   .mt .cls{color:var(--cls-fixed)}
   body.dark-mode .mt .cls{color:var(--cls-fixed-dark)}
   .sub{font-size:13px;color:var(--ink-soft);text-align:center}
@@ -235,7 +211,6 @@
 	30%{opacity:1;transform:scale(1)}
   }
 
-  /* 启动文字使用系统字体，避免字体加载重排 */
   .boot-text{display:flex;align-items:center;gap:1px;font-size:13px;color:var(--ink-soft);letter-spacing:.02em;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;}
   .boot-dots{ display:inline-flex; margin-left:1px; }
   .boot-dots i{display:inline-block;font-style:normal;line-height:1;animation:bootDot 1.2s infinite ease-in-out;}
@@ -249,7 +224,6 @@
   body.dark-mode .card::before{opacity:.5}
   body.dark-mode .card::after{opacity:.15}
 
-  /* 错误提示框：亮暗双模式适配 */
   .error-card{background:#fee;border-color:#fcc;}
   .error-card h3{color:var(--ink);margin:0 0 10px;font-size:17px;}
   .error-card .err-detail{color:#b00;font-size:14px;margin:0 0 10px;}
@@ -358,7 +332,6 @@
   .modal .m-body .field{background: rgba(255,255,255,.75);border: 1px solid rgba(0,0,0,.06);color: var(--ink);}
   .modal .m-body .field:focus{background: #fff;border-color: var(--orange);box-shadow: 0 0 0 3px rgba(193,99,62,.14);}
 
-  /* m-admin（登录弹窗）跟随主题色 */
   .modal.m-admin .m-tab{ background: var(--orange); }
   .modal.m-admin .m-strip{ background: var(--orange); }
   .modal.m-admin .m-body{ background: var(--orange-soft); }
@@ -442,13 +415,11 @@
   .btn-feedback:active{background:var(--orange-dark);transform:translate(3px,3px);box-shadow:0 0 0 0}
   .btn:disabled{cursor:not-allowed;opacity:.92}
 
-  /* 小按钮（.btn-xs）一律扁平：去掉硬阴影，只保留缩小的按压感 */
   .btn-xs,
   body.dark-mode .btn-xs{box-shadow:none !important;}
   .btn-xs:active,
   body.dark-mode .btn-xs:active{transform:scale(.95) !important;box-shadow:none !important;}
 
-  /* ==================== 按钮内加载（方块跳跃） ==================== */
   .btn-loader{
 	display: inline-block;
 	width: 14px;
@@ -528,7 +499,6 @@
   .inv-meta{font-size:12px;color:var(--ink-soft);margin-top:6px}
   .inv-loading{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:13px;color:var(--blue);justify-content:center;padding:6px 0}
 
-  /* 发票弹窗：米色边框（亮暗都加） */
   .inv-modal-body{
 	padding: 12px;
 	border-radius: 8px;
@@ -556,7 +526,6 @@
   }
   body.dark-mode .inv-modal-full-hint{ color: #D9AD5A; }
 
-  /* 全屏发票查看器 */
   .inv-fullscreen{
 	position: fixed;
 	inset: 0;
@@ -730,7 +699,6 @@
   .tool-item.i1{ --tx: 22px; --ty: -62px; }
   .tool-item.i2{ --tx: 58px; --ty: -32px; }
 
-  /* 小红点（未读提示） */
   .red-dot{
 	position: absolute;
 	top: -4px;
@@ -850,7 +818,6 @@
   <div class="modal" id="imgBody"></div>
 </div>
 
-<!-- 全屏发票查看器 -->
 <div class="inv-fullscreen" id="invFullscreen" onclick="closeInvFullscreen()">
   <button class="inv-fs-close" onclick="event.stopPropagation();closeInvFullscreen()" aria-label="关闭">×</button>
   <img id="invFullscreenImg" src="" alt="发票全屏" onclick="event.stopPropagation();">
@@ -860,9 +827,8 @@
 <div id="toastWrap"></div>
 
 <script>
-const APP_VERSION = 'v3.3.5';
+const APP_VERSION = 'v3.3.6';
 const APP_DATE = '2026年10月1日';
-const MIN_BOOT_MS = 2000; // 最短启动时间
 
 const BOOT_TEXTS = [
   '正在连接云端数据库',
@@ -1079,7 +1045,6 @@ function resetSettings(){
   });
 }
 
-/* ---------- 修改昵称 ---------- */
 function openEditName(){
   if (!isLoggedIn()) return;
   const curName = state.user.name || '';
@@ -1117,7 +1082,6 @@ async function saveNewName(){
   } finally { busyEnd(); }
 }
 
-/* ---------- 修改密码 ---------- */
 function openChangePassword(){
   if (!isLoggedIn()) return;
   openModal('修改密码', `
@@ -1165,9 +1129,6 @@ const INVOICE_MAX_DIM = 1200;
 const INVOICE_QUALITY = 0.72;
 const LOADER_MIN_MS = 450;
 
-/* ============================================================
-   带超时和自动重试的底层请求
-   ============================================================ */
 async function getToken(){
   try {
 	const { data: { session } } = await sb.auth.getSession();
@@ -1369,9 +1330,6 @@ const historyTotal = () => {
 const recordsOf = semId => DB.records.filter(r => r.semester_id === semId);
 const monthOf = d => (d ? String(d).slice(0, 7) : '');
 
-/* ============================================================
-   小红点（未读提示）
-   ============================================================ */
 function getUnreadCount() {
   if (!state.user) return 0;
   const key = 'inbox_last_seen_' + state.user.studentId;
@@ -1446,7 +1404,7 @@ async function loadAllData(silent = false) {
 
   for (let attempt = 1; attempt <= maxAttempt; attempt++) {
 	try {
-	  /* 分批请求：避免 8 个请求同时发送抢占主线程，导致启动动画掉帧 */
+	  /* 分批请求：避免 8 个请求同时发送抢占主线程 */
 	  const batch1 = await Promise.allSettled([
 		apiGet('semesters'),
 		apiGet('records'),
@@ -1466,7 +1424,6 @@ async function loadAllData(silent = false) {
 		apiGet('oplogs')
 	  ]);
 
-	  /* 按原顺序重排：[semesters, accounts, records, applications, feedbacks, logs, oplogs, settings] */
 	  const results = [
 		batch1[0], // semesters
 		batch2[0], // accounts
@@ -1571,7 +1528,6 @@ async function retryLoad() {
 function go(view, push = true) {
   if (push) state.history.push(state.view);
   state.view = view;
-  /* 进入 inbox 时记录已读时间戳，红点消失 */
   if (view === 'inbox' && state.user) {
 	markInboxSeen();
   }
@@ -1783,7 +1739,6 @@ function render() {
 
   window.scrollTo(0, 0);
 
-  /* 更新红点 */
   updateRedDots();
 
   requestAnimationFrame(() => {
@@ -2060,7 +2015,6 @@ function openExportDialog() {
   `, 'm-export');
 }
 
-/* ---------- 通用：按月份分组 ---------- */
 function groupRecordsByMonth(recs) {
   const map = {};
   recs.forEach(r => {
@@ -2732,16 +2686,13 @@ async function withdrawApp(id) {
   confirmAction('撤回删除申请', `确定撤回对「<b>${esc(a.record ? a.record.purpose : '该记录')}</b>」的删除申请吗？撤回后该记录将恢复正常显示。`, '确认撤回', false, async () => {
 	if (!busyStart()) return;
 	try {
-	  /* 方案 X：直接删除申请记录，不留数据 */
 	  await apiDelete('applications', id);
 	  DB.applications = DB.applications.filter(x => x.id !== id);
-	  /* 记录恢复正常 */
 	  const rec = DB.records.find(x => x.id === a.record_id);
 	  if (rec) {
 		rec.pending_delete = false;
 		try { await apiPatch('records', a.record_id, { pending_delete: false }); } catch(e){ console.warn('恢复记录失败:', e); }
 	  }
-	  /* 写日志 */
 	  await addOpLog('撤回申请', `撤回了对记录 "${a.record ? a.record.purpose : a.record_id}" 的删除申请`);
 	  toast('已撤回', 'success');
 	  render();
@@ -2936,7 +2887,6 @@ async function clearRecords() {
 
 function vwSemester() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); return `<div class="mt" style="font-size:16px">📅 学期管理</div><div class="card" style="margin-top:14px">${DB.semesters.map(s => `<div class="kv"><div class="k"><div class="n">${esc(s.name)} ${s.is_current ? '<span class="tag inv">当前</span>' : ''}</div><div class="s">起始余额 ¥${fmtMoney(s.start_balance)} · ${recordsOf(s.id).length} 条记录</div></div><button class="btn btn-ghost btn-xs" onclick="editSem('${s.id}')">编辑</button><button class="btn btn-ghost btn-xs" onclick="setCurSem('${s.id}')">设为当前</button><button class="btn btn-red btn-xs" onclick="delSem('${s.id}')">删除</button></div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addSem()">+ 新增学期</button></div>`; }
 
-/* 新增学期：自动填入上一学期的期末余额 */
 function addSem() {
   if (!isAdmin()) return;
   let defaultBal = '';
@@ -3084,9 +3034,6 @@ async function saveNotice() {
   finally { busyEnd(); }
 }
 
-/* ============================================================
-   日志
-   ============================================================ */
 function vwLog() {
   if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面');
   const visitLogs = DB.logs.map(l => ({ ...l, _tbl: 'logs', type: '访问', action: '访问了平台' }));
@@ -3185,9 +3132,6 @@ async function deleteSelectedLogs(){
   });
 }
 
-/* ============================================================
-   登录 / 登出
-   ============================================================ */
 function openLogin(){
   openModal('登录', `
 	<div class="form-line"><label>学号</label><input class="field" id="lgId" placeholder="如 20" onkeydown="if(event.key==='Enter')document.getElementById('lgPw').focus()" autocomplete="username"></div>
@@ -3231,9 +3175,6 @@ function enterBrowse() {
   go('main', false);
 }
 
-/* ============================================================
-   发票查看（弹窗 + 全屏）
-   ============================================================ */
 function openImg(id) {
   const sem = curSem();
   const r = sem ? recordsOf(sem.id).find(x => x.id === id) : null;
@@ -3333,10 +3274,9 @@ document.addEventListener('visibilitychange', () => {
 setInterval(() => { if (Date.now() - _lastLoad > 60000) silentRefresh(); }, 30000);
 
 /* ============================================================
-   启动
+   启动：加载完成立即进入，无延迟
    ============================================================ */
 window.onload = async function() {
-  const t0 = Date.now();
   loadTheme();
   loadSettings();
 
@@ -3370,13 +3310,7 @@ window.onload = async function() {
   clearTimeout(slowTimer);
 
   if (ok) {
-	/* 假加载：保证启动页至少显示 MIN_BOOT_MS 毫秒 */
-	const elapsed = Date.now() - t0;
-	if (elapsed < MIN_BOOT_MS) {
-	  await new Promise(r => setTimeout(r, MIN_BOOT_MS - elapsed));
-	}
 	_lastLoad = Date.now();
-	/* 移除启动标记，恢复 navbar 毛玻璃 */
 	document.body.classList.remove('booting');
 	stopBootTicker();
 	go(state.user ? 'main' : 'home', false);
