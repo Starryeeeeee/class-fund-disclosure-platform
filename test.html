@@ -1,0 +1,3176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="班费公示平台——公开透明的班级班费收支流水、删除审批与反馈系统">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📒%3C/text%3E%3C/svg%3E">
+<title>高二(1)班 班费公示平台（测试版）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./subset/result.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* 提前应用暗色偏好，防止加载闪烁 */
+(function(){
+  try {
+	if (localStorage.getItem('theme') === 'dark') {
+	  document.documentElement.style.background = '#1C1A18';
+	  document.documentElement.style.colorScheme = 'dark';
+	}
+  } catch(e){}
+})();
+</script>
+<style>
+  :root{
+		--bg:#FAF8F3; --card:#FFFFFF; --card-soft:#F5F1E9;
+		--orange:#C1633E; --orange-dark:#A34F30; --orange-soft:#F3E4DA;
+		--sunflower:#F0B23E; --sunflower-dark:#B87D22;
+		--teal:#5D8F7F; --teal-dark:#3D6F5F;
+		--blue:#5C7C93; --blue-soft:#EAF0F3; --blue-dark:#48617A;
+		--yellow:#CC9C3F; --yellow-soft:#F8F0DC;
+		--ink:#2B2A27; --ink-soft:#938D80; --ink-faint:#C9C2B4; --line:#EAE3D6;
+		--income:#5E8F71; --income-soft:#E8F1EA;
+		--expense:#B5694A; --expense-soft:#F5E7DE;
+		--red:#B85347; --red-soft:#F7E7E4; --red-dark:#8A3A30;
+		--stamp:#B53A2D; --stamp-soft:rgba(181,58,45,.08);
+		--card-left-line:#E8824E;
+		--card-left-line-feedback:#3B6BA5;
+		--stats-left-line:#D03028;
+		--radius:10px; --radius-sm:6px;
+		--shadow-card:0 1px 0 rgba(0,0,0,.04), 0 2px 8px -2px rgba(0,0,0,.08);
+		--shadow-btn:0 1px 2px rgba(43,36,24,.06);
+		--shadow-modal:0 30px 70px -20px rgba(30,24,14,.35);
+		--font-sans:'Inter',-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
+		--font-display:'Source Serif 4','Inter',"PingFang SC","Hiragino Sans GB","Microsoft YaHei",serif;
+		--font-hand:'AliHYAiHei-Beta','PingFang SC','Microsoft YaHei',sans-serif;
+		--foot-color:#8A7666;
+		--pencil-1:#4E7A9B;
+		--pencil-2:#87AEC9;
+		--pencil-3:#B8D1E2;
+		--pencil-4:#E0EDF4;
+		--pencil-dash:#87AEC9;
+		--sticky-bg:#FBF4E0;
+		--sticky-bg-2:#F6EBCB;
+		--sticky-fold-shadow:#D9BC62;
+		--sticky-tape-1:rgba(255,238,190,.96);
+		--sticky-tape-2:rgba(243,218,155,.78);
+		--sticky-tape-line:rgba(180,150,80,.32);
+		--sticky-label:#8A6A22;
+		--sticky-text:#6B5A30;
+		--cls-fixed:#C1633E;
+		--cls-fixed-dark:#D67A55;
+  }
+  body.dark-mode {
+		--bg: #1C1A18; --card: #2A2724; --card-soft: #33302C;
+		--ink: #EFEAE3; --ink-soft: #A69B8E; --ink-faint: #6B6358; --line: #3D3934;
+		--orange: #D67A55; --orange-dark: #B8633F; --orange-soft: #3D2E26;
+		--sunflower: #E8B452; --sunflower-dark: #A87520;
+		--teal: #7BB3A3; --teal-dark: #4C8B7B;
+		--blue: #7BA3B8; --blue-soft: #24323D; --blue-dark: #5B8499;
+		--yellow: #D9AD5A; --yellow-soft: #3D3422;
+		--income: #7DB392; --income-soft: #25352B;
+		--expense: #D48765; --expense-soft: #3D2B22;
+		--red: #D67A6A; --red-soft: #3D2824; --red-dark: #9A4A3E;
+		--stamp: #C96050; --stamp-soft: rgba(201,96,80,.12);
+		--card-left-line:#E8824E;
+		--card-left-line-feedback:#6B9BC7;
+		--stats-left-line:#E05048;
+		--shadow-card: 0 1px 0 rgba(0,0,0,.3), 0 2px 8px -2px rgba(0,0,0,.4);
+		--shadow-btn: 0 1px 2px rgba(0,0,0,.3);
+		--shadow-modal: 0 30px 70px -20px rgba(0,0,0,.7);
+		--foot-color:#B5A18F;
+		--pencil-1:#A6C0D4;
+		--pencil-2:#7BA0BC;
+		--pencil-3:#4E7A99;
+		--pencil-4:#2E4D66;
+		--pencil-dash:#7BA0BC;
+		--sticky-bg:#3A3324;
+		--sticky-bg-2:#453C2A;
+		--sticky-fold-shadow:#6A5520;
+		--sticky-tape-1:rgba(180,150,80,.35);
+		--sticky-tape-2:rgba(140,115,55,.25);
+		--sticky-tape-line:rgba(220,190,110,.25);
+		--sticky-label:#D9AD5A;
+		--sticky-text:#C4B08A;
+		--cls-fixed:#C1633E;
+		--cls-fixed-dark:#D67A55;
+  }
+
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+		font-family:var(--font-sans);
+		font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;
+		font-feature-settings:"tnum" 1;letter-spacing:.005em;
+		transition:background .3s,color .3s}
+  .app{max-width:460px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;transition:background .3s}
+
+  .navbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;height:60px;padding:0 6px;
+		background:rgba(250,248,243,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+		border-bottom:1px solid var(--line);transition:background .3s,border-color .3s}
+  body.dark-mode .navbar{background:rgba(28,26,24,.88)}
+  body.booting .navbar{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg);}
+  .nav-slot{width:84px;flex:0 0 auto;display:flex;align-items:center;min-height:1px}
+  .nav-slot.left{justify-content:flex-start}
+  .nav-slot.right{justify-content:flex-end}
+  .nav-back{display:inline-flex;align-items:center;gap:3px;color:var(--blue);font-size:14.5px;font-weight:500;background:none;border:none;padding:8px 6px;margin-left:2px;cursor:pointer;font-family:inherit;border-radius:6px;transition:opacity .15s,background .15s}
+  .nav-back:active{opacity:.6;background:rgba(92,124,147,.08)}
+  .nav-back svg{width:17px;height:17px;flex-shrink:0}
+  .nav-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+		max-width:calc(100% - 176px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+		font-family:var(--font-hand);
+		font-size:20px;font-weight:400;
+		color:var(--ink);letter-spacing:.04em;text-align:center}
+  .nav-right{flex:1;display:flex;align-items:center;justify-content:flex-end;gap:10px;padding-right:8px}
+
+  /* ==================== 胶囊开关（增强动效） ==================== */
+  .theme-switch{
+	position: relative; display: inline-flex; align-items: center;
+	width: 56px; cursor: pointer; flex-shrink: 0;
+	user-select: none; -webkit-tap-highlight-color: transparent;
+  }
+  .theme-switch .theme-switch-input{position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;}
+  .theme-switch svg{ display:block; width:100%; height:auto; overflow:visible; }
+  .theme-switch #container,
+  .theme-switch #patches,
+  .theme-switch #button{
+	transition-property: all;
+	transition-timing-function: cubic-bezier(0.34, 1.4, 0.64, 1);
+	transition-duration: 0.4s;
+  }
+  .theme-switch .theme-switch-input:checked + svg #container{ fill: #2b4360; }
+  .theme-switch .theme-switch-input:checked + svg #button{ transform: translate(28px, 2.333px); }
+  .theme-switch #sun{
+	opacity: 1; transform: rotate(0deg); transform-box: fill-box; transform-origin: center;
+	transition: opacity .28s ease, transform .45s cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+  .theme-switch .theme-switch-input:checked + svg #sun{ opacity: 0; transform: rotate(45deg); }
+  .theme-switch #moon{
+	opacity: 0; transform: rotate(-45deg); transform-box: fill-box; transform-origin: center;
+	transition: opacity .28s ease .06s, transform .45s cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+  .theme-switch .theme-switch-input:checked + svg #moon{ opacity: 1; transform: rotate(0deg); }
+  .theme-switch #cloud{ opacity: 1; transition: opacity .3s ease; }
+  .theme-switch .theme-switch-input:checked + svg #cloud{ opacity: 0; }
+  .theme-switch #stars{ opacity: 0; transition: opacity .35s ease .1s; }
+  .theme-switch .theme-switch-input:checked + svg #stars{ opacity: 1; }
+  .theme-switch .theme-switch-input:focus-visible + svg{outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 8px;}
+
+  #content{padding:24px 18px 56px;min-height:calc(100vh - 60px)}
+  .mt{font-family:var(--font-display);font-size:20px;font-weight:700;text-align:center;margin:4px 0 6px;letter-spacing:-.005em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mt .cls{color:var(--cls-fixed)}
+  body.dark-mode .mt .cls{color:var(--cls-fixed-dark)}
+  .sub{font-size:13px;color:var(--ink-soft);text-align:center}
+
+  /* ==================== 启动页加载器 ====================
+	 测试版：第一处使用原版粒子动画（boot-loader-orig）
+	 retryLoad 里仍使用九宫格（boot-loader-grid）
+	 ==================================================== */
+  .boot-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 108px);gap:22px;}
+
+  /* --- 原版 box-shadow 启动动画 --- */
+  .boot-loader-orig{
+	position: relative;
+	width: 2.5em;
+	height: 2.5em;
+	transform: rotate(165deg);
+	font-size: 16px;
+	display: inline-block;
+	flex-shrink: 0;
+  }
+  .boot-loader-orig::before,
+  .boot-loader-orig::after{
+	content: "";
+	position: absolute;
+	top: 50%; left: 50%;
+	display: block;
+	width: 0.5em; height: 0.5em;
+	border-radius: 0.25em;
+	transform: translate(-50%, -50%);
+  }
+  .boot-loader-orig::before { animation: bootOrigBefore 2s infinite; }
+  .boot-loader-orig::after  { animation: bootOrigAfter  2s infinite; }
+  @keyframes bootOrigBefore {
+	0%   { width: 0.5em; box-shadow: 1em -0.5em rgba(201,136,120,.85), -1em 0.5em rgba(143,169,178,.85); }
+	35%  { width: 2.5em; box-shadow: 0 -0.5em rgba(201,136,120,.85),    0 0.5em rgba(143,169,178,.85); }
+	70%  { width: 0.5em; box-shadow: -1em -0.5em rgba(201,136,120,.85), 1em 0.5em rgba(143,169,178,.85); }
+	100% { box-shadow: 1em -0.5em rgba(201,136,120,.85), -1em 0.5em rgba(143,169,178,.85); }
+  }
+  @keyframes bootOrigAfter {
+	0%   { height: 0.5em; box-shadow: 0.5em 1em rgba(143,168,144,.85),  -0.5em -1em rgba(201,170,112,.85); }
+	35%  { height: 2.5em; box-shadow: 0.5em 0 rgba(143,168,144,.85),    -0.5em 0 rgba(201,170,112,.85); }
+	70%  { height: 0.5em; box-shadow: 0.5em -1em rgba(143,168,144,.85), -0.5em 1em rgba(201,170,112,.85); }
+	100% { box-shadow: 0.5em 1em rgba(143,168,144,.85),  -0.5em -1em rgba(201,170,112,.85); }
+  }
+  body.dark-mode .boot-loader-orig::before { animation-name: bootOrigBeforeDark; }
+  body.dark-mode .boot-loader-orig::after  { animation-name: bootOrigAfterDark;  }
+  @keyframes bootOrigBeforeDark {
+	0%   { width: 0.5em; box-shadow: 1em -0.5em rgba(230,160,142,.95), -1em 0.5em rgba(170,200,212,.95); }
+	35%  { width: 2.5em; box-shadow: 0 -0.5em rgba(230,160,142,.95),    0 0.5em rgba(170,200,212,.95); }
+	70%  { width: 0.5em; box-shadow: -1em -0.5em rgba(230,160,142,.95), 1em 0.5em rgba(170,200,212,.95); }
+	100% { box-shadow: 1em -0.5em rgba(230,160,142,.95), -1em 0.5em rgba(170,200,212,.95); }
+  }
+  @keyframes bootOrigAfterDark {
+	0%   { height: 0.5em; box-shadow: 0.5em 1em rgba(170,200,178,.95),  -0.5em -1em rgba(230,200,140,.95); }
+	35%  { height: 2.5em; box-shadow: 0.5em 0 rgba(170,200,178,.95),    -0.5em 0 rgba(230,200,140,.95); }
+	70%  { height: 0.5em; box-shadow: 0.5em -1em rgba(170,200,178,.95), -0.5em 1em rgba(230,200,140,.95); }
+	100% { box-shadow: 0.5em 1em rgba(170,200,178,.95),  -0.5em -1em rgba(230,200,140,.95); }
+  }
+
+  /* --- 九宫格（供 retryLoad 使用） --- */
+  .boot-loader-grid{
+	--sq-size: 8px;
+	--sq-gap: 4px;
+	--sq-radius: 2px;
+	--sq-color: #C1633E;
+	display: inline-grid;
+	grid-template-columns:repeat(3,var(--sq-size));
+	grid-template-rows:repeat(3,var(--sq-size));
+	gap:var(--sq-gap);
+	vertical-align:middle;
+	flex-shrink: 0;
+  }
+  body.dark-mode .boot-loader-grid{ --sq-color: #E8B452; }
+  .boot-loader-grid > span{
+	display:block;
+	width:var(--sq-size);
+	height:var(--sq-size);
+	background:var(--sq-color);
+	border-radius:var(--sq-radius);
+	opacity:.3;
+	transform:scale(.55);
+	animation:bootSqWave 1.15s ease-in-out infinite;
+	will-change:transform,opacity;
+  }
+  .boot-loader-grid > span:nth-child(1){ animation-delay: 0s; }
+  .boot-loader-grid > span:nth-child(2){ animation-delay: 0.09s; }
+  .boot-loader-grid > span:nth-child(3){ animation-delay: 0.18s; }
+  .boot-loader-grid > span:nth-child(4){ animation-delay: 0.09s; }
+  .boot-loader-grid > span:nth-child(5){ animation-delay: 0.18s; }
+  .boot-loader-grid > span:nth-child(6){ animation-delay: 0.27s; }
+  .boot-loader-grid > span:nth-child(7){ animation-delay: 0.18s; }
+  .boot-loader-grid > span:nth-child(8){ animation-delay: 0.27s; }
+  .boot-loader-grid > span:nth-child(9){ animation-delay: 0.36s; }
+  @keyframes bootSqWave{
+	0%,65%,100%{opacity:.3;transform:scale(.55)}
+	30%{opacity:1;transform:scale(1)}
+  }
+
+  .boot-text{display:flex;align-items:center;gap:1px;font-size:13px;color:var(--ink-soft);letter-spacing:.02em;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;}
+  .boot-dots{ display:inline-flex; margin-left:1px; }
+  .boot-dots i{display:inline-block;font-style:normal;line-height:1;animation:bootDot 1.2s infinite ease-in-out;}
+  .boot-dots i:nth-child(2){ animation-delay:.18s; }
+  .boot-dots i:nth-child(3){ animation-delay:.36s; }
+  @keyframes bootDot{0%, 60%, 100% { transform:translateY(0); opacity:.4; } 30% { transform:translateY(-3px); opacity:1; }}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 18px 20px 22px;box-shadow:var(--shadow-card);position:relative;transition:background .3s,border-color .3s}
+  .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--card-left-line);border-radius:var(--radius) 0 0 var(--radius);opacity:.6}
+  .card::after{content:'';position:absolute;left:3px;top:0;bottom:0;width:1px;background:var(--card-left-line);opacity:.2}
+  body.dark-mode .card::before{opacity:.5}
+  body.dark-mode .card::after{opacity:.15}
+
+  .error-card{background:#fee;border-color:#fcc;}
+  .error-card h3{color:var(--ink);margin:0 0 10px;font-size:17px;}
+  .error-card .err-detail{color:#b00;font-size:14px;margin:0 0 10px;}
+  .error-card .err-hint{color:#8a6a6a;font-size:13px;line-height:1.7;margin:0;}
+  .error-card .btn-ghost{background:rgba(255,255,255,.85);color:#2B2A27;box-shadow:3px 3px 0 0 #C9C2B4;border-color:rgba(0,0,0,.06);}
+  .error-card .btn-ghost:active{background:#fff;transform:translate(3px,3px);box-shadow:0 0 0 0;}
+  body.dark-mode .error-card{background:#3A2222;border-color:#5A3030;}
+  body.dark-mode .error-card .err-detail{color:#F0A5A5;}
+  body.dark-mode .error-card .err-hint{color:#C9A6A6;}
+  body.dark-mode .error-card .btn-ghost{background:rgba(255,255,255,.12);color:#F0EAE3;box-shadow:3px 3px 0 0 #6B4848;border-color:rgba(255,255,255,.12);}
+  body.dark-mode .error-card .btn-ghost:active{background:rgba(255,255,255,.2);transform:translate(3px,3px);box-shadow:0 0 0 0;}
+
+  .folder{margin-bottom: 16px;}
+  .folder-tab{display: inline-block;padding: 5px 16px 7px;background: var(--orange);color: #fff;font-family: var(--font-hand);font-size: 14.5px;font-weight: 500;letter-spacing: .08em;line-height: 1.4;border-radius: 8px 8px 0 0;}
+  .folder-strip{height: 5px;background: var(--orange);width: 100%;margin-top: -1px;}
+  .folder-body{background: var(--orange-soft);padding: 16px 16px 14px;border-radius: 0 0 8px 8px;position: relative;}
+  .folder-foot{text-align: right;margin-top: 6px;font-size: 13px;color: var(--orange-dark);font-weight: 500;cursor: pointer;}
+  .folder-foot:active{ opacity: .6; }
+
+  .pencil-divider{display: flex;align-items: center;margin: 34px 0 24px;}
+  .pencil-divider .arrows{width: 128px;height: 14px;flex-shrink: 0;display: block;}
+  .pencil-divider .dash{flex: 1;height: 2px;margin-left: 12px;background-image: repeating-linear-gradient(to right,var(--pencil-dash) 0,var(--pencil-dash) 8px,transparent 8px,transparent 15px);}
+
+  .home-wrap{padding-top:20px}
+  .logo{width:64px;height:64px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center}
+  .logo img{width:100%;height:100%;object-fit:contain;display:block}
+  .home-title{font-family:var(--font-hand);text-align:center;font-size:21px;font-weight:400;letter-spacing:.06em;line-height:1.4;}
+  .home-desc{text-align:center;color:var(--ink-soft);font-size:12.5px;margin:6px 0 22px}
+
+  .login-form{--lf-bg: #A8795A;--lf-line: #4A2F1E;--lf-btn-bg: #FBF6EF;--lf-btn-fg: #4A2F1E;padding: 16px 16px 14px;background: var(--lf-bg);display: flex;flex-direction: column;align-items: flex-start;justify-content: center;gap: 12px;border-radius: 5px;border: 2px solid var(--lf-line);box-shadow: 4px 4px 0 0 var(--lf-line);max-width: 296px;margin: 0 auto;width: 100%;transition: background .4s, border-color .4s, box-shadow .4s;}
+  body.dark-mode .login-form{--lf-bg: #8A6045;--lf-line: #1A0F08;}
+  .login-form > p{font-family: var(--font-hand);color: #fff;font-weight: 500;font-size: 19px;margin: 0 0 2px;display: flex;flex-direction: column;position: relative;padding-left: 40px;line-height: 1.35;letter-spacing: .04em;text-shadow: 0 1px 2px rgba(74,47,30,.28);}
+  .login-form .quote-icon{position: absolute; left: 2px; top: -10px;width: 30px; height: 30px;color: rgba(255,255,255,.92);transition: color .4s;}
+  .login-form > p > span{font-family: "Inter", "PingFang SC", sans-serif;color: rgba(255,255,255,.78);font-weight: 500;font-size: 13.5px;margin-top: 2px;letter-spacing: 0;transition: color .4s;text-shadow: none;}
+  .login-form .lf-sep{width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px;}
+  .login-form .lf-sep > div{flex: 1; height: 2.5px; border-radius: 5px;background-color: rgba(74,47,30,.4);transition: background-color .4s;}
+  body.dark-mode .login-form .lf-sep > div{ background-color: rgba(255,255,255,.28); }
+  .login-form .lf-sep > span{color: rgba(74,47,30,.85);font-family: "Inter", sans-serif;font-weight: 800;font-size: 13px;letter-spacing: 2px;transition: color .4s;}
+  body.dark-mode .login-form .lf-sep > span{ color: rgba(255,255,255,.6); }
+  .login-form .lf-btn{display: flex; justify-content: center; align-items: center; gap: 5px;padding: 0 15px; width: 100%; height: 38px;border-radius: 5px;border: 2px solid var(--lf-line);background-color: var(--lf-btn-bg);box-shadow: 4px 4px var(--lf-line);font-size: 14px; font-weight: 600;color: var(--lf-btn-fg);cursor: pointer;transition: color .2s, transform .15s, box-shadow .15s, background-color .4s, border-color .4s;position: relative; overflow: hidden; z-index: 1;font-family: "Inter", "PingFang SC", sans-serif;}
+  .login-form .lf-btn::before{content: "";position: absolute; top: 0; left: 0;height: 100%; width: 0;background-color: var(--lf-line);z-index: -1;transition: width .25s ease;}
+  .login-form .lf-btn:hover{ color: #fff; }
+  .login-form .lf-btn:hover::before{ width: 100%; }
+  .login-form .lf-btn:active{transform: translate(4px, 4px);box-shadow: 0 0 0 0 var(--lf-line);}
+
+  .sticky-notice-wrap{position: relative;max-width: 420px;margin: 30px 0 22px;}
+  .sticky-notice-wrap .tape{position: absolute;top: -10px; left: 50%;transform: translateX(-50%) rotate(-2.5deg);width: 88px; height: 24px;background: linear-gradient(180deg, var(--sticky-tape-1), var(--sticky-tape-2));border-left: 1px dashed var(--sticky-tape-line);border-right: 1px dashed var(--sticky-tape-line);box-shadow: 0 2px 5px rgba(120,90,40,.18);pointer-events: none;z-index: 3;}
+  .sticky-notice{position: relative;background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'><defs><filter id='paper'><feTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3' seed='12'/><feColorMatrix values='0 0 0 0 0.72  0 0 0 0 0.62  0 0 0 0 0.45  0 0 0 0.22 0'/></filter><radialGradient id='warm' cx='40%25' cy='35%25' r='80%25'><stop offset='0' stop-color='%23FCF6E5'/><stop offset='1' stop-color='%23F4E9C9'/></radialGradient></defs><rect width='400' height='300' fill='url(%23warm)'/><rect width='400' height='300' filter='url(%23paper)' opacity='0.9'/></svg>");background-size: cover;background-position: center;padding: 26px 20px 22px;transform: rotate(-0.4deg);clip-path: polygon(0 0, 100% 0,100% calc(100% - 6px),96% 100%, 91% calc(100% - 4px), 86% 100%,80% calc(100% - 3px), 74% 100%, 68% calc(100% - 5px),62% 100%, 56% calc(100% - 3px), 50% 100%,44% calc(100% - 4px), 38% 100%, 32% calc(100% - 3px),26% 100%, 20% calc(100% - 5px), 14% 100%,9% calc(100% - 3px), 4% 100%, 0 calc(100% - 5px));box-shadow:0 1px 2px rgba(0,0,0,.05),0 12px 28px -12px rgba(120,90,40,.32);}
+  body.dark-mode .sticky-notice{background-image: linear-gradient(135deg, #3A3324 0%, #453C2A 100%);}
+  .sticky-notice .ns-content{position: relative; z-index: 2;text-shadow: 0 0 6px rgba(255,250,235,.7), 0 0 12px rgba(255,250,235,.5);}
+  body.dark-mode .sticky-notice .ns-content{text-shadow: 0 0 6px rgba(0,0,0,.5), 0 0 12px rgba(0,0,0,.3);}
+  .sticky-notice .ns-label{font-family: var(--font-hand);font-size: 17px;font-weight: 400;letter-spacing: .16em;color: var(--sticky-label);margin-bottom: 8px;}
+  .sticky-notice .ns-text{font-size: 13.5px;line-height: 1.78;color: var(--sticky-text);white-space: pre-wrap;}
+  .sticky-notice .ns-ack{text-align: right;margin-top: 14px;padding-right: 4px;}
+  .sticky-notice .ns-ack button{background: var(--orange);color: #fff;border: none;font-family: inherit;font-size: 12.5px;font-weight: 600;padding: 7px 16px;border-radius: 6px;cursor: pointer;transition: transform .12s, box-shadow .12s, background .15s;box-shadow: 3px 3px 0 0 var(--orange-dark);}
+  .sticky-notice .ns-ack button:active{background: var(--orange-dark);transform: translate(3px, 3px);box-shadow: 0 0 0 0;}
+
+  .action-row{display: flex;gap: 10px;margin: 14px 0 8px;}
+  .action-btn{flex: 1;display: inline-flex;align-items: center;justify-content: center;gap: 7px;padding: 12px 12px;border: none;border-radius: var(--radius-sm);font-family: inherit;font-size: 13.5px;font-weight: 600;color: #fff;cursor: pointer;transition: transform .12s, box-shadow .12s;}
+  .action-btn svg{ width: 15px; height: 15px; flex-shrink: 0; }
+  .action-btn.teal{background: var(--teal);box-shadow: 3px 3px 0 0 var(--teal-dark);}
+  .action-btn.sunflower{background: var(--sunflower);box-shadow: 3px 3px 0 0 var(--sunflower-dark);}
+  .action-btn:active{transform: translate(3px, 3px);box-shadow: 0 0 0 0;}
+
+  .stats{display: flex;margin-bottom: 16px;background: var(--card);border: 1px solid var(--line);border-radius: var(--radius);padding: 20px 6px;box-shadow:0 4px 14px -6px rgba(0,0,0,.1),0 1px 0 rgba(0,0,0,.02);transition: background .3s,border-color .3s;}
+  body.dark-mode .stats{box-shadow:0 4px 14px -6px rgba(0,0,0,.5),0 1px 0 rgba(0,0,0,.2);}
+  .stat{flex:1;text-align:center;padding:2px 12px}
+  .stat:not(:first-child){border-left:1px solid var(--line)}
+  .stat .k{font-size:12px;color:var(--ink-soft);letter-spacing:.01em}
+  .stat .v{font-size:19px;font-weight:700;margin-top:6px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .stat.income .v{color:var(--income)}
+  .stat.expense .v{color:var(--expense)}
+  .history{text-align:center;font-size:12px;color:var(--ink-soft);margin:-2px 0 20px}
+
+  .foot{text-align:center;color:var(--foot-color);font-size:11.5px;margin-top:28px;letter-spacing:.01em}
+  .foot-actions{display:flex;justify-content:center;gap:20px;margin-top:8px}
+  .foot-actions a{color:var(--foot-color);font-size:12px;cursor:pointer;text-decoration:none;transition:color .15s}
+  .foot-actions a:hover{color:var(--orange)}
+  .foot-actions a:active{opacity:.6}
+
+  .menu-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;cursor:pointer;box-shadow:var(--shadow-card);position:relative;transition:background .15s,border-color .25s,transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
+  @media (hover:hover){.menu-item:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:0 8px 22px -8px rgba(92,124,147,.28)}}}
+  .menu-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue);border-radius:var(--radius) 0 0 var(--radius);opacity:.5}
+  .menu-item:active{background:var(--card-soft)}
+
+  .feedback-item{background:rgba(255,255,255,.55);border-radius:6px;padding:12px 14px;margin-bottom:10px;position:relative;transition:background .3s}
+  .feedback-item:last-child{margin-bottom:0}
+  body.dark-mode .feedback-item{background:rgba(255,255,255,.04)}
+  .feedback-item .header{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-soft);margin-bottom:6px}
+  .feedback-item .content{font-size:14.5px;line-height:1.6}
+  .feedback-item .reply{background:rgba(92,124,147,.12);border-radius:6px;padding:10px 12px;margin-top:8px;font-size:13.5px;color:var(--sunflower-dark);transition:background .3s}
+
+  .mask{position:fixed;inset:0;background:rgba(30,26,18,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;visibility:hidden;opacity:0;transition:opacity .25s ease,visibility 0s linear .32s}
+  .mask.show{visibility:visible;opacity:1;transition:opacity .25s ease}
+
+  .modal{background: transparent; border: none; box-shadow: none; padding: 0;width: 100%; max-width: 380px;max-height: 88vh; overflow-y: auto; overflow-x: hidden;position: relative;line-height: 0; font-size: 0;transform: translateY(32px) scale(.96);opacity: 0;transition: transform .36s cubic-bezier(.34,1.56,.64,1), opacity .26s ease;}
+  .mask.show .modal{ transform: translateY(0) scale(1); opacity: 1; }
+
+  .modal .modal-close{position: absolute; right: 6px; top: 4px;background: transparent; border: none;color: rgba(255,255,255,.85);font-size: 22px; line-height: 1;cursor: pointer; padding: 4px 8px;border-radius: 50%; z-index: 10;transition: color .15s, transform .25s;font-family: inherit;}
+  .modal .modal-close:hover{ color: #fff; transform: rotate(90deg); }
+
+  .modal .m-tab{display: block; width: fit-content;padding: 6px 18px 8px;background: var(--orange);color: #fff;font-family: var(--font-hand);font-size: 15px;font-weight: 500;letter-spacing: .08em;line-height: 1.4;border-radius: 10px 10px 0 0;position: relative; z-index: 2;max-width: calc(100% - 44px);overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+  .modal .m-strip{height: 5px;background: var(--orange);width: 100%;margin-top: -1px;}
+  .modal .m-body{background: var(--orange-soft);padding: 22px 20px 18px;border-radius: 0 0 10px 10px;color: var(--ink);line-height: 1.7;font-size: 15px;}
+  .modal .m-body .form-line label{ color: var(--ink-soft); }
+  .modal .m-body .field{background: rgba(255,255,255,.75);border: 1px solid rgba(0,0,0,.06);color: var(--ink);}
+  .modal .m-body .field:focus{background: #fff;border-color: var(--orange);box-shadow: 0 0 0 3px rgba(193,99,62,.14);}
+
+  .modal.m-admin .m-tab{ background: var(--orange); }
+  .modal.m-admin .m-strip{ background: var(--orange); }
+  .modal.m-admin .m-body{ background: var(--orange-soft); }
+  .modal.m-admin .m-body .field:focus{border-color: var(--orange);box-shadow: 0 0 0 3px rgba(193,99,62,.14);}
+
+  .modal.m-export .m-tab{ background: var(--sunflower); }
+  .modal.m-export .m-strip{ background: var(--sunflower); }
+  .modal.m-export .m-body{ background: var(--yellow-soft); }
+
+  body.dark-mode .modal.m-export .m-tab{ background: #A87520; }
+  body.dark-mode .modal.m-export .m-strip{ background: #A87520; }
+  body.dark-mode .modal.m-export .m-body{ background: #3D3422; }
+
+  body.dark-mode .modal .m-body{ color: var(--ink); }
+  body.dark-mode .modal .m-body .form-line label{ color: var(--ink-soft); }
+  body.dark-mode .modal .m-body .field{background: rgba(255,255,255,.05);border: 1.5px solid rgba(255,255,255,.35);color: #fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -1px 0 rgba(0,0,0,.15);}
+  body.dark-mode .modal .m-body .field::placeholder{ color: rgba(255,255,255,.35); }
+  body.dark-mode .modal .m-body .field:focus{background: rgba(255,255,255,.08);border-color: #fff;box-shadow:0 0 0 3px rgba(255,255,255,.15),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -1px 0 rgba(0,0,0,.15);}
+
+  .about-title{font-family:var(--font-hand);font-size:22px;font-weight:500;letter-spacing:.04em;margin:0 0 4px;line-height:1.35}
+  .about-sub{font-size:13px;color:var(--ink-soft);margin:0 0 22px}
+  .about-section{display:flex;flex-direction:column;gap:14px}
+  .about-row{display:flex;align-items:baseline;gap:16px}
+  .about-row .lbl{font-size:12.5px;color:var(--ink-soft);flex-shrink:0;width:64px;letter-spacing:.02em}
+  .about-row .val{font-size:14px;color:var(--ink);line-height:1.55;text-align:left;flex:1;word-break:break-word}
+  .about-row .val a{color:var(--orange-dark);text-decoration:none;font-weight:500}
+
+  .export-options{ display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+  .export-opt{display: flex; align-items: center; gap: 12px;padding: 14px 16px;background: rgba(255,255,255,.6);border: 1.5px solid rgba(0,0,0,.06);border-radius: 8px; cursor: pointer;transition: background .15s, transform .15s, box-shadow .15s, border-color .15s;font-family: inherit; color: var(--ink);text-align: left; width: 100%;font-size: 14.5px; font-weight: 600;box-shadow: 3px 3px 0 0 var(--sunflower-dark);}
+  .export-opt:hover{ background: rgba(255,255,255,.85); border-color: rgba(0,0,0,.12); }
+  .export-opt:active{ transform: translate(3px,3px); box-shadow: 0 0 0 0; }
+  .export-opt .ico{width: 36px; height: 36px; border-radius: 8px;display: flex; align-items: center; justify-content: center;flex-shrink: 0; background: rgba(0,0,0,.05);color: var(--sunflower-dark);}
+  .export-opt svg{ width: 18px; height: 18px; }
+  .export-opt .name{ font-size: 14.5px; font-weight: 600; }
+  body.dark-mode .export-opt{background: rgba(255,255,255,.05);border-color: rgba(255,255,255,.12);color: #EFEAE3;}
+  body.dark-mode .export-opt:hover{background: rgba(255,255,255,.1);border-color: rgba(255,255,255,.35);}
+  body.dark-mode .export-opt .ico{background: rgba(255,255,255,.08);color: #E8B452;}
+
+  .settings-section{margin-bottom: 22px;}
+  .settings-section:last-child{ margin-bottom: 4px; }
+  .settings-label{font-size: 12px;font-weight: 600;color: var(--ink-soft);margin-bottom: 10px;letter-spacing: .02em;}
+  .theme-swatches{display: grid;grid-template-columns: repeat(6, 1fr);gap: 10px;}
+  .theme-swatch{position: relative;aspect-ratio: 1;border-radius: 50%;border: none;cursor: pointer;transition: transform .15s, box-shadow .15s;padding: 0;box-shadow: 0 1px 3px rgba(0,0,0,.18);}
+  .theme-swatch:active{ transform: scale(.9); }
+  .theme-swatch.active{box-shadow: 0 0 0 3px var(--card), 0 0 0 5px var(--ink), 0 1px 3px rgba(0,0,0,.18);}
+
+  .segmented{display: flex;background: rgba(255,255,255,.6);border-radius: 8px;padding: 3px;gap: 3px;}
+  body.dark-mode .segmented{ background: rgba(255,255,255,.06); }
+  .segmented button{flex: 1;padding: 8px 10px;background: transparent;border: none;border-radius: 6px;font-family: inherit;font-size: 13px;font-weight: 500;color: var(--ink-soft);cursor: pointer;transition: background .15s, color .15s;}
+  .segmented button.active{background: #fff;color: var(--ink);box-shadow: 0 1px 3px rgba(0,0,0,.08);}
+  body.dark-mode .segmented button.active{background: rgba(255,255,255,.14);color: #fff;}
+
+  .reset-btn{width: 100%;display: inline-flex; align-items: center; justify-content: center;gap: 6px;padding: 11px 16px;background: rgba(184,83,71,.1);border: 1px solid transparent;border-radius: 6px;color: var(--red);font-family: inherit; font-size: 13.5px; font-weight: 600;cursor: pointer;transition: background .15s, transform .15s, box-shadow .15s;box-shadow: 3px 3px 0 0 var(--red-dark);}
+  .reset-btn:hover{ background: rgba(184,83,71,.18); }
+  .reset-btn:active{ transform: translate(3px,3px); box-shadow: 0 0 0 0; }
+  .reset-btn.neutral{background: rgba(92,124,147,.1);color: var(--blue);box-shadow: 3px 3px 0 0 var(--blue-dark);}
+  .reset-btn.neutral:hover{background: rgba(92,124,147,.18);}
+  .reset-btn.neutral:active{transform: translate(3px,3px);box-shadow: 0 0 0 0;}
+
+  .settings-about{font-size: 13px;color: var(--ink-soft);line-height: 1.9;padding: 4px 0;}
+  .settings-about .row{display: flex;justify-content: space-between;align-items: center;}
+  .settings-about a{color: var(--blue);text-decoration: none;font-weight: 500;}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:var(--radius-sm);cursor:pointer;font-family:inherit;font-size:15px;font-weight:600;padding:13px 18px;transition:background .15s,transform .15s,box-shadow .15s}
+  .btn-primary{background:var(--orange);color:#fff;box-shadow:3px 3px 0 0 var(--orange-dark)}
+  .btn-primary:active{background:var(--orange-dark);transform:translate(3px,3px);box-shadow:0 0 0 0}
+  .btn-blue{background:var(--blue);color:#fff;box-shadow:3px 3px 0 0 var(--blue-dark)}
+  .btn-blue:active{transform:translate(3px,3px);box-shadow:0 0 0 0}
+  .btn-ghost{background:rgba(255,255,255,.7);color:var(--ink);border:1px solid rgba(0,0,0,.06);box-shadow:3px 3px 0 0 var(--ink-soft)}
+  .btn-ghost:active{background:rgba(255,255,255,.9);transform:translate(3px,3px);box-shadow:0 0 0 0}
+  body.dark-mode .btn-ghost{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.1)}
+  body.dark-mode .btn-ghost:active{background:rgba(255,255,255,.14);transform:translate(3px,3px);box-shadow:0 0 0 0}
+  .btn-red{background:var(--red-soft);color:var(--red);border:1px solid transparent;box-shadow:3px 3px 0 0 var(--red-dark)}
+  .btn-red:active{background:#F0D9D5;transform:translate(3px,3px);box-shadow:0 0 0 0}
+  .btn-red:disabled{opacity:.55;cursor:not-allowed;transform:none}
+  .btn-block{width:100%}
+  .btn-sm{padding:9px 14px;font-size:13px;border-radius:var(--radius-sm)}
+  .btn-xs{padding:4px 8px;font-size:11px;border-radius:4px;font-weight:500}
+  .btn-feedback{background:var(--orange);color:#fff;border-radius:var(--radius-sm);padding:10px 18px;font-size:14px;box-shadow:3px 3px 0 0 var(--orange-dark)}
+  .btn-feedback:active{background:var(--orange-dark);transform:translate(3px,3px);box-shadow:0 0 0 0}
+  .btn:disabled{cursor:not-allowed;opacity:.92}
+
+  .btn-xs,
+  body.dark-mode .btn-xs{box-shadow:none !important;}
+  .btn-xs:active,
+  body.dark-mode .btn-xs:active{transform:scale(.95) !important;box-shadow:none !important;}
+
+  .btn-loader{
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	position: relative;
+	flex-shrink: 0;
+	vertical-align: middle;
+	margin-top: -2px;
+  }
+  .btn-loader::before{
+	content: '';
+	width: 14px;
+	height: 3px;
+	background: rgba(255,255,255,.35);
+	position: absolute;
+	top: 16px;
+	left: 0;
+	border-radius: 50%;
+	animation: btnShadow .5s linear infinite;
+  }
+  .btn-loader::after{
+	content: '';
+	width: 100%;
+	height: 100%;
+	background: #fff;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius: 2px;
+	animation: btnJump .5s linear infinite;
+  }
+  @keyframes btnJump{
+	15% { border-bottom-right-radius: 1px; }
+	25% { transform: translateY(3px) rotate(22.5deg); }
+	50% { transform: translateY(5px) scale(1, .9) rotate(45deg); border-bottom-right-radius: 12px; }
+	75% { transform: translateY(3px) rotate(67.5deg); }
+	100% { transform: translateY(0) rotate(90deg); }
+  }
+  @keyframes btnShadow{
+	0%, 100% { transform: scale(1, 1); }
+	50% { transform: scale(1.2, 1); }
+  }
+
+  .loader-grid{--sq-size: 6px;--sq-gap: 3px;--sq-radius: 1.5px;--sq-color: currentColor;display:inline-grid;grid-template-columns:repeat(3,var(--sq-size));grid-template-rows:repeat(3,var(--sq-size));gap:var(--sq-gap);vertical-align:middle;flex-shrink:0}
+  .loader-grid > span{display:block;width:var(--sq-size);height:var(--sq-size);background:var(--sq-color);border-radius:var(--sq-radius);opacity:.3;transform:scale(.55);animation:sq-wave 1.15s ease-in-out infinite;will-change:transform,opacity}
+  .loader-grid > span:nth-child(1){ animation-delay: 0s; }
+  .loader-grid > span:nth-child(2){ animation-delay: 0.09s; }
+  .loader-grid > span:nth-child(3){ animation-delay: 0.18s; }
+  .loader-grid > span:nth-child(4){ animation-delay: 0.09s; }
+  .loader-grid > span:nth-child(5){ animation-delay: 0.18s; }
+  .loader-grid > span:nth-child(6){ animation-delay: 0.27s; }
+  .loader-grid > span:nth-child(7){ animation-delay: 0.18s; }
+  .loader-grid > span:nth-child(8){ animation-delay: 0.27s; }
+  .loader-grid > span:nth-child(9){ animation-delay: 0.36s; }
+  @keyframes sq-wave{0%,65%,100%{opacity:.3;transform:scale(.55)}30%{opacity:1;transform:scale(1)}}
+  .loader-grid.md{ --sq-size: 6px; --sq-gap: 3px;   --sq-radius: 1.5px; }
+  .loader-grid.lg{ --sq-size: 8px; --sq-gap: 4px;   --sq-radius: 2px; }
+
+  .inv-drop{display:flex;flex-direction:column;align-items:center;justify-content:center;border:1.5px dashed rgba(0,0,0,.15);border-radius:var(--radius-sm);padding:18px 12px;cursor:pointer;text-align:center;transition:border-color .15s,background .15s;background:rgba(255,255,255,.6);min-height:96px}
+  body.dark-mode .inv-drop{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.12)}
+  .inv-drop:hover{border-color:var(--blue)}
+  .inv-drop .inv-tip{font-size:12px;color:var(--ink-soft);margin-top:6px}
+  .inv-drop .inv-ico{font-size:22px;opacity:.6;line-height:1}
+  .inv-preview{position:relative;display:inline-block}
+  .inv-preview img{max-width:180px;max-height:180px;border-radius:var(--radius-sm);border:1px solid var(--line);display:block;object-fit:cover}
+  .inv-preview .inv-remove{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;border:none;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;transition:background .15s}
+  .inv-preview .inv-remove:hover{background:rgba(184,83,71,.9)}
+  .inv-meta{font-size:12px;color:var(--ink-soft);margin-top:6px}
+  .inv-loading{display:flex;flex-direction:column;align-items:center;gap:10px;font-size:13px;color:var(--blue);justify-content:center;padding:6px 0}
+
+  .inv-modal-body{
+	padding: 12px;
+	border-radius: 8px;
+	background: #FBF4E0;
+	border: 1px solid rgba(180,150,80,.32);
+	box-sizing: border-box;
+  }
+  body.dark-mode .inv-modal-body{
+	background: #3A3324;
+	border-color: rgba(220,190,110,.28);
+  }
+  .inv-modal-body img{
+	max-width: 100%;
+	display: block;
+	border-radius: 6px;
+	cursor: zoom-in;
+	background: #fff;
+  }
+  .inv-modal-full-hint{
+	text-align: center;
+	font-size: 11.5px;
+	color: #8A6A22;
+	margin-top: 8px;
+	letter-spacing: .02em;
+  }
+  body.dark-mode .inv-modal-full-hint{ color: #D9AD5A; }
+
+  .inv-fullscreen{
+	position: fixed;
+	inset: 0;
+	z-index: 300;
+	background: rgba(20,18,15,.94);
+	display: none;
+	align-items: center;
+	justify-content: center;
+	padding: 16px;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+  }
+  .inv-fullscreen.show{ display: flex; }
+  .inv-fullscreen img{
+	max-width: 100%;
+	max-height: 100%;
+	display: block;
+	border-radius: 8px;
+	background: #fff;
+	cursor: zoom-out;
+	transition: transform .25s ease;
+  }
+  .inv-fullscreen .inv-fs-close{
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: rgba(255,255,255,.15);
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	font-size: 22px;
+	line-height: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	backdrop-filter: blur(6px);
+  }
+  .inv-fullscreen .inv-fs-close:active{ background: rgba(255,255,255,.28); }
+
+  .sem-switch{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .sem-switch label{font-size:13px;color:var(--ink-soft);white-space:nowrap}
+  select.sem{flex:1;font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 11px;transition:border-color .15s,background .3s,color .3s}
+  select.sem:focus{outline:none;border-color:var(--blue)}
+
+  .func{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+  .func .action-btn{flex:1;min-width:130px}
+  .func .btn{flex:1;min-width:130px}
+
+  .flow-list{display:flex;flex-direction:column}
+  .flow{display:flex;align-items:center;gap:10px;padding:12px 2px;border-bottom:1px solid rgba(0,0,0,.07);transition:background .15s,border-color .3s}
+  body.dark-mode .flow{border-bottom-color:rgba(255,255,255,.06)}
+  .flow:active{background:rgba(0,0,0,.03)}
+  body.dark-mode .flow:active{background:rgba(255,255,255,.04)}
+  .flow:last-child{border-bottom:none}
+  .flow .date{width:36px;text-align:center;flex-shrink:0;font-size:11px;color:var(--ink-soft)}
+  .flow .date .d{font-size:17px;font-weight:700;color:var(--ink);display:block;line-height:1.15;font-variant-numeric:tabular-nums}
+  .flow .body{flex:1;min-width:0}
+  .flow .purpose{font-size:14px;font-weight:600;letter-spacing:-.005em;word-break:break-word}
+  .flow .meta{font-size:12px;color:var(--ink-soft);margin-top:2px}
+  .flow .meta .tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:3px;margin-right:4px;font-weight:500}
+  .tag.inv{background:var(--blue-soft);color:var(--blue)}
+  .tag.pending{background:var(--yellow-soft);color:#8A6A22}
+  body.dark-mode .tag.pending{color:#D9AD5A}
+  .flow .amt{font-size:14px;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .flow .amt.income{color:var(--income)}
+  .flow .amt.expense{color:var(--expense)}
+  .flow .ops{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+  .empty{text-align:center;color:var(--ink-faint);padding:44px 0;font-size:13.5px}
+
+  .stamp-mini{display:inline-block;border:1.5px solid var(--stamp);color:var(--stamp);border-radius:2px;padding:1px 7px 0 7px;font-size:11px;font-weight:700;letter-spacing:.12em;transform:rotate(-6deg);opacity:.75;line-height:1.6;user-select:none;pointer-events:none;flex-shrink:0;margin-left:2px;vertical-align:middle;}
+
+  .filters{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+  .filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .chip{padding:7px 14px;border-radius:var(--radius-sm);font-size:12.5px;font-weight:500;cursor:pointer;background:var(--card);border:1px solid var(--line);color:var(--ink-soft);transition:background .15s,color .15s,border-color .15s,background .3s,border-color .3s}
+  .chip.on{background:var(--orange);color:#fff;border-color:var(--orange)}
+  .field{flex:1;min-width:120px;font-family:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 11px;transition:border-color .15s,box-shadow .15s,background .3s,color .3s}
+  .field:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+  .search-wrap{position:relative}
+  .search-wrap svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--ink-soft)}
+  .search-wrap .field{padding-left:38px}
+
+  .menu{display:flex;flex-direction:column;gap:10px}
+  .menu-item .mi-ico{width:40px;height:40px;border-radius:8px;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .3s}
+  .menu-item .mi-ico svg{width:19px;height:19px;color:var(--blue)}
+  .menu-item .mi-t{font-weight:600;font-size:14.5px;letter-spacing:-.005em}
+  .menu-item .mi-d{font-size:12px;color:var(--ink-soft);margin-top:2px}
+  .menu-item .arrow{margin-left:auto;color:var(--ink-faint)}
+
+  .kv{display:flex;align-items:center;gap:10px;padding:13px 4px;border-bottom:1px solid var(--line);transition:border-color .3s}
+  .kv:last-child{border-bottom:none}
+  .kv .k{flex:1}
+  .kv .k .n{font-weight:600;font-size:14.5px}
+  .kv .k .s{font-size:12px;color:var(--ink-soft);margin-top:2px}
+
+  .form-line{margin-bottom:16px}
+  .form-line label{display:block;font-size:12.5px;color:var(--ink-soft);margin-bottom:7px;font-weight:500}
+  .form-line .field{width:100%}
+  textarea.field{height:90px;resize:vertical;line-height:1.6}
+  .radio-row{display:flex;gap:10px}
+  .radio-row label{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--ink);cursor:pointer}
+
+  .appr{border:1px solid rgba(0,0,0,.08);border-left:2px solid var(--sunflower);border-radius:var(--radius-sm);padding:14px;margin-bottom:12px;transition:border-color .3s}
+  body.dark-mode .appr{border-color:rgba(255,255,255,.08);border-left-color:var(--sunflower)}
+  .appr .top{display:flex;justify-content:space-between;font-size:13px;font-variant-numeric:tabular-nums;align-items:center}
+  .appr .st{font-weight:700}
+  .st.pending{color:#8A6A22}
+  body.dark-mode .st.pending{color:#D9AD5A}
+  .st.approved{color:var(--income)}
+  .st.rejected{color:var(--red)}
+  .appr .reason{font-size:13px;color:var(--ink-soft);margin:7px 0;line-height:1.6}
+  .appr .reply{font-size:13px;color:var(--ink-soft);margin:7px 0;line-height:1.6}
+  .appr .ops{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
+  .hidden{display:none!important}
+
+  .tab-bar{display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--line);padding-bottom:8px;transition:border-color .3s}
+  .tab{font-size:14px;font-weight:500;padding:6px 14px;border-radius:var(--radius-sm);cursor:pointer;color:var(--ink-soft);transition:all .15s;flex:1;text-align:center}
+  .tab.active{background:var(--orange);color:#fff}
+  .tab:active{opacity:.6}
+
+  .content-enter {opacity: 0;transform: translateY(22px);transition: opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);}
+  .content-enter.active {opacity: 1;transform: translateY(0);}
+
+  .stat.balance .v.is-pos{color:var(--income)}
+  .stat.balance .v.is-neg{color:var(--expense)}
+
+  @media (hover:hover){.flow:hover{background:rgba(0,0,0,.02)} body.dark-mode .flow:hover{background:rgba(255,255,255,.03)}}
+  .flow{animation:flowIn .4s cubic-bezier(.25,.8,.3,1) both}
+  @keyframes flowIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  .stamp-mini{animation:stampIn .5s cubic-bezier(.34,1.56,.64,1) both}
+  @keyframes stampIn{0%{opacity:0;transform:rotate(-6deg) scale(2.1)}62%{opacity:.92;transform:rotate(-6deg) scale(.9)}100%{opacity:.75;transform:rotate(-6deg) scale(1)}}
+
+  #toastWrap{position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:120;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;width:max-content;max-width:calc(100vw - 40px)}
+  .toast{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.68);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border-radius:18px;padding:12px 20px;font-size:13.5px;font-weight:500;letter-spacing:.01em;color:var(--ink);box-shadow:0 8px 32px -6px rgba(40,30,20,.18),0 2px 8px -2px rgba(40,30,20,.1),inset 0 1px 0 rgba(255,255,255,.6);opacity:0;transform:translateY(-10px) scale(.92);transition:opacity .3s cubic-bezier(.34,1.4,.64,1),transform .38s cubic-bezier(.34,1.56,.64,1);max-width:100%}
+  .toast.show{opacity:1;transform:translateY(0) scale(1)}
+  .toast.hide{opacity:0;transform:translateY(-6px) scale(.96);transition:opacity .26s ease,transform .26s ease}
+  .toast .t-ico{flex-shrink:0;font-size:15px;line-height:1}
+  body.dark-mode .toast{background:rgba(50,45,40,.66);box-shadow:0 8px 32px -6px rgba(0,0,0,.5),0 2px 8px -2px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12);}
+
+  #topbar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--orange),var(--yellow));z-index:200;opacity:0;transition:width .35s ease,opacity .35s ease;border-radius:0 2px 2px 0;pointer-events:none}
+  #topbar.loading{opacity:1;width:82%}
+  #topbar.done{width:100%;opacity:0}
+
+  #backTop{position: fixed;right: 18px;bottom: 26px;width: 44px;height: 44px;border-radius: 50%;background: var(--orange);color: #fff;border: none;cursor: pointer;padding: 0;box-shadow:0 6px 18px -4px rgba(163,79,48,.55),0 2px 6px -2px rgba(163,79,48,.35);display: flex;align-items: center;justify-content: center;opacity: 0;visibility: hidden;transform: translateY(14px) scale(.85);transition:opacity .28s ease,transform .28s cubic-bezier(.34,1.56,.64,1),background .15s,visibility 0s linear .3s;z-index: 40;-webkit-tap-highlight-color: transparent;font-family: inherit;}
+  #backTop.show{opacity: 1;visibility: visible;transform: translateY(0) scale(1);transition:opacity .28s ease,transform .28s cubic-bezier(.34,1.56,.64,1),background .15s;}
+  #backTop:active{background: var(--orange-dark);transform: translateY(0) scale(.9);}
+  #backTop svg{width: 22px;height: 22px;display: block;}
+
+  .tool-fab{position: fixed;left: 18px;bottom: 26px;width: 44px;height: 44px;z-index: 40;pointer-events: none;}
+  .tool-fab .tool-main,.tool-fab .tool-item{pointer-events: auto;}
+  .tool-main{position: absolute;left: 0; bottom: 0;width: 44px; height: 44px;border-radius: 50%;background: var(--orange);color: #fff;border: none;cursor: pointer;display: flex;align-items: center; justify-content: center;box-shadow:0 6px 18px -4px rgba(163,79,48,.55),0 2px 6px -2px rgba(163,79,48,.35);transition: background .15s;padding: 0;font-family: inherit;z-index: 2;}
+  .tool-main:active{ background: var(--orange-dark); }
+  .tool-main svg{width: 20px; height: 20px; overflow: visible;}
+  .tool-main .bar{transform-origin: 12px 12px;transition: transform .4s cubic-bezier(.34,1.56,.64,1), opacity .25s;}
+  .tool-main .bar-1{ transform: translateY(-6px); }
+  .tool-main .bar-2{ opacity: 1; }
+  .tool-main .bar-3{ transform: translateY(6px); }
+  .tool-fab.open .tool-main .bar-1{ transform: translateY(0) rotate(45deg); }
+  .tool-fab.open .tool-main .bar-2{ opacity: 0; }
+  .tool-fab.open .tool-main .bar-3{ transform: translateY(0) rotate(-45deg); }
+
+  .tool-item{position: absolute;left: 0; bottom: 0;width: 42px; height: 42px;border-radius: 50%;background: var(--card);color: var(--ink);border: 1.5px solid var(--line);cursor: pointer;display: flex;align-items: center; justify-content: center;box-shadow: 0 4px 12px -4px rgba(0,0,0,.18);padding: 0;font-family: inherit;opacity: 0;visibility: hidden;transform: translate(0,0) scale(.35);transition:opacity .2s,transform .35s cubic-bezier(.34,1.56,.64,1),visibility 0s linear .3s;z-index: 1;}
+  .tool-item svg{ width: 18px; height: 18px; }
+  .tool-item:hover{ background: var(--card-soft); }
+  .tool-fab.open .tool-item{opacity: 1; visibility: visible;transition:opacity .25s,transform .4s cubic-bezier(.34,1.56,.64,1) var(--delay,0s),visibility 0s linear 0s;}
+  .tool-fab.open .tool-item.i1{--tx: 22px; --ty: -62px;transform: translate(22px, -62px) scale(1);transition-delay: .02s;}
+  .tool-fab.open .tool-item.i2{--tx: 58px; --ty: -32px;transform: translate(58px, -32px) scale(1);transition-delay: .06s;}
+  .tool-item.i1{ --tx: 22px; --ty: -62px; }
+  .tool-item.i2{ --tx: 58px; --ty: -32px; }
+
+  .red-dot{
+	position: absolute;top: -4px;right: -4px;min-width: 16px;height: 16px;padding: 0 4px;
+	border-radius: 8px;background: #E05048;color: #fff;font-size: 10px;font-weight: 700;
+	line-height: 16px;text-align: center;box-sizing: border-box;box-shadow: 0 0 0 2px var(--card);
+	pointer-events: none;z-index: 3;font-variant-numeric: tabular-nums;transition: opacity .2s ease;
+  }
+  .tool-main .red-dot{ box-shadow: 0 0 0 2px var(--orange); }
+  .red-dot.hidden{ display: none; }
+
+  .modal::-webkit-scrollbar{width:5px}
+  .modal::-webkit-scrollbar-thumb{background:var(--ink-faint);border-radius:3px}
+  .modal::-webkit-scrollbar-track{background:transparent}
+
+  .btn:focus-visible,.chip:focus-visible,.tab:focus-visible,.entry:focus-visible,.menu-item:focus-visible,.nav-back:focus-visible,#backTop:focus-visible,.action-btn:focus-visible,.export-opt:focus-visible,.tool-main:focus-visible,.tool-item:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+  .empty .empty-ico{font-size:32px;opacity:.45;display:block;margin-bottom:6px;line-height:1}
+
+  body.dark-mode .btn-red:active{background:#4A2E2A;transform:translate(3px,3px);box-shadow:0 0 0 0}
+
+  body.reduce-motion *,body.reduce-motion *::before,body.reduce-motion *::after {animation-duration: .01ms !important;animation-iteration-count: 1 !important;transition-duration: .01ms !important;}
+  body.reduce-motion .loader-grid > span,body.reduce-motion .boot-dots i,body.reduce-motion .boot-loader-grid > span,body.reduce-motion .boot-loader-orig::before,body.reduce-motion .boot-loader-orig::after,body.reduce-motion .btn-loader::before,body.reduce-motion .btn-loader::after {animation-duration: inherit !important;animation-iteration-count: infinite !important;}
+
+  @media (prefers-reduced-motion: reduce){
+		*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+		.flow,.stamp-mini,.loader-grid>span,.boot-dots i{animation:none}
+		#backTop{transform: translateY(0) scale(1);}
+  }
+</style>
+</head>
+<body class="booting">
+<script>
+/* 提前应用暗色偏好 */
+(function(){
+  try {
+	if (localStorage.getItem('theme') === 'dark') {
+	  document.body.classList.add('dark-mode');
+	}
+  } catch(e){}
+})();
+</script>
+<div class="app">
+  <nav class="navbar">
+		<div class="nav-slot left">
+		  <button class="nav-back hidden" id="navBack" onclick="handleNavLeft()">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+				<span id="navBackLabel">返回</span>
+		  </button>
+		</div>
+		<div class="nav-title" id="navTitle">班费公示平台</div>
+		<div class="nav-right" id="navRight"></div>
+  </nav>
+  <div id="content">
+	<div class="boot-loading">
+	  <span class="boot-loader-orig" aria-hidden="true"></span>
+	  <div class="boot-text">
+		<span id="bootTextMsg">正在连接云端数据库</span><span class="boot-dots"><i>.</i><i>.</i><i>.</i></span>
+	  </div>
+	</div>
+  </div>
+</div>
+
+<button id="backTop" onclick="scrollToTop()" aria-label="返回顶部" title="返回顶部">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+	<polyline points="6 14 12 8 18 14"/>
+  </svg>
+</button>
+
+<div class="tool-fab hidden" id="toolFab">
+  <button class="tool-item i1" onclick="openInboxFromFab()" aria-label="信箱">
+	<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+	  <path d="M3 7l9 6 9-6"/>
+	  <rect x="3" y="5" width="18" height="14" rx="2"/>
+	</svg>
+	<span class="red-dot hidden" id="inboxDot"></span>
+  </button>
+  <button class="tool-item i2" onclick="openSettings()" aria-label="设置">
+	<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+	  <circle cx="12" cy="12" r="3"/>
+	  <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>
+	</svg>
+  </button>
+  <button class="tool-main" onclick="toggleToolFab()" aria-label="工具菜单">
+	<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+	  <line class="bar bar-1" x1="4" y1="12" x2="20" y2="12"/>
+	  <line class="bar bar-2" x1="4" y1="12" x2="20" y2="12"/>
+	  <line class="bar bar-3" x1="4" y1="12" x2="20" y2="12"/>
+	</svg>
+	<span class="red-dot hidden" id="toolMainDot"></span>
+  </button>
+</div>
+
+<div class="mask" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modalBody"></div>
+</div>
+<div class="mask" id="imgMask" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="imgBody"></div>
+</div>
+
+<div class="inv-fullscreen" id="invFullscreen" onclick="closeInvFullscreen()">
+  <button class="inv-fs-close" onclick="event.stopPropagation();closeInvFullscreen()" aria-label="关闭">×</button>
+  <img id="invFullscreenImg" src="" alt="发票全屏" onclick="event.stopPropagation();">
+</div>
+
+<div id="topbar"></div>
+<div id="toastWrap"></div>
+
+<script>
+const APP_VERSION = 'v3.3.6-test';
+const APP_DATE = '2026年10月1日';
+
+const BOOT_TEXTS = [
+  '正在连接云端数据库',
+  '正在读取班级信息',
+  '正在加载流水记录',
+  '正在整理页面内容'
+];
+let _bootIdx = 0;
+let _bootTimer = null;
+function startBootTicker(){
+  if (_bootTimer) return;
+  _bootTimer = setInterval(() => {
+	const msgEl = document.getElementById('bootTextMsg');
+	if (!msgEl) { stopBootTicker(); return; }
+	_bootIdx++;
+	if (_bootIdx >= BOOT_TEXTS.length) {
+	  stopBootTicker();
+	  msgEl.textContent = BOOT_TEXTS[0];
+	  return;
+	}
+	msgEl.textContent = BOOT_TEXTS[_bootIdx];
+  }, 780);
+}
+function stopBootTicker(){
+  if (_bootTimer) { clearInterval(_bootTimer); _bootTimer = null; }
+}
+startBootTicker();
+
+function scrollToTop(){
+  try { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  catch(e) { window.scrollTo(0, 0); }
+}
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('backTop');
+  if (!btn) return;
+  if (window.scrollY > 320) btn.classList.add('show');
+  else btn.classList.remove('show');
+}, { passive: true });
+
+function toggleToolFab(){
+  const fab = document.getElementById('toolFab');
+  if (fab) fab.classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  const fab = document.getElementById('toolFab');
+  if (!fab) return;
+  if (!fab.contains(e.target)) fab.classList.remove('open');
+});
+function closeToolFab(){
+  const fab = document.getElementById('toolFab');
+  if (fab) fab.classList.remove('open');
+}
+function openInboxFromFab(){
+  closeToolFab();
+  if (!state.user) { openLogin(); return; }
+  go('inbox');
+}
+
+const THEMES = {
+  orange: { name: '暖橙', main: '#C1633E', light: { main: '#C1633E', dark: '#A34F30', soft: '#F3E4DA' }, dark:  { main: '#D67A55', dark: '#B8633F', soft: '#3D2E26' } },
+  teal:   { name: '青绿', main: '#4F8E7F', light: { main: '#4F8E7F', dark: '#3A6E62', soft: '#E3F0EC' }, dark:  { main: '#7BB3A3', dark: '#4C8B7B', soft: '#2A3B35' } },
+  blue:   { name: '雾蓝', main: '#5C7C93', light: { main: '#5C7C93', dark: '#48617A', soft: '#EAF0F3' }, dark:  { main: '#7BA3B8', dark: '#5B8499', soft: '#24323D' } },
+  purple: { name: '藕紫', main: '#8B7B9C', light: { main: '#8B7B9C', dark: '#6B5C7A', soft: '#F0EBF2' }, dark:  { main: '#B29BC3', dark: '#8A76A0', soft: '#2E2535' } },
+  clay:   { name: '陶土', main: '#A8795A', light: { main: '#A8795A', dark: '#86603F', soft: '#F1E6DC' }, dark:  { main: '#C99177', dark: '#9C6E53', soft: '#3D2C20' } },
+  ink:    { name: '墨绿', main: '#2E4038', light: { main: '#2E4038', dark: '#1F2E28', soft: '#E0EAE5' }, dark:  { main: '#7BA393', dark: '#4C7A6A', soft: '#1D2A24' } }
+};
+
+function applyPrimaryTheme(themeId){
+  const t = THEMES[themeId] || THEMES.orange;
+  const isDark = document.body.classList.contains('dark-mode');
+  const c = isDark ? t.dark : t.light;
+  document.documentElement.style.setProperty('--orange', c.main);
+  document.documentElement.style.setProperty('--orange-dark', c.dark);
+  document.documentElement.style.setProperty('--orange-soft', c.soft);
+  document.body.style.setProperty('--orange', c.main);
+  document.body.style.setProperty('--orange-dark', c.dark);
+  document.body.style.setProperty('--orange-soft', c.soft);
+}
+
+const RADIUS_MAP = { sm: '6px', md: '10px', lg: '14px' };
+const RADIUS_SM_MAP = { sm: '4px', md: '6px', lg: '8px' };
+function applyRadius(size){
+  const r = RADIUS_MAP[size] || RADIUS_MAP.md;
+  const rs = RADIUS_SM_MAP[size] || RADIUS_SM_MAP.md;
+  document.documentElement.style.setProperty('--radius', r);
+  document.documentElement.style.setProperty('--radius-sm', rs);
+}
+
+function applyMotion(enabled){
+  if (enabled) document.body.classList.remove('reduce-motion');
+  else document.body.classList.add('reduce-motion');
+}
+
+function loadSettings(){
+  const primaryId = localStorage.getItem('theme_primary') || 'orange';
+  const radius = localStorage.getItem('theme_radius') || 'md';
+  const motion = localStorage.getItem('theme_motion') !== 'off';
+  applyPrimaryTheme(primaryId);
+  applyRadius(radius);
+  applyMotion(motion);
+}
+
+function openSettings(){
+  closeToolFab();
+  const primaryId = localStorage.getItem('theme_primary') || 'orange';
+  const radius = localStorage.getItem('theme_radius') || 'md';
+  const motion = localStorage.getItem('theme_motion') !== 'off';
+
+  const themeSwatchesHtml = Object.keys(THEMES).map(id => {
+	const t = THEMES[id];
+	const isActive = id === primaryId;
+	return `<button class="theme-swatch ${isActive ? 'active' : ''}" data-theme-id="${id}" onclick="selectTheme('${id}')" style="background:${t.main};" title="${esc(t.name)}"></button>`;
+  }).join('');
+
+  const personalSection = isLoggedIn() ? `
+	<div class="settings-section">
+	  <div class="settings-label">个人信息</div>
+	  <button class="reset-btn neutral" onclick="openEditName()" style="margin-bottom:8px;">
+		<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
+		修改昵称
+	  </button>
+	  <button class="reset-btn neutral" onclick="openChangePassword()">
+		<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+		修改密码
+	  </button>
+	</div>
+  ` : '';
+
+  openModal('设置', `
+	${personalSection}
+	<div class="settings-section">
+	  <div class="settings-label">主题色</div>
+	  <div class="theme-swatches">${themeSwatchesHtml}</div>
+	</div>
+	<div class="settings-section">
+	  <div class="settings-label">卡片圆角</div>
+	  <div class="segmented" id="segRadius">
+		<button data-r="sm" class="${radius === 'sm' ? 'active' : ''}" onclick="selectRadius('sm')">小</button>
+		<button data-r="md" class="${radius === 'md' ? 'active' : ''}" onclick="selectRadius('md')">中</button>
+		<button data-r="lg" class="${radius === 'lg' ? 'active' : ''}" onclick="selectRadius('lg')">大</button>
+	  </div>
+	</div>
+	<div class="settings-section">
+	  <div class="settings-label">动效</div>
+	  <div class="segmented" id="segMotion">
+		<button data-m="on"  class="${motion ? 'active' : ''}" onclick="selectMotion(true)">开启</button>
+		<button data-m="off" class="${!motion ? 'active' : ''}" onclick="selectMotion(false)">关闭</button>
+	  </div>
+	</div>
+	<div class="settings-section">
+	  <div class="settings-label">数据</div>
+	  <button class="reset-btn" onclick="resetSettings()">
+		<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+		  <polyline points="1 4 1 10 7 10"/>
+		  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+		</svg>
+		重置本地设置
+	  </button>
+	</div>
+	<div class="settings-section">
+	  <div class="settings-label">关于</div>
+	  <div class="settings-about">
+		<div class="row"><span>版本</span><span>${APP_VERSION}</span></div>
+		<div class="row"><span>更新</span><span>${APP_DATE}</span></div>
+		<div class="row"><span>仓库</span><a href="https://github.com/starryeeeeee/class-fund-disclosure-platform" target="_blank">GitHub ↗</a></div>
+	  </div>
+	</div>
+  `);
+}
+
+function selectTheme(id){
+  localStorage.setItem('theme_primary', id);
+  applyPrimaryTheme(id);
+  document.querySelectorAll('.theme-swatch').forEach(el => {
+	if (el.dataset.themeId === id) el.classList.add('active');
+	else el.classList.remove('active');
+  });
+}
+function selectRadius(size){
+  localStorage.setItem('theme_radius', size);
+  applyRadius(size);
+  const seg = document.getElementById('segRadius');
+  if (seg) seg.querySelectorAll('button').forEach(b => { b.classList.toggle('active', b.dataset.r === size); });
+}
+function selectMotion(enabled){
+  localStorage.setItem('theme_motion', enabled ? 'on' : 'off');
+  applyMotion(enabled);
+  const seg = document.getElementById('segMotion');
+  if (seg) seg.querySelectorAll('button').forEach(b => { b.classList.toggle('active', (b.dataset.m === 'on') === enabled); });
+}
+function resetSettings(){
+  confirmAction('重置本地设置', '将把主题色、圆角、动效恢复到默认值。此操作只影响本机，不影响云端数据。', '确认重置', true, () => {
+	localStorage.removeItem('theme_primary');
+	localStorage.removeItem('theme_radius');
+	localStorage.removeItem('theme_motion');
+	loadSettings();
+	closeModal();
+	setTimeout(openSettings, 150);
+	toast('已重置为默认设置', 'success');
+  });
+}
+
+function openEditName(){
+  if (!isLoggedIn()) return;
+  const curName = state.user.name || '';
+  openModal('修改昵称', `
+	<div class="form-line"><label>新的昵称</label>
+	  <input class="field" id="newName" maxlength="20" value="${esc(curName)}" placeholder="如：小明">
+	  <div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">不超过20字</div>
+	</div>
+	<div style="display:flex;gap:10px;">
+	  <button class="btn btn-ghost btn-block" onclick="closeModal();openSettings()">取消</button>
+	  <button class="btn btn-primary btn-block" id="saveNameBtn" onclick="saveNewName()">保存</button>
+	</div>
+  `);
+}
+async function saveNewName(){
+  const newName = document.getElementById('newName').value.trim();
+  if (!newName) { toast('昵称不能为空', 'warn'); return; }
+  if (newName.length > 20) { toast('昵称不超过20字', 'warn'); return; }
+  if (newName === state.user.name) { toast('昵称未改变', 'info'); return; }
+  const btn = document.getElementById('saveNameBtn');
+  if (!busyStart()) return;
+  try {
+	await runWithLoader(btn, LOADER_BARS_HTML + '<span>保存中…</span>', async () => {
+	  await apiPatch('accounts', state.user.studentId, { name: newName }, 'student_id');
+	});
+	state.user.name = newName;
+	const acc = DB.accounts.find(a => a.student_id === state.user.studentId);
+	if (acc) acc.name = newName;
+	toast('昵称已更新', 'success');
+	closeModal();
+	render();
+  } catch (e) { toast('更新失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
+}
+
+function openChangePassword(){
+  if (!isLoggedIn()) return;
+  openModal('修改密码', `
+	<div class="form-line"><label>新密码（至少6位）</label>
+	  <input class="field" id="newPw" type="password" placeholder="请输入新密码" autocomplete="new-password">
+	</div>
+	<div class="form-line"><label>确认新密码</label>
+	  <input class="field" id="newPw2" type="password" placeholder="再次输入新密码" autocomplete="new-password">
+	</div>
+	<div style="display:flex;gap:10px;">
+	  <button class="btn btn-ghost btn-block" onclick="closeModal();openSettings()">取消</button>
+	  <button class="btn btn-primary btn-block" id="savePwBtn" onclick="saveNewPassword()">保存</button>
+	</div>
+  `);
+}
+async function saveNewPassword(){
+  const pw1 = document.getElementById('newPw').value;
+  const pw2 = document.getElementById('newPw2').value;
+  if (!pw1 || pw1.length < 6) { toast('密码至少6位', 'warn'); return; }
+  if (pw1 !== pw2) { toast('两次密码不一致', 'warn'); return; }
+  const btn = document.getElementById('savePwBtn');
+  if (!busyStart()) return;
+  try {
+	await runWithLoader(btn, LOADER_BARS_HTML + '<span>保存中…</span>', async () => {
+	  const { error } = await sb.auth.updateUser({ password: pw1 });
+	  if (error) throw new Error(error.message);
+	});
+	toast('密码已更新', 'success');
+	closeModal();
+  } catch (e) { toast('更新失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
+}
+
+/* ============================================================
+   Supabase 配置 + Auth 客户端
+   ============================================================ */
+const SUPABASE_URL = 'https://ejvzxlslfdweqavturmi.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqdnp4bHNsZmR3ZXFhdnR1cm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTU2MzYsImV4cCI6MjEwMzIzMTYzNn0.4UUWXysA20Bi-pwBfcfKMi50Op22530443zKgBxlZwo';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const INVOICE_MAX_SIZE = 5 * 1024 * 1024;
+const INVOICE_MAX_DIM = 1200;
+const INVOICE_QUALITY = 0.72;
+const LOADER_MIN_MS = 450;
+
+async function getToken(){
+  try {
+	const { data: { session } } = await sb.auth.getSession();
+	if (session && session.access_token) return session.access_token;
+  } catch (e) { console.warn('获取 token 失败:', e); }
+  return SUPABASE_KEY;
+}
+
+async function fetchWithRetry(url, options = {}, { timeout = 20000, retry = 2 } = {}) {
+  let lastErr = null;
+  for (let i = 0; i <= retry; i++) {
+	try {
+	  const controller = new AbortController();
+	  const timer = setTimeout(() => controller.abort(), timeout);
+	  const r = await fetch(url, { ...options, signal: controller.signal });
+	  clearTimeout(timer);
+	  return r;
+	} catch (e) {
+	  lastErr = e;
+	  if (i < retry) { await new Promise(res => setTimeout(res, 600 * (i + 1))); }
+	}
+  }
+  throw lastErr || new Error('请求失败');
+}
+
+async function apiGet(table, selectFields = '*') {
+  const token = await getToken();
+  const url = `${SUPABASE_URL}/rest/v1/${table}?select=${selectFields}&apikey=${SUPABASE_KEY}`;
+  const r = await fetchWithRetry(url, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` } });
+  if (!r.ok) { const text = await r.text(); throw new Error(`GET ${table} 失败(${r.status}): ${text}`); }
+  return r.json();
+}
+async function apiGetOne(table, field, value, selectFields = '*') {
+  const token = await getToken();
+  const url = `${SUPABASE_URL}/rest/v1/${table}?${field}=eq.${encodeURIComponent(value)}&select=${selectFields}&apikey=${SUPABASE_KEY}`;
+  const r = await fetchWithRetry(url, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` } });
+  if (!r.ok) { const text = await r.text(); throw new Error(`GET ${table} 失败(${r.status}): ${text}`); }
+  const rows = await r.json();
+  return rows[0] || null;
+}
+async function apiPost(table, data) {
+  const token = await getToken();
+  const url = `${SUPABASE_URL}/rest/v1/${table}?apikey=${SUPABASE_KEY}`;
+  const r = await fetchWithRetry(url, {
+	method: 'POST',
+	headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+	body: JSON.stringify(data)
+  });
+  if (!r.ok) { const text = await r.text(); throw new Error(`POST ${table} 失败(${r.status}): ${text}`); }
+  try { return await r.json(); } catch { return null; }
+}
+async function apiPatch(table, id, data, keyField = 'id') {
+  const token = await getToken();
+  const url = `${SUPABASE_URL}/rest/v1/${table}?${keyField}=eq.${encodeURIComponent(id)}&apikey=${SUPABASE_KEY}`;
+  const r = await fetchWithRetry(url, {
+	method: 'PATCH',
+	headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+	body: JSON.stringify(data)
+  });
+  if (!r.ok) { const text = await r.text(); throw new Error(`PATCH ${table} 失败(${r.status}): ${text}`); }
+  try { return await r.json(); } catch { return null; }
+}
+async function apiDelete(table, id, keyField = 'id') {
+  const token = await getToken();
+  const url = `${SUPABASE_URL}/rest/v1/${table}?${keyField}=eq.${encodeURIComponent(id)}&apikey=${SUPABASE_KEY}`;
+  const r = await fetchWithRetry(url, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` } });
+  if (!r.ok) { const text = await r.text(); throw new Error(`DELETE ${table} 失败(${r.status}): ${text}`); }
+  try { return await r.json(); } catch { return null; }
+}
+async function apiDeleteByFilter(table, field, value) {
+  if (!value) return;
+  const token = await getToken();
+  const url = `${SUPABASE_URL}/rest/v1/${table}?${field}=eq.${encodeURIComponent(value)}&apikey=${SUPABASE_KEY}`;
+  const r = await fetchWithRetry(url, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` } });
+  if (!r.ok) { const text = await r.text(); throw new Error(`DELETE ${table} 失败(${r.status}): ${text}`); }
+  try { return await r.json(); } catch { return null; }
+}
+async function apiDeleteAll(table) {
+  const token = await getToken();
+  const url = `${SUPABASE_URL}/rest/v1/${table}?id=neq.null&apikey=${SUPABASE_KEY}`;
+  const r = await fetchWithRetry(url, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` } });
+  if (!r.ok) { const text = await r.text(); throw new Error(`DELETE ${table} 失败(${r.status}): ${text}`); }
+  try { return await r.json(); } catch { return null; }
+}
+
+const LOADER_BARS_HTML = '<span class="btn-loader" aria-hidden="true"></span>';
+const LOADER_GRID_HTML = '<span class="loader-grid md" style="--sq-color:var(--blue)"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span>';
+
+async function runWithLoader(btn, loadingHTML, task, minMs = LOADER_MIN_MS) {
+  const origHTML = btn ? btn.innerHTML : '';
+  const t0 = Date.now();
+  if (btn) { btn.disabled = true; btn.innerHTML = loadingHTML; }
+  try {
+	const result = await task();
+	const elapsed = Date.now() - t0;
+	if (elapsed < minMs) { await new Promise(r => setTimeout(r, minMs - elapsed)); }
+	return result;
+  } catch (e) {
+	if (btn) { btn.disabled = false; btn.innerHTML = origHTML; }
+	throw e;
+  }
+}
+
+function compressImage(file, maxDim = INVOICE_MAX_DIM, quality = INVOICE_QUALITY) {
+  return new Promise((resolve, reject) => {
+		if (!file || !file.type || !file.type.startsWith('image/')) return reject(new Error('仅支持图片文件'));
+		const reader = new FileReader();
+		reader.onerror = () => reject(new Error('读取文件失败'));
+		reader.onload = () => {
+		  const img = new Image();
+		  img.onerror = () => reject(new Error('图片解码失败'));
+		  img.onload = () => {
+				let w = img.naturalWidth || img.width;
+				let h = img.naturalHeight || img.height;
+				if (!w || !h) return reject(new Error('图片尺寸异常'));
+				if (w > maxDim || h > maxDim) {
+				  const ratio = Math.min(maxDim / w, maxDim / h);
+				  w = Math.max(1, Math.round(w * ratio));
+				  h = Math.max(1, Math.round(h * ratio));
+				}
+				const canvas = document.createElement('canvas');
+				canvas.width = w; canvas.height = h;
+				const ctx = canvas.getContext('2d');
+				ctx.fillStyle = '#ffffff';
+				ctx.fillRect(0, 0, w, h);
+				ctx.drawImage(img, 0, 0, w, h);
+				try { resolve(canvas.toDataURL('image/jpeg', quality)); }
+				catch (e) { reject(new Error('生成图片失败')); }
+		  };
+		  img.src = reader.result;
+		};
+		reader.readAsDataURL(file);
+  });
+}
+
+const ROLE_ADMIN = '总管理员';
+const ROLE_KEEPER = '生活委员';
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const safeImgSrc = s => (/^(https?:|data:image\/)/i.test(String(s || ''))) ? s : '';
+const fmtMoney = n => { const num = Number(n || 0); const s = Math.abs(num).toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); return num < 0 ? '-' + s : s; };
+const emptyBox = (ico, txt) => `<div class="empty"><span class="empty-ico">${ico}</span>${txt}</div>`;
+const mdEscape = s => String(s || '').replace(/\n/g, ' ').replace(/([|*_\[\]`\\])/g, '\\$1');
+const truncate = (s, n) => { s = String(s || ''); return s.length > n ? s.slice(0, n) + '…' : s; };
+
+let _busy = false;
+function busyStart() { if (_busy) return false; _busy = true; return true; }
+function busyEnd() { _busy = false; }
+
+let DB = { semesters: [], accounts: [], records: [], applications: [], feedbacks: [], logs: [], oplogs: [], settings: { class_name: '高二(1)班', notice: '' } };
+let state = {
+  view: 'home',
+  currentSemesterId: null,
+  noticeAck: false,
+  user: null,
+  editingId: null,
+  applyingId: null,
+  filters: { type: 'all', month: 'all', keyword: '', start: '', end: '' },
+  history: ['home'],
+  inboxTab: 'applications',
+  _invUrl: null,
+  _invDataUrl: null,
+  _invLoading: false
+};
+
+const isVisitor = () => !state.user;
+const isKeeper = () => state.user && state.user.role === ROLE_KEEPER;
+const isAdmin = () => state.user && state.user.role === ROLE_ADMIN;
+const canManageFlow = () => state.user && (isKeeper() || isAdmin());
+const isLoggedIn = () => !!state.user;
+
+const curSem = () => {
+  if (state.currentSemesterId) {
+	const found = DB.semesters.find(s => s.id === state.currentSemesterId);
+	if (found) return found;
+  }
+  return DB.semesters[0] || null;
+};
+
+function stats(semId) {
+  const recs = DB.records.filter(r => r.semester_id === semId);
+  const income = recs.filter(r => r.type === 'income' && !r.pending_delete).reduce((s, r) => s + Number(r.amount || 0), 0);
+  const expense = recs.filter(r => r.type === 'expense' && !r.pending_delete).reduce((s, r) => s + Number(r.amount || 0), 0);
+  const sem = DB.semesters.find(s => s.id === semId);
+  return { income, expense, balance: Number(sem ? sem.start_balance : 0) + income - expense };
+}
+const historyTotal = () => {
+  if (!DB.semesters.length) return 0;
+  const base = Number(DB.semesters[0].start_balance || 0);
+  const flow = DB.records.filter(r => !r.pending_delete).reduce((s, r) => {
+	const amt = Number(r.amount || 0);
+	return s + (r.type === 'income' ? amt : -amt);
+  }, 0);
+  return base + flow;
+};
+const recordsOf = semId => DB.records.filter(r => r.semester_id === semId);
+const monthOf = d => (d ? String(d).slice(0, 7) : '');
+
+function getUnreadCount() {
+  if (!state.user) return 0;
+  const key = 'inbox_last_seen_' + state.user.studentId;
+  const lastSeen = Number(localStorage.getItem(key) || 0);
+  let count = 0;
+  if (isAdmin()) {
+	count += DB.applications.filter(a => a.status === 'pending' && (a.time || 0) > lastSeen).length;
+	count += DB.feedbacks.filter(f => f.status === 'pending' && (f.created_at || 0) > lastSeen).length;
+  } else if (isKeeper()) {
+	count += DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status !== 'pending' && (a.time || 0) > lastSeen).length;
+	count += DB.feedbacks.filter(f => f.submitter_id === state.user.studentId && f.status === 'public' && f.admin_reply && (f.updated_at || f.created_at || 0) > lastSeen).length;
+  } else {
+	count += DB.feedbacks.filter(f => f.submitter_id === state.user.studentId && f.status === 'public' && f.admin_reply && (f.updated_at || f.created_at || 0) > lastSeen).length;
+  }
+  return count;
+}
+
+function updateRedDots() {
+  const count = getUnreadCount();
+  const show = count > 0;
+  const text = count > 9 ? '9+' : String(count);
+  ['inboxDot', 'toolMainDot'].forEach(id => {
+	const el = document.getElementById(id);
+	if (!el) return;
+	if (show) { el.textContent = text; el.classList.remove('hidden'); }
+	else { el.classList.add('hidden'); }
+  });
+}
+
+function markInboxSeen() {
+  if (!state.user) return;
+  try { localStorage.setItem('inbox_last_seen_' + state.user.studentId, String(Date.now())); } catch(e){}
+}
+
+async function addOpLog(action, detail) {
+  if (!state.user) return;
+  try {
+	const logEntry = { time: Date.now(), operator: state.user.name + '(' + state.user.studentId + ')', action: action, detail: detail };
+	await apiPost('oplogs', logEntry);
+	DB.oplogs.push({ ...logEntry, id: 'local-' + uid() });
+  } catch (e) { console.warn('日志记录失败:', e); }
+}
+
+async function logVisit(nick) {
+  const ua = navigator.userAgent;
+  const dev = /iPhone/.test(ua) ? 'iPhone' : /Android/.test(ua) ? 'Android' : /iPad/.test(ua) ? 'iPad' : '其他设备';
+  const role = state.user ? state.user.role : '访客';
+  const sem = curSem();
+  const logEntry = { nickname: nick, role: role, device: dev, ip: '本地（静态托管）', time: Date.now(), semester: sem ? sem.id : null };
+  try { await apiPost('logs', logEntry); DB.logs.push({ ...logEntry, id: 'local-' + uid() }); } catch (e) { console.warn('访问日志记录失败:', e); }
+}
+
+async function loadAllData(silent = false) {
+  const maxAttempt = 3;
+  let lastErr = null;
+
+  for (let attempt = 1; attempt <= maxAttempt; attempt++) {
+	try {
+	  const batch1 = await Promise.allSettled([
+		apiGet('semesters'),
+		apiGet('records'),
+		apiGet('settings')
+	  ]);
+	  await new Promise(r => setTimeout(r, 120));
+
+	  const batch2 = await Promise.allSettled([
+		apiGet('accounts', 'student_id,name,role'),
+		apiGet('applications'),
+		apiGet('feedbacks')
+	  ]);
+	  await new Promise(r => setTimeout(r, 120));
+
+	  const batch3 = await Promise.allSettled([
+		apiGet('logs'),
+		apiGet('oplogs')
+	  ]);
+
+	  const results = [
+		batch1[0], batch2[0], batch1[1], batch2[1], batch2[2], batch3[0], batch3[1], batch1[2]
+	  ];
+
+	  const critical = ['semesters', 'records', 'settings'];
+	  const names = ['semesters','accounts','records','applications','feedbacks','logs','oplogs','settings'];
+	  const failed = [];
+	  results.forEach((r, i) => { if (r.status === 'rejected') failed.push(names[i]); });
+
+	  const criticalFailed = failed.filter(n => critical.includes(n));
+	  if (criticalFailed.length > 0) { throw new Error(`关键表加载失败：${criticalFailed.join(', ')}`); }
+
+	  const [sems, accs, recs, apps, fbs, logs, oplogs, set] = results.map(r => r.status === 'fulfilled' ? r.value : []);
+
+	  DB.semesters = sems || [];
+	  DB.accounts = accs || [];
+	  DB.records = recs || [];
+	  DB.applications = apps || [];
+	  DB.feedbacks = fbs || [];
+	  DB.logs = logs || [];
+	  DB.oplogs = oplogs || [];
+	  if (set && set.length) DB.settings = set[0];
+
+	  if (DB.semesters.length > 0) {
+		const saved = localStorage.getItem('currentSemesterId');
+		if (saved && DB.semesters.some(s => s.id === saved)) { state.currentSemesterId = saved; }
+		else { state.currentSemesterId = DB.semesters[0].id; }
+	  }
+	  return true;
+
+	} catch (e) {
+	  lastErr = e;
+	  console.warn(`第 ${attempt}/${maxAttempt} 次加载失败:`, e.message);
+	  if (attempt < maxAttempt) {
+		if (!silent) {
+		  const msgEl = document.getElementById('bootTextMsg');
+		  if (msgEl) msgEl.textContent = `云端响应较慢，正在重试 (${attempt}/${maxAttempt - 1})`;
+		}
+		await new Promise(res => setTimeout(res, 800 * attempt));
+		continue;
+	  }
+	}
+  }
+
+  console.error('❌ 加载数据失败:', lastErr);
+  if (!silent) {
+	document.getElementById('content').innerHTML = `
+	<div class="card error-card">
+	  <h3>⚠️ 连接云端失败</h3>
+	  <p class="err-detail">${esc(lastErr ? lastErr.message : '未知错误')}</p>
+	  <p class="err-hint">
+		如果这是你今天第一次打开，可能是云端数据库刚从休眠中唤醒。<br>稍等几秒再试一次通常就能成功。
+	  </p>
+	  <div style="display:flex;gap:10px;margin-top:12px;">
+		<button class="btn btn-primary" style="flex:1;" onclick="retryLoad()">立即重试</button>
+		<button class="btn btn-ghost" style="flex:1;" onclick="location.reload()">刷新页面</button>
+	  </div>
+	</div>`;
+  }
+  return false;
+}
+
+async function retryLoad() {
+  document.getElementById('content').innerHTML = `
+	<div class="boot-loading">
+	  <span class="boot-loader-orig" aria-hidden="true"></span>
+	  <div class="boot-text">
+		<span id="bootTextMsg">正在重新连接云端数据库</span><span class="boot-dots"><i>.</i><i>.</i><i>.</i></span>
+	  </div>
+	</div>`;
+  const ok = await loadAllData();
+  if (ok) {
+	_lastLoad = Date.now();
+	document.body.classList.remove('booting');
+	stopBootTicker();
+	go(state.user ? 'main' : 'home', false);
+  }
+}
+
+function go(view, push = true) {
+  if (push) state.history.push(state.view);
+  state.view = view;
+  if (view === 'inbox' && state.user) { markInboxSeen(); }
+  render();
+  try {
+	if (push) history.pushState({ v: view }, '', '#' + view);
+	else history.replaceState({ v: view }, '', '#' + view);
+  } catch (e) { }
+}
+window.addEventListener('popstate', function () {
+  if (state.history.length > 1) { state.view = state.history.pop(); }
+  else { state.view = 'home'; }
+  render();
+});
+function back() {
+  if (state.history.length > 1) { history.back(); }
+  else { go('home', false); }
+}
+function toggleTheme() {
+  document.body.classList.toggle('dark-mode');
+  const isDark = document.body.classList.contains('dark-mode');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  document.documentElement.style.background = isDark ? '#1C1A18' : '';
+  document.documentElement.style.colorScheme = isDark ? 'dark' : '';
+  const primaryId = localStorage.getItem('theme_primary') || 'orange';
+  applyPrimaryTheme(primaryId);
+}
+function loadTheme() {
+  if (localStorage.getItem('theme') === 'dark' && !document.body.classList.contains('dark-mode')) {
+	document.body.classList.add('dark-mode');
+  }
+}
+
+const TOAST_ICONS = { success: '✅', error: '⚠️', warn: '💡', info: '🔔' };
+function toast(msg, type = 'info', dur = 2400) {
+  let wrap = document.getElementById('toastWrap');
+  if (!wrap) { wrap = document.createElement('div'); wrap.id = 'toastWrap'; document.body.appendChild(wrap); }
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = `<span class="t-ico">${TOAST_ICONS[type] || TOAST_ICONS.info}</span><span>${esc(msg)}</span>`;
+  wrap.appendChild(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
+  setTimeout(() => { el.classList.remove('show'); el.classList.add('hide'); setTimeout(() => el.remove(), 320); }, dur);
+}
+function topbar(mode) {
+  const bar = document.getElementById('topbar');
+  if (!bar) return;
+  if (mode === 'loading') { bar.className = 'loading'; }
+  else if (mode === 'done') { bar.className = 'done'; setTimeout(() => { bar.className = ''; }, 420); }
+  else { bar.className = ''; }
+}
+function confirmAction(title, msgHtml, okLabel, danger, onOk) {
+  openModal(esc(title), `
+	<p style="font-size:14px;color:var(--ink-soft);line-height:1.75;margin:0 0 18px;">${msgHtml}</p>
+	<div style="display:flex;gap:10px">
+	  <button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button>
+	  <button class="btn ${danger ? 'btn-red' : 'btn-primary'} btn-block" id="cfmOkBtn">${esc(okLabel)}</button>
+	</div>
+  `);
+  const btn = document.getElementById('cfmOkBtn');
+  if (btn) btn.onclick = () => { closeModal(); onOk(); };
+}
+function animateNums() {
+  document.querySelectorAll('#content .stat .v[data-v]').forEach(el => {
+	const target = parseFloat(el.dataset.v) || 0;
+	if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+	  el.textContent = '¥' + fmtMoney(target); return;
+	}
+	const dur = 650, t0 = performance.now();
+	const step = now => {
+	  const p = Math.min((now - t0) / dur, 1);
+	  const eased = 1 - Math.pow(1 - p, 3);
+	  el.textContent = '¥' + fmtMoney(target * eased);
+	  if (p < 1) requestAnimationFrame(step);
+	};
+	requestAnimationFrame(step);
+  });
+}
+function openAbout() {
+  openModal('关于', `
+	<div class="about-title">${esc(DB.settings.class_name)}</div>
+	<div class="about-sub">班费公示平台（测试版）</div>
+	<div class="about-section">
+	  <div class="about-row"><span class="lbl">版本</span><span class="val">${APP_VERSION}</span></div>
+	  <div class="about-row"><span class="lbl">最近更新</span><span class="val">${APP_DATE}</span></div>
+	  <div class="about-row"><span class="lbl">了解更多</span><span class="val"><a href="https://github.com/starryeeeeee/class-fund-disclosure-platform" target="_blank">点击跳转至 GitHub 仓库</a></span></div>
+	</div>
+	<div style="display:flex;gap:10px;margin-top:20px;">
+	  <button class="btn btn-primary btn-block" onclick="closeModal()">我知道了</button>
+	</div>
+  `);
+}
+
+function render() {
+  const navBack = document.getElementById('navBack');
+  const navLabel = document.getElementById('navBackLabel');
+  const isHome = state.view === 'home';
+
+  if (state.user && state.view === 'main') {
+	navBack.classList.remove('hidden');
+	navLabel.textContent = '退出';
+	const svg = navBack.querySelector('svg');
+	if (svg) svg.style.display = 'none';
+  } else if (!isHome) {
+	navBack.classList.remove('hidden');
+	navLabel.textContent = '返回';
+	const svg = navBack.querySelector('svg');
+	if (svg) svg.style.display = 'block';
+  } else {
+	navBack.classList.add('hidden');
+  }
+
+  const fab = document.getElementById('toolFab');
+  if (fab) fab.classList.toggle('hidden', isHome);
+  if (isHome) closeToolFab();
+
+  let title = '班费公示平台';
+  if (state.view === 'home') title = '班费公示平台';
+  else if (state.view === 'main') {
+	if (isVisitor()) title = '访客主页';
+	else if (isAdmin()) title = '总管理员主页';
+	else if (isKeeper()) title = '生活委员主页';
+	else if (isLoggedIn()) title = '班级成员主页';
+	else title = '访客主页';
+  } else if (state.view === 'records') title = '全部流水';
+  else if (state.view === 'edit') title = state.editingId ? '修改记录' : '新增记录';
+  else if (state.view === 'admin') title = '管理后台';
+  else if (state.view === 'semester') title = '学期管理';
+  else if (state.view === 'account') title = '账号管理';
+  else if (state.view === 'notice') title = '公告与班级名';
+  else if (state.view === 'log') title = '日志';
+  else if (state.view === 'inbox') title = isAdmin() ? '审批中心' : '我的信箱';
+  else if (state.view === 'feedback') title = '我要反馈';
+  document.getElementById('navTitle').textContent = title;
+
+  const isDarkMode = document.body.classList.contains('dark-mode');
+  let right = `
+	<label class="theme-switch" aria-label="切换昼夜模式">
+	  <input type="checkbox" class="theme-switch-input" ${isDarkMode ? 'checked' : ''} onchange="toggleTheme()">
+	  <svg viewBox="0 0 69.667 44" xmlns="http://www.w3.org/2000/svg">
+		<g transform="translate(3.5 3.5)">
+		  <g transform="matrix(1, 0, 0, 1, -3.5, -3.5)" filter="url(#container)">
+			<rect id="container" width="60.667" height="35" rx="17.5" transform="translate(3.5 3.5)" fill="#83cbd8"/>
+		  </g>
+		  <g id="button" transform="translate(2.333 2.333)">
+			<g id="sun">
+			  <g transform="matrix(1, 0, 0, 1, -5.83, -5.83)" filter="url(#sun-outer)">
+				<circle cx="15.167" cy="15.167" r="15.167" transform="translate(5.83 5.83)" fill="#f8e664"/>
+			  </g>
+			  <g transform="matrix(1, 0, 0, 1, -5.83, -5.83)" filter="url(#sun)">
+				<path d="M11.667,0A11.667,11.667,0,1,1,0,11.667,11.667,11.667,0,0,1,11.667,0Z" transform="translate(9.33 9.33)" fill="rgba(246,254,247,0.29)"/>
+			  </g>
+			  <circle cx="7" cy="7" r="7" transform="translate(8.167 8.167)" fill="#fcf4b9"/>
+			</g>
+			<g id="moon">
+			  <g transform="matrix(1, 0, 0, 1, -31.5, -5.83)" filter="url(#moon)">
+				<circle cx="15.167" cy="15.167" r="15.167" transform="translate(31.5 5.83)" fill="#cce6ee"/>
+			  </g>
+			  <g id="patches" transform="translate(-24.415 -1.009)" fill="#a6cad0">
+				<circle cx="2" cy="2" r="2" transform="translate(43.009 4.496)"/>
+				<circle cx="2" cy="2" r="2" transform="translate(39.366 17.952)"/>
+				<circle cx="1" cy="1" r="1" transform="translate(33.016 8.044)"/>
+				<circle cx="1" cy="1" r="1" transform="translate(51.081 18.888)"/>
+				<circle cx="1" cy="1" r="1" transform="translate(33.016 22.503)"/>
+				<circle cx="1.5" cy="1.5" r="1.5" transform="translate(50.081 10.53)"/>
+			  </g>
+			</g>
+		  </g>
+		  <g transform="matrix(1, 0, 0, 1, -3.5, -3.5)" filter="url(#cloud)">
+			<path id="cloud" d="M3512.81,173.815a4.463,4.463,0,0,1,2.243.62.95.95,0,0,1,.72-1.281,4.852,4.852,0,0,1,2.623.519c.034.02-.5-1.968.281-2.716a2.117,2.117,0,0,1,2.829-.274,1.821,1.821,0,0,1,.854,1.858c.063.037,2.594-.049,3.285,1.273s-.865,2.544-.807,2.626a12.192,12.192,0,0,1,2.278.892c.553.448,1.106,1.992-1.62,2.927a7.742,7.742,0,0,1-3.762-.3c-1.28-.49-1.181-2.65-1.137-2.624s-1.417,2.2-2.623,2.2a4.172,4.172,0,0,1-2.394-1.206,3.825,3.825,0,0,1-2.771.774c-3.429-.46-2.333-3.267-2.2-3.55A3.721,3.721,0,0,1,3512.81,173.815Z" transform="translate(-3466.47 -160.94)" fill="#fff"/>
+		  </g>
+		  <g id="stars" transform="translate(3.585 1.325)" fill="#def8ff">
+			<path d="M.774,0,.566.559,0,.539.458.933.25,1.492l.485-.361.458.394L1.024.953,1.509.592.943.572Z" transform="matrix(-1, 0.017, -0.017, -1, 24.231, 3.055)"/>
+			<path d="M1.341.529.836.472.736,0,.505.46,0,.4.4.729l-.231.46L.605.932l.4.326L.9.786Z" transform="matrix(-0.777, 0.629, -0.629, -0.777, 23.185, 12.358)"/>
+			<path d="M.015,1.065.475.9l.285.365L.766.772l.46-.164L.745.494.751,0,.481.407,0,.293.285.658Z" transform="matrix(0.438, 0.899, -0.899, 0.438, 23.177, 29.735)"/>
+			<path d="M1.161,1.6,1.059,1,1.574.722.962.607.86,0,.613.572,0,.457.446.881.2,1.454l.516-.274Z" transform="translate(12.677 0.388) rotate(104)"/>
+			<path d="M.873,1.648l.114-.62L1.579.945,1.03.62,1.144,0,.706.464.157.139.438.7,0,1.167l.592-.083Z" transform="matrix(-0.07, 0.998, -0.998, -0.07, 11.066, 15.457)"/>
+			<path d="M.593,0,.638.724,0,.982l.7.211.045.724.36-.64.7.211L1.342.935,1.7.294,1.063.552Z" transform="translate(8.326 28.061) rotate(11)"/>
+			<path d="M.816,0,.5.455,0,.311.323.767l-.312.455.516-.215.323.456L.827.911,1.343.7.839.552Z" transform="translate(5.012 5.962) rotate(172)"/>
+			<path d="M1.261,0,.774.571.114.3.487.967,0,1.538.728,1.32l.372.662.047-.749.728-.218L1.215.749Z" transform="translate(2.218 14.616) rotate(169)"/>
+		  </g>
+		</g>
+	  </svg>
+	</label>
+  `;
+  document.getElementById('navRight').innerHTML = right;
+
+  const V = { home: vwHome, main: vwMain, records: vwRecords, edit: vwEdit, admin: vwAdmin, semester: vwSemester, account: vwAccount, notice: vwNotice, log: vwLog, inbox: vwInbox, feedback: vwFeedback };
+  const html = (V[state.view] || vwHome)();
+
+  const oldContent = document.getElementById('content');
+  const newContent = document.createElement('div');
+  newContent.id = 'content';
+  newContent.className = 'content-enter';
+  newContent.innerHTML = html;
+  oldContent.parentNode.replaceChild(newContent, oldContent);
+
+  window.scrollTo(0, 0);
+  updateRedDots();
+  requestAnimationFrame(() => {
+	requestAnimationFrame(() => {
+	  newContent.classList.add('active');
+	  animateNums();
+	});
+  });
+}
+
+function handleNavLeft() {
+  if (state.user && state.view === 'main') { logout(); return; }
+  back();
+}
+async function logout() {
+  try { await sb.auth.signOut(); } catch (e) { console.warn('登出失败:', e); }
+  state.user = null;
+  state.history = ['home'];
+  toast('已退出登录', 'info');
+  go('home', false);
+}
+
+function vwHome() {
+  const isLoggedInUser = !!state.user;
+  return `
+  <div class="home-wrap">
+	<div class="logo"><img src="logo.gif" alt="班级Logo" onerror="this.style.display='none'"></div>
+	<div class="home-title">${esc(DB.settings.class_name)} 班费公示平台</div>
+	<div class="home-desc">随时查看班费流向📋🤩公开透明</div>
+	<div class="login-form">
+	  <p>
+		<svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor">
+		  <path d="M9.6 4C5.4 6.1 3 9.6 3 14.2c0 3.2 2.1 5.8 5.1 5.8 2.6 0 4.5-2 4.5-4.5 0-2.4-1.8-4.3-4.2-4.3-.4 0-.9.1-1 .1.3-2.4 2.4-5.1 4.6-6.3L9.6 4zm10.4 0c-4.2 2.1-6.6 5.6-6.6 10.2 0 3.2 2.1 5.8 5.1 5.8 2.6 0 4.5-2 4.5-4.5 0-2.4-1.8-4.3-4.2-4.3-.4 0-.9.1-1 .1.3-2.4 2.4-5.1 4.6-6.3L20 4z"/>
+		</svg>
+		${isLoggedInUser ? `你好，${esc(state.user.name)}` : '欢迎回来'}<span>${isLoggedInUser ? '你已登录' : '请选择登录方式'}</span>
+	  </p>
+	  ${isLoggedInUser ? `
+		<button class="lf-btn" type="button" onclick="go('main', false)">进入主页</button>
+		<button class="lf-btn" type="button" onclick="logout()">退出登录</button>
+	  ` : `
+		<button class="lf-btn" type="button" onclick="openLogin()">管理员登录</button>
+		<button class="lf-btn" type="button" onclick="openLogin()">班级成员登录</button>
+		<div class="lf-sep"><div></div><span>OR</span><div></div></div>
+		<button class="lf-btn" type="button" onclick="enterBrowse()">以访客身份访问</button>
+	  `}
+	</div>
+  </div>
+  <div class="foot">
+	<div>如发现bug或安全问题欢迎指出🤓不胜感激😘</div>
+	<div class="foot-actions"><a onclick="openAbout()">关于</a></div>
+  </div>`;
+}
+
+function noticeCard() {
+  if (!DB.settings.notice) return '';
+  return `
+	<div class="sticky-notice-wrap">
+	  <span class="tape"></span>
+	  <div class="sticky-notice">
+		<div class="ns-content">
+		  <div class="ns-label">通知</div>
+		  <div class="ns-text">${esc(DB.settings.notice).replace(/\n/g, '<br>')}</div>
+		  ${state.noticeAck ? '' : `<div class="ns-ack"><button onclick="state.noticeAck=true;render()">我已知悉</button></div>`}
+		</div>
+	  </div>
+	</div>
+  `;
+}
+
+function statsHTML(semId) {
+  const s = stats(semId);
+  return `<div class="stats">
+  <div class="stat balance"><div class="k">当前总余额</div><div class="v ${s.balance >= 0 ? 'is-pos' : 'is-neg'}" data-v="${s.balance}">¥${fmtMoney(s.balance)}</div></div>
+  <div class="stat income"><div class="k">本学期总收入</div><div class="v" data-v="${s.income}">¥${fmtMoney(s.income)}</div></div>
+  <div class="stat expense"><div class="k">本学期总支出</div><div class="v" data-v="${s.expense}">¥${fmtMoney(s.expense)}</div></div>
+  </div><div class="history">历史总账（全部学期累计）：¥${fmtMoney(historyTotal())}</div>`;
+}
+
+function semSelect() {
+  const opts = DB.semesters.map(s => `<option value="${s.id}" ${s.id === state.currentSemesterId ? 'selected' : ''}>${esc(s.name)}</option>`).join('');
+  return `<div class="sem-switch"><label>当前学期</label><select class="sem" onchange="switchSem(this.value)">${opts}</select></div>`;
+}
+
+function flowHTML(r, idx) {
+  const d = r.date ? r.date.slice(8) : '--', m = r.date ? r.date.slice(5, 7) : '--';
+  const sign = r.type === 'income' ? '+' : '-';
+  const invTag = r.invoice ? `<span class="tag inv">发票</span>` : '';
+  const pend = r.pending_delete ? `<span class="tag pending">⏳ 待删除</span>` : '';
+  let ops = '';
+  if (!r.pending_delete && canManageFlow()) {
+	ops += `<button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();editRecord('${r.id}')">改</button>`;
+	if (isAdmin()) {
+	  ops += `<button class="btn btn-red btn-xs" onclick="event.stopPropagation();adminDelete('${r.id}', event)">删</button>`;
+	} else if (isKeeper()) {
+	  ops += `<button class="btn btn-red btn-xs" onclick="event.stopPropagation();applyDelete('${r.id}')">删除</button>`;
+	}
+  }
+  const tap = r.invoice ? `onclick="openImg('${r.id}')"` : (isVisitor() ? '' : `onclick="editRecord('${r.id}')"`);
+  const delay = typeof idx === 'number' ? ` style="animation-delay:${Math.min(idx, 14) * 28}ms"` : '';
+  return `<div class="flow" ${tap}${delay}>
+  <div class="date"><span class="d">${d}</span><span style="font-size:9px;display:block;color:var(--ink-soft)">${m}月</span></div>
+  <div class="body"><div class="purpose">${esc(r.purpose)}</div>
+	<div class="meta">${invTag}${pend}经手：${esc(r.handler)}</div></div>
+  <div class="amt ${r.type}">${sign}¥${fmtMoney(r.amount)}</div>
+  ${ops ? `<div class="ops">${ops}</div>` : ''}
+  </div>`;
+}
+
+function pencilDivider() {
+  return `
+	<div class="pencil-divider">
+	  <svg class="arrows" viewBox="0 0 128 14" xmlns="http://www.w3.org/2000/svg">
+		<path d="M 84 0 L 116 0 L 128 7 L 116 14 L 84 14 Z" fill="var(--pencil-4)"/>
+		<path d="M 56 0 L 88 0 L 100 7 L 88 14 L 56 14 Z" fill="var(--pencil-3)"/>
+		<path d="M 28 0 L 60 0 L 72 7 L 60 14 L 28 14 Z" fill="var(--pencil-2)"/>
+		<path d="M 0 0 L 32 0 L 44 7 L 32 14 L 0 14 Z" fill="var(--pencil-1)"/>
+	  </svg>
+	  <div class="dash"></div>
+	</div>
+  `;
+}
+
+function renderPublicFeedbacks() {
+  const publicFbs = DB.feedbacks.filter(f => f.status === 'public').sort((a, b) => b.created_at - a.created_at);
+  if (!publicFbs.length) return '';
+  const feedbackTab = isAdmin() ? 'feedbacks' : 'myfeedbacks';
+  return `
+	<div class="folder" style="margin-bottom:0;">
+	  <div class="folder-tab">公开反馈</div>
+	  <div class="folder-strip"></div>
+	  <div class="folder-body">
+		${publicFbs.map(f => `
+		  <div class="feedback-item">
+			<div class="header"><span>${esc(f.submitter_name)}</span><span style="font-size:12px;color:var(--ink-faint)">${new Date(f.created_at).toLocaleString('zh-CN')}</span></div>
+			<div class="content">${esc(f.content)}</div>
+			${f.admin_reply ? `<div class="reply">💬 ${esc(f.admin_reply)}</div>` : ''}
+		  </div>
+		`).join('')}
+		${isLoggedIn() ? `<div class="folder-foot" onclick="state.inboxTab = '${feedbackTab}'; go('inbox')">📬 查看我的反馈 ›</div>` : ''}
+	  </div>
+	</div>
+  `;
+}
+
+function vwMain() {
+  const sem = curSem();
+  if (!sem) {
+	if (isAdmin()) {
+	  return `<div class="mt">还没有学期数据</div><div class="sub">请先到管理后台创建一个学期</div>
+			<div class="func" style="margin-top:18px"><button class="btn btn-blue btn-block" onclick="go('admin')">⚙ 进入管理后台</button></div>`;
+	}
+	return `<div class="mt">还没有学期数据</div><div class="sub">请联系管理员在后台添加学期</div>`;
+  }
+  let func = '';
+  if (canManageFlow()) {
+	const pending = DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length;
+	const myAppsLabel = isAdmin() ? '审批申请' : '我的申请';
+	func = `<div class="func">
+	<button class="action-btn teal" onclick="newRecord()">
+	  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+	  新增记录
+	</button>
+	<button class="action-btn sunflower" onclick="state.inboxTab = 'applications'; go('inbox')">
+	  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>
+	  ${myAppsLabel}${pending ? ` (${pending})` : ''}
+	</button>
+	</div>`;
+	if (isAdmin()) {
+	  func += `<div class="func" style="margin-top:8px"><button class="btn btn-blue" onclick="go('admin')">⚙ 管理后台</button></div>`;
+	}
+  }
+  const recent = recordsOf(sem.id).filter(r => !r.pending_delete).slice()
+	.sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.created_at || 0) - (a.created_at || 0))
+	.slice(0, 6);
+  const feedbackSection = renderPublicFeedbacks();
+
+  let feedbackBtn = '';
+  if (!isAdmin()) {
+	feedbackBtn = `<div style="display:flex;justify-content:flex-end;margin:0 0 3px;"><button class="btn btn-feedback" onclick="go('feedback')">💬 我要反馈</button></div>`;
+  }
+
+  return `
+  <div class="mt">欢迎来到 <span class="cls">${esc(DB.settings.class_name)}</span> 班费公示平台</div>
+  ${noticeCard()}
+  ${func}
+  ${semSelect()}
+  ${statsHTML(sem.id)}
+
+  <div class="folder">
+	<div class="folder-tab">最近流水</div>
+	<div class="folder-strip"></div>
+	<div class="folder-body">
+	  <div class="flow-list">${(recent.length ? recent.map((r, i) => flowHTML(r, i)).join('') : emptyBox('🪙', '本学期暂无记录'))}</div>
+	</div>
+  </div>
+
+  <div class="action-row">
+	<button class="action-btn teal" onclick="go('records')">
+	  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3.5" cy="6" r="1"/><circle cx="3.5" cy="12" r="1"/><circle cx="3.5" cy="18" r="1"/></svg>
+	  查看全部
+	</button>
+	${isLoggedIn() ? `<button class="action-btn sunflower" onclick="openExportDialog()">
+	  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+	  导出数据
+	</button>` : ''}
+  </div>
+
+  ${pencilDivider()}
+
+  ${feedbackBtn}
+  ${feedbackSection}
+  `;
+}
+
+function vwRecords() {
+  const sem = curSem();
+  if (!sem) return emptyBox('📅', '暂无学期');
+  const months = Array.from(new Set(recordsOf(sem.id).map(r => monthOf(r.date)).filter(Boolean))).sort();
+  const f = state.filters;
+  const recs = getFilteredRecords();
+  const monthChips = `<span class="chip ${f.month === 'all' ? 'on' : ''}" onclick="setMonth('all')">全部月份</span>` +
+	months.map(m => `<span class="chip ${f.month === m ? 'on' : ''}" onclick="setMonth('${m}')">${m.slice(5)}月</span>`).join('');
+  return `
+  <div class="mt" style="font-size:16px;margin-bottom:14px">全部流水明细</div>
+  ${semSelect()}
+  ${statsHTML(sem.id)}
+
+  <div class="filters">
+	<div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+	<input class="field" id="kw" placeholder="搜索用途关键词…" value="${esc(f.keyword)}" oninput="f_keyword(this.value)"></div>
+	<div class="filter-row"><span class="chip ${f.type === 'all' ? 'on' : ''}" onclick="setType('all')">全部</span><span class="chip ${f.type === 'income' ? 'on' : ''}" onclick="setType('income')">仅收入</span><span class="chip ${f.type === 'expense' ? 'on' : ''}" onclick="setType('expense')">仅支出</span></div>
+	<div class="filter-row">${monthChips}</div>
+	<div class="filter-row"><input class="field" type="date" id="ds" value="${f.start}" onchange="f_start(this.value)"><span style="color:var(--ink-soft)">至</span><input class="field" type="date" id="de" value="${f.end}" onchange="f_end(this.value)"><button class="btn btn-ghost btn-sm" onclick="resetDate()">清除</button></div>
+  </div>
+
+  <div class="folder">
+	<div class="folder-tab">全部流水</div>
+	<div class="folder-strip"></div>
+	<div class="folder-body" id="recordsListCard">
+	  <div class="flow-list">${recs.map((r, i) => flowHTML(r, i)).join('')}</div>
+	  ${recs.length ? '' : emptyBox('🔍', '没有符合条件的记录')}
+	</div>
+  </div>`;
+}
+
+function openExportDialog() {
+  if (!isLoggedIn()) { toast('请先登录后再导出', 'warn'); return; }
+  openModal('导出数据', `
+	<div class="export-options">
+	  <button class="export-opt" onclick="exportRecords('html'); closeModal();">
+		<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+		<div class="name">下载 HTML</div>
+	  </button>
+	  <button class="export-opt" onclick="exportRecords('md'); closeModal();">
+		<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></div>
+		<div class="name">下载 Markdown</div>
+	  </button>
+	  <button class="export-opt" onclick="exportRecords('pdf'); closeModal();">
+		<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></div>
+		<div class="name">下载 PDF</div>
+	  </button>
+	</div>
+  `, 'm-export');
+}
+
+function groupRecordsByMonth(recs) {
+  const map = {};
+  recs.forEach(r => {
+	const m = (r.date || '').slice(0, 7) || '未知';
+	if (!map[m]) map[m] = [];
+	map[m].push(r);
+  });
+  return Object.keys(map).sort((a, b) => b.localeCompare(a)).map(m => ({ month: m, records: map[m] }));
+}
+function fmtMonthLabel(m) {
+  if (m === '未知') return '未知月份';
+  const y = m.slice(0, 4), mo = Number(m.slice(5));
+  return `${y}年${mo}月`;
+}
+
+function exportRecords(format) {
+  const sem = curSem();
+  if (!sem) { toast('没有学期数据', 'warn'); return; }
+  const recs = getFilteredRecords().slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  if (!recs.length) { toast('当前没有可导出的记录', 'warn'); return; }
+
+  const semStats = stats(sem.id);
+  const className = DB.settings.class_name;
+  const exportTime = new Date().toLocaleString('zh-CN');
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const groups = groupRecordsByMonth(recs);
+  const shouldGroup = groups.length > 1;
+
+  if (format === 'html') {
+	const rows = recs.map(r => `
+	  <tr>
+		<td>${r.date || ''}</td>
+		<td>${esc(r.purpose)}</td>
+		<td><span style="color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '收入' : '支出'}</span></td>
+		<td style="text-align:right;font-weight:600;color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};font-variant-numeric:tabular-nums;">${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</td>
+		<td>${esc(r.handler)}</td>
+	  </tr>
+	`).join('');
+	const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${esc(className)} · ${esc(sem.name)} 流水</title><style>
+	  body{font-family:-apple-system,"PingFang SC",sans-serif;background:#faf8f3;padding:30px 20px;max-width:900px;margin:0 auto;color:#2b2a27;}
+	  h1{font-size:22px;color:#F0B23E;margin:0 0 4px;}
+	  .sub{color:#938d80;font-size:14px;margin-bottom:20px;border-bottom:1px solid #eae3d6;padding-bottom:12px;}
+	  .total-box{background:#fff;border-radius:12px;padding:16px 20px;margin:16px 0;border:1px solid #eae3d6;display:flex;justify-content:space-around;text-align:center;}
+	  .total-box .label{font-size:12px;color:#938d80;}
+	  .total-box .value{font-size:20px;font-weight:700;}
+	  .total-box .balance .value{color:#F0B23E;}
+	  .total-box .income .value{color:#5E8F71;}
+	  .total-box .expense .value{color:#B5694A;}
+	  table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
+	  th{background:#f5f1e9;font-weight:600;font-size:13px;padding:10px 12px;text-align:left;}
+	  td{padding:10px 12px;border-bottom:1px solid #f0ebe2;font-size:13px;}
+	  .footer{text-align:center;color:#c9c2b4;font-size:12px;margin-top:30px;border-top:1px solid #eae3d6;padding-top:16px;}
+	</style></head><body>
+	  <h1>📚 ${esc(className)} · ${esc(sem.name)}</h1>
+	  <div class="sub">📅 导出时间：${exportTime} · 共 ${recs.length} 条记录</div>
+	  <div class="total-box">
+		<div class="balance"><div class="label">当前余额</div><div class="value">¥${fmtMoney(semStats.balance)}</div></div>
+		<div class="income"><div class="label">总收入</div><div class="value">¥${fmtMoney(semStats.income)}</div></div>
+		<div class="expense"><div class="label">总支出</div><div class="value">¥${fmtMoney(semStats.expense)}</div></div>
+	  </div>
+	  <table><thead><tr><th>日期</th><th>用途</th><th>类型</th><th style="text-align:right;">金额</th><th>经手人</th></tr></thead>
+	  <tbody>${rows}</tbody></table>
+	  <div class="footer">由班费公示平台导出 · 数据来源于云端</div>
+	</body></html>`;
+	downloadFile(html, `班费流水_${sem.name}_${dateStr}.html`, 'text/html');
+	toast('HTML 已导出', 'success');
+	return;
+  }
+
+  if (format === 'md') {
+	const recCount = recs.length;
+	const dates = recs.map(r => r.date).filter(Boolean).sort();
+	const minDate = dates[0] || '';
+	const maxDate = dates[dates.length - 1] || '';
+	const maxIncomeRec = recs.filter(r => r.type === 'income').reduce((m, r) => Number(r.amount) > Number(m ? m.amount : 0) ? r : m, null);
+	const maxExpenseRec = recs.filter(r => r.type === 'expense').reduce((m, r) => Number(r.amount) > Number(m ? m.amount : 0) ? r : m, null);
+
+	let md = `# ${className} · ${sem.name} 班费流水\n\n`;
+	md += `> 导出时间：${exportTime}\n`;
+	md += `> 共 ${recCount} 条记录 · 时间范围 ${minDate || '—'} 至 ${maxDate || '—'}\n\n`;
+	md += `## 📊 概览\n\n`;
+	md += `| 项目 | 金额 |\n| --- | ---: |\n`;
+	md += `| 当前余额 | ¥${fmtMoney(semStats.balance)} |\n`;
+	md += `| 总收入 | ¥${fmtMoney(semStats.income)} |\n`;
+	md += `| 总支出 | ¥${fmtMoney(semStats.expense)} |\n`;
+	if (maxIncomeRec) md += `| 最大单笔收入 | ¥${fmtMoney(maxIncomeRec.amount)}（${mdEscape(truncate(maxIncomeRec.purpose, 20))}） |\n`;
+	if (maxExpenseRec) md += `| 最大单笔支出 | ¥${fmtMoney(maxExpenseRec.amount)}（${mdEscape(truncate(maxExpenseRec.purpose, 20))}） |\n`;
+	md += `\n`;
+
+	const writeTable = (list) => {
+	  let t = `| 日期 | 用途 | 类型 | 金额 | 经手人 |\n`;
+	  t += `| --- | --- | --- | ---: | --- |\n`;
+	  list.forEach(r => {
+		const sign = r.type === 'income' ? '+' : '-';
+		t += `| ${r.date || ''} | ${mdEscape(truncate(r.purpose, 40))} | ${r.type === 'income' ? '收入' : '支出'} | ${sign}¥${fmtMoney(r.amount)} | ${mdEscape(r.handler || '')} |\n`;
+	  });
+	  return t;
+	};
+
+	if (shouldGroup) {
+	  groups.forEach(g => {
+		md += `## 📅 ${fmtMonthLabel(g.month)}\n\n`;
+		md += writeTable(g.records);
+		md += `\n`;
+	  });
+	} else {
+	  md += `## 📋 流水明细\n\n`;
+	  md += writeTable(recs);
+	  md += `\n`;
+	}
+	md += `---\n\n*本文档由班费公示平台 ${APP_VERSION} 生成*\n`;
+	downloadFile(md, `班费流水_${sem.name}_${dateStr}.md`, 'text/markdown');
+	toast('Markdown 已导出', 'success');
+	return;
+  }
+
+  if (format === 'pdf') {
+	const renderTable = (list) => {
+	  const rows = list.map(r => `
+		<tr>
+		  <td>${r.date || ''}</td>
+		  <td>${esc(r.purpose)}</td>
+		  <td>${r.type === 'income' ? '收入' : '支出'}</td>
+		  <td class="amt-cell" style="color:${r.type === 'income' ? '#5E8F71' : '#B5694A'};">${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</td>
+		  <td>${esc(r.handler)}</td>
+		</tr>
+	  `).join('');
+	  return `<table>
+		<thead><tr><th style="width:12%;">日期</th><th style="width:38%;">用途</th><th style="width:10%;">类型</th><th style="width:20%;" class="amt-head">金额</th><th style="width:20%;">经手人</th></tr></thead>
+		<tbody>${rows}</tbody>
+	  </table>`;
+	};
+
+	let bodyHtml = '';
+	if (shouldGroup) {
+	  groups.forEach(g => {
+		bodyHtml += `<section class="month-section">
+		  <h3 class="month-title">📅 ${fmtMonthLabel(g.month)}</h3>
+		  ${renderTable(g.records)}
+		</section>`;
+	  });
+	} else {
+	  bodyHtml = renderTable(recs);
+	}
+
+	const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${esc(className)} · ${esc(sem.name)} 流水</title>
+	  <style>
+		*{margin:0;padding:0;box-sizing:border-box}
+		@page{ margin: 15mm 12mm; }
+		body{font-family:-apple-system,"PingFang SC",sans-serif;color:#2b2a27;font-size:13px;line-height:1.6;}
+		.cover{border-bottom:2px solid #F0B23E;padding-bottom:16px;margin-bottom:20px;}
+		.cover h1{font-size:24px;color:#C1633E;margin-bottom:4px;font-weight:700;}
+		.cover .sem-name{font-size:15px;color:#5C7C93;margin-bottom:8px;font-weight:500;}
+		.cover .meta{font-size:12px;color:#938d80;}
+		.stats-row{display:flex;gap:12px;margin-bottom:24px;page-break-inside:avoid;}
+		.stats-row .sc{flex:1;background:#FBF6EF;border:1px solid #EAE3D6;border-radius:10px;padding:14px 12px;text-align:center;}
+		.stats-row .sc .label{font-size:11.5px;color:#938d80;margin-bottom:4px;letter-spacing:.02em;}
+		.stats-row .sc .value{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
+		.stats-row .sc.balance .value{color:#F0B23E;}
+		.stats-row .sc.income .value{color:#5E8F71;}
+		.stats-row .sc.expense .value{color:#B5694A;}
+		.month-section{margin-bottom:22px;}
+		.month-title{font-size:14px;font-weight:700;color:#8A6A22;margin-bottom:8px;padding-left:8px;border-left:3px solid #F0B23E;page-break-after:avoid;}
+		table{width:100%;border-collapse:collapse;font-size:12px;page-break-inside:auto;}
+		thead{display:table-header-group;}
+		tr{page-break-inside:avoid;}
+		th{background:#3d3934;color:#fff;padding:9px 10px;text-align:left;font-weight:600;font-size:12px;border:1px solid #2b2a27;}
+		th.amt-head{text-align:right;}
+		td{padding:8px 10px;border:1px solid #e0d8c8;font-size:12px;vertical-align:top;word-break:break-word;}
+		td.amt-cell{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;}
+		tr:nth-child(even) td{background:#FAF8F3;}
+		.footer{text-align:center;color:#c9c2b4;font-size:11px;margin-top:24px;padding-top:12px;border-top:1px solid #eae3d6;}
+		@media print{ body{font-size:12px;} .stats-row{page-break-inside:avoid;} .month-section{page-break-inside:auto;} }
+	  </style></head><body>
+	  <div class="cover">
+		<h1>📚 ${esc(className)}</h1>
+		<div class="sem-name">${esc(sem.name)} 班费流水明细</div>
+		<div class="meta">导出时间：${exportTime}　·　共 ${recs.length} 条记录</div>
+	  </div>
+	  <div class="stats-row">
+		<div class="sc balance"><div class="label">当前余额</div><div class="value">¥${fmtMoney(semStats.balance)}</div></div>
+		<div class="sc income"><div class="label">总收入</div><div class="value">¥${fmtMoney(semStats.income)}</div></div>
+		<div class="sc expense"><div class="label">总支出</div><div class="value">¥${fmtMoney(semStats.expense)}</div></div>
+	  </div>
+	  ${bodyHtml}
+	  <div class="footer">由班费公示平台导出 · 数据来源于云端 · ${APP_VERSION}</div>
+	  </body></html>`;
+
+	const iframe = document.createElement('iframe');
+	iframe.style.cssText = 'position:fixed;left:-9999px;top:0;width:0;height:0;border:0;visibility:hidden;';
+	iframe.setAttribute('aria-hidden', 'true');
+	document.body.appendChild(iframe);
+
+	let printed = false;
+	const doPrint = () => {
+	  if (printed) return;
+	  printed = true;
+	  try {
+		iframe.contentWindow.focus();
+		iframe.contentWindow.print();
+		toast('已打开打印窗口，请选择"另存为 PDF"', 'info', 3500);
+	  } catch (err) {
+		try {
+		  const w = window.open('', '_blank');
+		  if (w) {
+			w.document.open(); w.document.write(htmlContent); w.document.close();
+			setTimeout(() => { try { w.focus(); w.print(); } catch (e) {} }, 300);
+			toast('已在新窗口打开，请选择"另存为 PDF"', 'info', 3500);
+		  } else { toast('请允许弹出窗口，然后重试', 'warn'); }
+		} catch (e2) { toast('导出失败：' + e2.message, 'error'); }
+	  }
+	  setTimeout(() => { if (iframe.parentNode) iframe.remove(); }, 1500);
+	};
+
+	iframe.onload = () => setTimeout(doPrint, 80);
+	try {
+	  const doc = iframe.contentWindow.document;
+	  doc.open(); doc.write(htmlContent); doc.close();
+	} catch (e) { console.warn('iframe 写入失败:', e); }
+	setTimeout(doPrint, 900);
+	return;
+  }
+}
+
+function downloadFile(content, filename, mime) {
+  const blob = new Blob([content], { type: (mime || 'text/plain') + ';charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+function getFilteredRecords() {
+  const sem = curSem();
+  if (!sem) return [];
+  const f = state.filters;
+  let recs = recordsOf(sem.id);
+  if (f.type !== 'all') recs = recs.filter(r => r.type === f.type);
+  if (f.month !== 'all') recs = recs.filter(r => monthOf(r.date) === f.month);
+  if (f.keyword) recs = recs.filter(r => (r.purpose || '').includes(f.keyword));
+  if (f.start) recs = recs.filter(r => r.date >= f.start);
+  if (f.end) recs = recs.filter(r => r.date <= f.end);
+  return recs.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+}
+
+function f_keyword(v) { state.filters.keyword = v; refreshRecords(); }
+function f_start(v) { state.filters.start = v; refreshRecords(); }
+function f_end(v) { state.filters.end = v; refreshRecords(); }
+function setType(t) { state.filters.type = t; refreshRecords(); }
+function setMonth(m) { state.filters.month = m; refreshRecords(); }
+function resetDate() { state.filters.start = ''; state.filters.end = ''; refreshRecords(); }
+function refreshRecords() {
+  if (state.view !== 'records') return;
+  const card = document.getElementById('recordsListCard');
+  if (!card) { render(); return; }
+  const recs = getFilteredRecords();
+  card.innerHTML = `<div class="flow-list">${recs.map((r, i) => flowHTML(r, i)).join('')}</div>${recs.length ? '' : emptyBox('🔍', '没有符合条件的记录')}`;
+}
+function switchSem(id) {
+  state.currentSemesterId = id;
+  localStorage.setItem('currentSemesterId', id);
+  state.filters = { type: 'all', month: 'all', keyword: '', start: '', end: '' };
+  render();
+}
+
+function vwFeedback() {
+  if (!isLoggedIn()) {
+	return `
+	  <div class="mt" style="font-size:16px">💬 我要反馈</div>
+	  <div class="card" style="margin-top:14px;text-align:center;">
+		<div style="font-size:36px;margin-bottom:10px;">🔐</div>
+		<div style="font-size:14px;color:var(--ink-soft);line-height:1.8;margin-bottom:18px;">反馈需要登录后才能提交<br>请先登录你的账号</div>
+		<button class="btn btn-primary btn-block" onclick="openLogin()">立即登录</button>
+		<button class="btn btn-ghost btn-block" style="margin-top:10px;" onclick="back()">返回</button>
+	  </div>
+	`;
+  }
+  let formHtml = `<div class="mt" style="font-size:16px">💬 我要反馈</div><div class="card" style="margin-top:14px">`;
+  formHtml += `<div style="font-size:14px;color:var(--ink-soft);margin-bottom:12px;">👤 ${esc(state.user.name)} (${esc(state.user.role)})</div>`;
+  formHtml += `
+	<div class="form-line"><label>反馈内容</label>
+	  <textarea class="field" id="fb_content" rows="4" placeholder="请描述你的问题或建议（不超过200字）" maxlength="200" oninput="const c=document.getElementById('fb_count'); if(c)c.textContent=this.value.length"></textarea>
+	  <div class="char-count" style="text-align:right;font-size:12px;color:var(--ink-soft);margin-top:4px;"><span id="fb_count">0</span>/200</div>
+	</div>
+	<div class="form-line">
+	  <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+		<input type="checkbox" id="fb_anon"> 匿名提交
+	  </label>
+	</div>
+	<div style="display:flex;gap:10px;margin-top:6px">
+	  <button class="btn btn-ghost btn-block" onclick="back()">取消</button>
+	  <button class="btn btn-primary btn-block" onclick="submitFeedback()">提交反馈</button>
+	</div>
+	</div>
+	<div style="font-size:13px;color:var(--ink-soft);text-align:center;margin-top:8px;">你的反馈会在管理员审核后公开显示</div>
+  `;
+  return formHtml;
+}
+
+async function submitFeedback() {
+  if (!isLoggedIn()) { toast('请先登录', 'warn'); return; }
+  const content = document.getElementById('fb_content').value.trim();
+  if (!content) { toast('请填写反馈内容', 'warn'); return; }
+  if (content.length > 200) { toast('反馈内容不能超过200字', 'warn'); return; }
+  const isAnon = document.getElementById('fb_anon') && document.getElementById('fb_anon').checked;
+  const submitter_name = isAnon ? '匿名' : state.user.name;
+  const feedback = {
+	id: uid(), content, submitter_name,
+	submitter_role: isAnon ? '匿名' : state.user.role,
+	submitter_id: state.user.studentId,
+	status: 'pending', admin_reply: '',
+	created_at: Date.now(), updated_at: Date.now()
+  };
+  if (!busyStart()) return;
+  try {
+	await apiPost('feedbacks', feedback);
+	DB.feedbacks.push(feedback);
+	toast('反馈已提交，感谢你的建议！', 'success');
+	back();
+  } catch (e) { toast('提交失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
+}
+
+function newRecord() {
+  state.editingId = null;
+  state._invUrl = null;
+  state._invDataUrl = null;
+  state._invLoading = false;
+  state._editFrom = state.view === 'records' ? 'records' : 'main';
+  go('edit');
+}
+function editRecord(id) {
+  state.editingId = id;
+  const sem = curSem();
+  const r = sem ? recordsOf(sem.id).find(x => x.id === id) : null;
+  state._invUrl = r ? (r.invoice || null) : null;
+  state._invDataUrl = null;
+  state._invLoading = false;
+  state._editFrom = state.view === 'records' ? 'records' : 'main';
+  go('edit');
+}
+
+function invoiceFieldHTML() {
+  if (state._invLoading) {
+	return `<div class="inv-loading">${LOADER_GRID_HTML}<span>正在压缩图片…</span></div>`;
+  }
+  const current = state._invDataUrl || state._invUrl;
+  if (current) {
+	const isNew = !!state._invDataUrl;
+	return `
+	  <div class="inv-preview">
+		<img src="${esc(safeImgSrc(current))}" alt="发票预览">
+		<button type="button" class="inv-remove" onclick="clearInvoiceField()" title="移除">×</button>
+	  </div>
+	  <div class="inv-meta">${isNew ? '📎 新发票已就绪，保存后生效' : '当前已有发票（点 × 可移除）'}</div>
+	`;
+  }
+  return `
+	<div class="inv-drop" onclick="document.getElementById('f_invoice').click()">
+	  <div class="inv-ico">📎</div>
+	  <div style="font-size:13px;font-weight:500;margin-top:4px;">点击上传发票 / 收据</div>
+	  <div class="inv-tip">可选 · 支持 JPG / PNG · 原图不超过 5MB</div>
+	</div>
+  `;
+}
+function renderInvoiceField() {
+  const box = document.getElementById('invPreview');
+  if (box) box.innerHTML = invoiceFieldHTML();
+}
+async function onInvoiceSelect(input) {
+  const f = input && input.files && input.files[0];
+  if (!f) return;
+  if (!f.type || !f.type.startsWith('image/')) { toast('请选择图片文件', 'warn'); input.value = ''; return; }
+  if (f.size > INVOICE_MAX_SIZE) { toast(`原图不能超过 ${(INVOICE_MAX_SIZE / 1024 / 1024).toFixed(0)}MB`, 'warn'); input.value = ''; return; }
+  state._invLoading = true;
+  renderInvoiceField();
+  try {
+	const dataUrl = await compressImage(f);
+	state._invDataUrl = dataUrl;
+  } catch (e) { toast('图片处理失败: ' + e.message, 'error'); input.value = ''; }
+  finally { state._invLoading = false; renderInvoiceField(); }
+}
+function clearInvoiceField() {
+  state._invDataUrl = null;
+  state._invUrl = null;
+  state._invLoading = false;
+  const inp = document.getElementById('f_invoice');
+  if (inp) inp.value = '';
+  renderInvoiceField();
+}
+
+function vwEdit() {
+  if (!canManageFlow()) { toast('当前身份无权限操作', 'warn'); go('main', false); return ''; }
+  const editing = !!state.editingId;
+  const sem = curSem();
+  const r = editing && sem ? recordsOf(sem.id).find(x => x.id === state.editingId) : null;
+  const today = new Date().toISOString().slice(0, 10);
+  return `
+  <div class="mt" style="font-size:16px">${editing ? '修改记录' : '新增记录'}</div>
+  <div class="card" style="margin-top:14px">
+	<div class="form-line"><label>交易日期</label><input class="field" id="f_date" type="date" value="${r ? r.date : today}"></div>
+	<div class="form-line"><label>收支类型</label>
+	<div class="radio-row">
+	  <label><input type="radio" name="tp" value="income" ${r ? (r.type === 'income' ? 'checked' : '') : 'checked'}> 收入</label>
+	  <label><input type="radio" name="tp" value="expense" ${r ? (r.type === 'expense' ? 'checked' : '') : ''}> 支出</label>
+	</div></div>
+	<div class="form-line"><label>用途或事由（必填）</label>
+	  <input class="field" id="f_purpose" maxlength="200" value="${r ? esc(r.purpose) : ''}" placeholder="如：班级活动物料">
+	  <div style="font-size:12px;color:var(--ink-soft);margin-top:2px;">不超过 200 个字符</div>
+	</div>
+	<div class="form-line"><label>金额（正数）</label>
+	  <input class="field" id="f_amount" type="number" min="0.01" max="999.99" step="0.01" value="${r ? r.amount : ''}" placeholder="0.00">
+	  <div style="font-size:12px;color:var(--ink-soft);margin-top:2px;">单笔不超过 ¥999.99</div>
+	</div>
+	<div class="form-line"><label>经手人</label><input class="field" id="f_handler" value="${r ? esc(r.handler) : ''}" placeholder="填写经手人"></div>
+	<div class="form-line">
+	  <label>发票 / 收据（可选）</label>
+	  <input type="file" id="f_invoice" accept="image/*" onchange="onInvoiceSelect(this)" style="display:none">
+	  <div id="invPreview">${invoiceFieldHTML()}</div>
+	</div>
+	<div style="display:flex;gap:10px;margin-top:6px">
+	<button class="btn btn-ghost btn-block" onclick="back()">取消</button>
+	<button class="btn btn-primary btn-block" id="saveRecordBtn" onclick="saveRecord()">保存</button>
+	</div>
+  </div>`;
+}
+
+async function saveRecord() {
+  const purpose = document.getElementById('f_purpose').value.trim();
+  const amount = parseFloat(document.getElementById('f_amount').value);
+  const handler = document.getElementById('f_handler').value.trim();
+  const date = document.getElementById('f_date').value;
+  const type = document.querySelector('input[name=tp]:checked').value;
+
+  if (!date) { toast('请选择交易日期', 'warn'); return; }
+  if (!purpose) { toast('请填写用途或事由', 'warn'); return; }
+  if (purpose.length > 200) { toast('用途描述不能超过200个字符', 'warn'); return; }
+  if (isNaN(amount) || amount <= 0) { toast('请填写正确的金额', 'warn'); return; }
+  if (amount > 999.99) { toast('单笔金额不能超过999.99元', 'warn'); return; }
+
+  const sem = curSem();
+  if (!sem) { toast('没有可用的学期，请先添加学期', 'warn'); return; }
+  const semester_id = sem.id;
+
+  if (!busyStart()) return;
+  const btn = document.getElementById('saveRecordBtn');
+  try {
+	await runWithLoader(btn, LOADER_BARS_HTML + '<span>保存中…</span>', async () => {
+	  const finalInvoice = state._invDataUrl || state._invUrl || null;
+	  if (state.editingId) {
+		const old = DB.records.find(r => r.id === state.editingId);
+		if (!old) throw new Error('记录不存在');
+		const updated = { ...old, date, type, purpose, amount, handler, invoice: finalInvoice, updated_at: Date.now() };
+		await apiPatch('records', state.editingId, updated);
+		const idx = DB.records.findIndex(r => r.id === state.editingId);
+		if (idx >= 0) DB.records[idx] = updated;
+		await addOpLog('修改记录', `修改了记录 "${old.purpose}" 金额 ¥${fmtMoney(old.amount)} → ¥${fmtMoney(amount)}`);
+	  } else {
+		const newRec = {
+		  id: uid(), semester_id, date, type, purpose, amount, handler,
+		  invoice: finalInvoice, pending_delete: false,
+		  created_at: Date.now(), updated_at: Date.now()
+		};
+		await apiPost('records', newRec);
+		DB.records.push(newRec);
+		await addOpLog('添加记录', `添加记录 "${purpose}" 金额 ¥${fmtMoney(amount)}${finalInvoice ? '（含发票）' : ''}`);
+	  }
+	});
+	state.editingId = null;
+	state._invDataUrl = null;
+	state._invUrl = null;
+	state._invLoading = false;
+	toast('已保存', 'success');
+	go(state._editFrom === 'records' ? 'records' : 'main', false);
+  } catch (e) { toast('保存失败: ' + e.message, 'error'); console.error(e); }
+  finally { busyEnd(); }
+}
+
+function applyDelete(id) {
+  if (!canManageFlow()) { toast('当前身份无权限操作', 'warn'); return; }
+  state.applyingId = id;
+  const sem = curSem();
+  const r = sem ? recordsOf(sem.id).find(x => x.id === id) : null;
+  if (!r) { toast('该记录已不存在', 'warn'); return; }
+  openModal('申请删除记录', `
+  <p style="font-size:13px;color:var(--ink-soft)">记录：${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</p>
+  <div class="form-line"><label>删除原因</label><textarea class="field" id="appReason" placeholder="请填写删除原因"></textarea></div>
+  <div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-red btn-block" onclick="submitApply()">提交申请</button></div>
+  `);
+}
+async function submitApply() {
+  const reason = document.getElementById('appReason').value.trim();
+  if (!reason) { toast('请填写删除原因', 'warn'); return; }
+  const sem = curSem();
+  const r = sem ? recordsOf(sem.id).find(x => x.id === state.applyingId) : null;
+  if (!r) return;
+  if (!busyStart()) return;
+  try {
+	const app = {
+	  id: uid(), record_id: r.id, record: r,
+	  applicant_student_id: state.user.studentId, applicant_name: state.user.name,
+	  reason, status: 'pending', reply: '', time: Date.now()
+	};
+	await apiPost('applications', app);
+	DB.applications.push(app);
+	const idx = DB.records.findIndex(x => x.id === r.id);
+	if (idx >= 0) { DB.records[idx].pending_delete = true; await apiPatch('records', r.id, { pending_delete: true }); }
+	await addOpLog('申请删除', `申请删除记录 "${r.purpose}" 金额 ¥${fmtMoney(r.amount)}，原因：${reason}`);
+	closeModal();
+	toast('已提交，等待总管理员审批', 'success');
+	go('main', false);
+  } catch (e) { toast('提交失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
+}
+
+function adminDelete(id, e) {
+  if (e) e.stopPropagation();
+  if (!isAdmin()) { toast('当前身份无权限操作', 'warn'); return; }
+  confirmAction('删除记录', '确定<b>直接删除</b>该记录？删除后不可恢复。', '直接删除', true, async () => {
+	if (!busyStart()) return;
+	try {
+	  const r = DB.records.find(x => x.id === id);
+	  await apiDelete('records', id);
+	  DB.records = DB.records.filter(x => x.id !== id);
+	  if (r) addOpLog('直接删除', `直接删除了记录 "${r.purpose}" 金额 ¥${fmtMoney(r.amount)}`);
+	  toast('记录已删除', 'success');
+	  render();
+	} catch (err) { toast('删除失败: ' + err.message, 'error'); }
+	finally { busyEnd(); }
+  });
+}
+
+function vwInbox() {
+  if (!state.user) return emptyBox('🔐', '请先登录');
+  let activeTab = state.inboxTab || 'applications';
+  if (isAdmin()) {
+	const tabs = [
+	  { id: 'applications', label: `📋 申请审批 (${DB.applications.filter(a => a.status === 'pending').length})` },
+	  { id: 'feedbacks', label: `💬 反馈管理 (${DB.feedbacks.filter(f => f.status === 'pending').length})` }
+	];
+	let content = activeTab === 'applications' ? renderApplications() : renderAdminFeedbacks();
+	return `<div class="mt" style="font-size:16px">📩 审批中心</div>
+	  <div class="tab-bar">${tabs.map(t => `<span class="tab ${t.id === activeTab ? 'active' : ''}" onclick="switchInboxTab('${t.id}')">${t.label}</span>`).join('')}</div>
+	  ${content}`;
+  } else {
+	const tabs = [
+	  { id: 'applications', label: `📋 我的申请 (${DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length})` },
+	  { id: 'myfeedbacks', label: `💬 我的反馈 (${DB.feedbacks.filter(f => f.submitter_id === state.user.studentId && f.status === 'pending').length})` }
+	];
+	let content = activeTab === 'applications' ? renderMyApplications() : renderMyFeedbacks();
+	return `<div class="mt" style="font-size:16px">📩 我的信箱</div>
+	  <div class="tab-bar">${tabs.map(t => `<span class="tab ${t.id === activeTab ? 'active' : ''}" onclick="switchInboxTab('${t.id}')">${t.label}</span>`).join('')}</div>
+	  ${content}`;
+  }
+}
+function switchInboxTab(tab) { state.inboxTab = tab; render(); }
+
+function renderApplications() {
+  const apps = DB.applications.slice().sort((a, b) => b.time - a.time);
+  if (!apps.length) return emptyBox('📭', '暂无申请');
+  return apps.map(a => {
+	const r = a.record || { purpose: '记录已变动', amount: 0, type: 'expense' };
+	let statusHtml = '';
+	if (a.status === 'pending') statusHtml = `<span class="st pending">⏳ 待审</span>`;
+	else if (a.status === 'approved') statusHtml = `<span class="stamp-mini">已批准</span>`;
+	else if (a.status === 'rejected') statusHtml = `<span class="stamp-mini">已拒绝</span>`;
+	let ops = '';
+	if (a.status === 'pending') {
+	  ops = `<div class="ops" style="margin-top:8px;display:flex;gap:8px;">
+			<button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">✅ 批准</button>
+			<button class="btn btn-red btn-xs" onclick="rejectApp('${a.id}')">❌ 拒绝</button>
+	  </div>`;
+	}
+	if (a.status === 'rejected') {
+	  ops = `<div class="ops" style="margin-top:8px;"><button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">改为批准</button></div>`;
+	}
+	return `<div class="appr">
+	<div class="top"><span>${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</span>${statusHtml}</div>
+	<div class="reason">申请人：${esc(a.applicant_name)}　原因：${esc(a.reason)}</div>
+	${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
+	${ops}
+	</div>`;
+  }).join('');
+}
+
+function renderMyApplications() {
+  const apps = DB.applications.filter(a => a.applicant_student_id === state.user.studentId).sort((a, b) => b.time - a.time);
+  if (!apps.length) return emptyBox('📭', '暂无申请');
+  return apps.map(a => {
+	const r = a.record || { purpose: '记录已变动', amount: 0, type: 'expense' };
+	let statusHtml = '';
+	if (a.status === 'pending') statusHtml = `<span class="st pending">⏳ 待审</span>`;
+	else if (a.status === 'approved') statusHtml = `<span class="stamp-mini">已批准</span>`;
+	else if (a.status === 'rejected') statusHtml = `<span class="stamp-mini">已拒绝</span>`;
+	let ops = '';
+	if (a.status === 'pending') {
+	  ops = `<div class="ops" style="margin-top:8px;"><button class="btn btn-ghost btn-xs" onclick="withdrawApp('${a.id}')">撤回申请</button></div>`;
+	}
+	return `<div class="appr">
+	<div class="top"><span>${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</span>${statusHtml}</div>
+	<div class="reason">原因：${esc(a.reason)}</div>
+	${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
+	${ops}
+	</div>`;
+  }).join('');
+}
+
+async function withdrawApp(id) {
+  if (!state.user) return;
+  const a = DB.applications.find(x => x.id === id);
+  if (!a) { toast('申请不存在', 'warn'); return; }
+  if (a.applicant_student_id !== state.user.studentId) { toast('无权限', 'warn'); return; }
+  if (a.status !== 'pending') { toast('该申请已被处理，无法撤回', 'warn'); return; }
+  confirmAction('撤回删除申请', `确定撤回对「<b>${esc(a.record ? a.record.purpose : '该记录')}</b>」的删除申请吗？撤回后该记录将恢复正常显示。`, '确认撤回', false, async () => {
+	if (!busyStart()) return;
+	try {
+	  await apiDelete('applications', id);
+	  DB.applications = DB.applications.filter(x => x.id !== id);
+	  const rec = DB.records.find(x => x.id === a.record_id);
+	  if (rec) {
+		rec.pending_delete = false;
+		try { await apiPatch('records', a.record_id, { pending_delete: false }); } catch(e){ }
+	  }
+	  await addOpLog('撤回申请', `撤回了对记录 "${a.record ? a.record.purpose : a.record_id}" 的删除申请`);
+	  toast('已撤回', 'success');
+	  render();
+	} catch (e) { toast('撤回失败: ' + e.message, 'error'); }
+	finally { busyEnd(); }
+  });
+}
+
+function renderAdminFeedbacks() {
+  const fbs = DB.feedbacks.slice().sort((a, b) => b.created_at - a.created_at);
+  if (!fbs.length) return emptyBox('💬', '暂无反馈');
+  return fbs.map(f => {
+	const statusMap = { pending: '⏳ 待处理', read: '✅ 已读', public: '📢 已公开' };
+	let ops = '';
+	if (f.status === 'pending' || f.status === 'read') {
+	  ops += `<button class="btn btn-primary btn-xs" onclick="markFeedbackRead('${f.id}')">确认已读</button>`;
+	}
+	if (f.status !== 'public') {
+	  ops += `<button class="btn btn-blue btn-xs" onclick="openFeedbackReply('${f.id}')">公开回复</button>`;
+	}
+	ops += `<button class="btn btn-red btn-xs" onclick="deleteFeedback('${f.id}')">🗑️ 删除</button>`;
+	const idLine = f.submitter_id ? `学号 ${esc(f.submitter_id)}` : '访客';
+	return `<div class="appr">
+	<div class="top"><span><strong>${esc(f.submitter_name)}</strong> · ${esc(f.submitter_role || '访客')} · <span style="color:var(--ink-faint);font-size:11.5px;">${idLine}</span></span><span class="st ${f.status}">${statusMap[f.status] || f.status}</span></div>
+	<div class="reason" style="margin-top:4px;">${esc(f.content)}</div>
+	<div style="font-size:12px;color:var(--ink-soft);margin-bottom:6px;">${new Date(f.created_at).toLocaleString('zh-CN')}</div>
+	${f.admin_reply ? `<div class="reply">💬 管理员回复：${esc(f.admin_reply)}</div>` : ''}
+	${ops ? `<div class="ops">${ops}</div>` : ''}
+	</div>`;
+  }).join('');
+}
+
+async function markFeedbackRead(id) {
+  const f = DB.feedbacks.find(x => x.id === id);
+  if (!f) return;
+  try {
+	await apiPatch('feedbacks', id, { status: 'read', updated_at: Date.now() });
+	f.status = 'read';
+	f.updated_at = Date.now();
+	render();
+  } catch (e) { toast('操作失败: ' + e.message, 'error'); }
+}
+
+function openFeedbackReply(id) {
+  openModal('公开回复', `
+	<div class="form-line"><label>回复内容（访客端可见）</label>
+	  <textarea class="field" id="fb_reply" rows="3" placeholder="请输入回复内容" maxlength="200"></textarea>
+	  <div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">不超过200字</div>
+	</div>
+	<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button>
+	<button class="btn btn-primary btn-block" onclick="submitFeedbackReply('${id}')">确认公开回复</button></div>
+  `);
+}
+
+async function submitFeedbackReply(id) {
+  const reply = document.getElementById('fb_reply').value.trim();
+  if (!reply) { toast('请填写回复内容', 'warn'); return; }
+  const f = DB.feedbacks.find(x => x.id === id);
+  if (!f) return;
+  if (!busyStart()) return;
+  try {
+	await apiPatch('feedbacks', id, { status: 'public', admin_reply: reply, updated_at: Date.now() });
+	f.status = 'public'; f.admin_reply = reply; f.updated_at = Date.now();
+	closeModal();
+	render();
+	toast('已公开回复', 'success');
+  } catch (e) { toast('操作失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
+}
+
+async function deleteFeedback(id) {
+  if (!isAdmin()) { toast('无权限', 'warn'); return; }
+  confirmAction('删除反馈', '确定删除这条反馈吗？删除后不可恢复。', '删除', true, async () => {
+	if (!busyStart()) return;
+	try {
+	  await apiDelete('feedbacks', id);
+	  DB.feedbacks = DB.feedbacks.filter(f => f.id !== id);
+	  render();
+	  toast('反馈已删除', 'success');
+	} catch (e) { toast('删除失败: ' + e.message, 'error'); }
+	finally { busyEnd(); }
+  });
+}
+
+function renderMyFeedbacks() {
+  const fbs = DB.feedbacks.filter(f => f.submitter_id === state.user.studentId).sort((a, b) => b.created_at - a.created_at);
+  if (!fbs.length) return emptyBox('💬', '暂无反馈，点击主页「我要反馈」提交');
+  const statusMap = { pending: '⏳ 待处理', read: '✅ 已读', public: '📢 已公开回复' };
+  return fbs.map(f => `
+	<div class="appr">
+	  <div class="top"><span>我的反馈</span><span class="st ${f.status}">${statusMap[f.status] || f.status}</span></div>
+	  <div class="reason">${esc(f.content)}</div>
+	  <div style="font-size:12px;color:var(--ink-soft);">${new Date(f.created_at).toLocaleString('zh-CN')}</div>
+	  ${f.admin_reply ? `<div class="reply">💬 管理员回复：${esc(f.admin_reply)}</div>` : ''}
+	</div>
+  `).join('');
+}
+
+async function approveApp(id) {
+  if (!isAdmin()) { toast('无权限', 'warn'); return; }
+  const a = DB.applications.find(x => x.id === id);
+  if (!a) return;
+  if (!busyStart()) return;
+  try {
+	await apiPatch('applications', id, { status: 'approved' });
+	a.status = 'approved';
+	await apiDelete('records', a.record_id);
+	DB.records = DB.records.filter(x => x.id !== a.record_id);
+	const rec = a.record;
+	await addOpLog('批准删除', rec ? `批准删除记录 "${rec.purpose}" 金额 ¥${fmtMoney(rec.amount)}` : '批准删除了一条记录');
+	toast('已批准并删除该记录', 'success');
+	render();
+  } catch (e) { toast('操作失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
+}
+
+function rejectApp(id) {
+  if (!isAdmin()) { toast('无权限', 'warn'); return; }
+  openModal('拒绝申请', `
+  <div class="form-line"><label>拒绝理由</label><textarea class="field" id="rejReply" rows="3" placeholder="如：理由不充分"></textarea></div>
+  <div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-red btn-block" onclick="doReject('${id}')">确认拒绝</button></div>
+  `);
+}
+
+async function doReject(id) {
+  const reply = document.getElementById('rejReply').value.trim() || '未说明原因';
+  const a = DB.applications.find(x => x.id === id);
+  if (!a) return;
+  if (!busyStart()) return;
+  try {
+	await apiPatch('applications', id, { status: 'rejected', reply });
+	a.status = 'rejected'; a.reply = reply;
+	const idx = DB.records.findIndex(x => x.id === a.record_id);
+	if (idx >= 0) { DB.records[idx].pending_delete = false; await apiPatch('records', a.record_id, { pending_delete: false }); }
+	await addOpLog('拒绝删除', `拒绝了 "${a.applicant_name}" 的删除申请，理由：${reply}`);
+	closeModal();
+	render();
+	toast('已拒绝该申请', 'info');
+  } catch (e) { toast('操作失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
+}
+
+function vwAdmin() {
+  if (!isAdmin()) { toast('当前身份无权限操作', 'warn'); go('main', false); return ''; }
+  const recCnt = DB.records.filter(r => !r.pending_delete).length;
+  const accCnt = DB.accounts.length;
+  const pend = DB.applications.filter(a => a.status === 'pending').length;
+  const item = (ico, t, d, fn) => `<div class="menu-item" onclick="${fn}"><div class="mi-ico">${ico}</div><div><div class="mi-t">${t}</div><div class="mi-d">${d}</div></div><div class="arrow">›</div></div>`;
+  const I = {
+	sem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>',
+	acc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><path d="M16 11l2 2 4-4"/></svg>',
+	note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>',
+	log: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 6 4-12 2 6h6"/></svg>',
+	data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>'
+  };
+  return `
+  <div class="mt" style="font-size:16px">⚙️ 管理后台</div>
+  <div class="menu" style="margin-top:14px">
+  ${item(I.sem, '学期管理', '添加/切换/删除学期', "go('semester')")}
+  ${item(I.acc, '账号管理', accCnt + ' 个账号', "go('account')")}
+  ${item(I.note, '公告与班级名', '编辑通知', "go('notice')")}
+  ${item(I.log, '日志查看', '访问与操作日志', "go('log')")}
+  ${item(I.data, '数据管理', recCnt + ' 条记录', "openDataMgr()")}
+  ${pend ? item(I.note, '删除申请审批', pend + ' 条待处理', "go('inbox')") : ''}
+  </div>`;
+}
+
+function openDataMgr() {
+  openModal('数据管理', `
+  <p style="font-size:13px;color:var(--ink-soft)">清空后所有流水记录将被删除，操作不可撤销。学期、账号、设置将保留。</p>
+  <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
+	<button class="btn btn-red btn-block" onclick="clearRecords()">清空全部流水记录</button>
+	<button class="btn btn-ghost btn-block" onclick="closeModal()">关闭</button>
+  </div>`);
+}
+async function clearRecords() {
+  confirmAction('清空全部流水', '确定清空<b>全部</b>流水记录？该操作不可撤销，学期、账号、设置将保留。', '确认清空', true, async () => {
+	if (!busyStart()) return;
+	try {
+	  await apiDeleteAll('records');
+	  DB.records = [];
+	  await addOpLog('清空记录', '清空了全部流水记录');
+	  toast('已清空全部流水记录', 'success');
+	  render();
+	} catch (e) { toast('清空失败: ' + e.message, 'error'); }
+	finally { busyEnd(); }
+  });
+}
+
+function vwSemester() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); return `<div class="mt" style="font-size:16px">📅 学期管理</div><div class="card" style="margin-top:14px">${DB.semesters.map(s => `<div class="kv"><div class="k"><div class="n">${esc(s.name)} ${s.is_current ? '<span class="tag inv">当前</span>' : ''}</div><div class="s">起始余额 ¥${fmtMoney(s.start_balance)} · ${recordsOf(s.id).length} 条记录</div></div><button class="btn btn-ghost btn-xs" onclick="editSem('${s.id}')">编辑</button><button class="btn btn-ghost btn-xs" onclick="setCurSem('${s.id}')">设为当前</button><button class="btn btn-red btn-xs" onclick="delSem('${s.id}')">删除</button></div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addSem()">+ 新增学期</button></div>`; }
+function addSem() {
+  if (!isAdmin()) return;
+  let defaultBal = '';
+  if (DB.semesters.length > 0) {
+	const last = DB.semesters[DB.semesters.length - 1];
+	if (last) { defaultBal = stats(last.id).balance; }
+  }
+  const valAttr = (defaultBal === '' || defaultBal === null || isNaN(defaultBal)) ? '' : ` value="${defaultBal}"`;
+  openModal('新增学期', `<div class="form-line"><label>学期名称</label><input class="field" id="sn" placeholder="如：高二下"></div><div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" step="0.01" placeholder="0"${valAttr}><div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">已自动填入上一学期期末余额，可手动修改</div></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem(null)">创建</button></div>`);
+}
+function editSem(id) { const s = DB.semesters.find(x => x.id === id); if (!s) return; openModal('编辑学期', `<div class="form-line"><label>学期名称</label><input class="field" id="sn" value="${esc(s.name)}"></div><div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" step="0.01" value="${s.start_balance}"></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem('${id}')">保存</button></div>`); }
+async function saveSem(id) {
+  const name = document.getElementById('sn').value.trim();
+  const bal = parseFloat(document.getElementById('sb').value) || 0;
+  if (!name) { toast('请填写学期名称', 'warn'); return; }
+  if (name.length > 30) { toast('学期名称不能超过30个字符', 'warn'); return; }
+  if (!busyStart()) return;
+  try {
+	if (id) {
+	  await apiPatch('semesters', id, { name, start_balance: bal });
+	  const sem = DB.semesters.find(s => s.id === id);
+	  if (sem) { sem.name = name; sem.start_balance = bal; }
+	} else {
+	  const newSem = { id: uid(), name, start_balance: bal, is_current: false };
+	  await apiPost('semesters', newSem);
+	  DB.semesters.push(newSem);
+	}
+	closeModal();
+	toast(id ? '学期已更新' : '学期已创建', 'success');
+	render();
+  } catch (e) { toast('操作失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
+}
+async function setCurSem(id) {
+  switchSem(id);
+  const staleIds = DB.semesters.filter(s => s.is_current && s.id !== id).map(s => s.id);
+  DB.semesters = DB.semesters.map(s => ({ ...s, is_current: s.id === id }));
+  try {
+	for (const sid of staleIds) { await apiPatch('semesters', sid, { is_current: false }); }
+	await apiPatch('semesters', id, { is_current: true });
+  } catch (e) { console.warn('同步当前学期标记失败:', e); }
+}
+async function delSem(id) {
+  const s = DB.semesters.find(x => x.id === id);
+  if (!s) return;
+  const cnt = recordsOf(id).length;
+  confirmAction('删除学期', `确定删除学期「<b>${esc(s.name)}</b>」？该学期下 <b>${cnt}</b> 条记录将一并删除，且不可恢复。`, '确认删除', true, async () => {
+	if (!busyStart()) return;
+	try {
+	  await apiDelete('semesters', id);
+	  await apiDeleteByFilter('records', 'semester_id', id);
+	  DB.semesters = DB.semesters.filter(x => x.id !== id);
+	  DB.records = DB.records.filter(r => r.semester_id !== id);
+	  if (state.currentSemesterId === id) {
+		state.currentSemesterId = DB.semesters[0]?.id || null;
+		if (state.currentSemesterId) localStorage.setItem('currentSemesterId', state.currentSemesterId);
+	  }
+	  render();
+	  toast('学期已删除', 'success');
+	} catch (e) { toast('删除失败: ' + e.message, 'error'); }
+	finally { busyEnd(); }
+  });
+}
+
+function vwAccount() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); return `<div class="mt" style="font-size:16px">👤 账号管理</div><div class="card" style="margin-top:14px">${DB.accounts.map(a => `<div class="kv"><div class="k"><div class="n">${esc(a.name)}</div><div class="s">学号 ${esc(a.student_id)} · ${a.role}</div></div><button class="btn btn-ghost btn-xs" onclick="editAcc('${a.student_id}')">编辑</button>${a.student_id !== '00' ? `<button class="btn btn-red btn-xs" onclick="delAcc('${a.student_id}')">删除</button>` : ''}</div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addAcc()">+ 新增账号</button></div>`; }
+function addAcc() { if (!isAdmin()) return; openModal('新增账号', `
+  <p style="font-size:14px;color:var(--ink-soft);line-height:1.75;margin:0 0 14px;">由于安全策略限制，新增账号需前往 Supabase 后台操作：</p>
+  <ol style="font-size:13px;color:var(--ink-soft);line-height:1.9;padding-left:20px;margin:0 0 18px;">
+	<li>进入 Supabase 后台 → Authentication → Users</li>
+	<li>点击 <b>Add user</b> → <b>Create new user</b></li>
+	<li>邮箱填 <code style="background:rgba(0,0,0,.06);padding:2px 6px;border-radius:4px;">学号@banfei.local</code>，密码填 <code style="background:rgba(0,0,0,.06);padding:2px 6px;border-radius:4px;">123456</code></li>
+	<li>在 SQL Editor 执行关联语句（见下）</li>
+  </ol>
+  <div style="background:rgba(0,0,0,.04);padding:12px;border-radius:6px;font-size:12px;color:var(--ink-soft);line-height:1.7;word-break:break-all;margin-bottom:18px;">
+	update accounts a set auth_id = u.id<br>
+	from auth.users u<br>
+	where u.email = a.student_id || '@banfei.local'<br>
+	and a.auth_id is null;
+  </div>
+  <button class="btn btn-ghost btn-block" onclick="closeModal()">知道了</button>
+`); }
+function editAcc(sid) { if (!isAdmin()) return; accForm(sid); }
+function accForm(sid) {
+  if (!isAdmin()) return;
+  const a = sid ? DB.accounts.find(x => x.student_id === sid) : null;
+  if (!a) return;
+  const isSelf = sid === '00';
+  const roleOpts = (sel) => ['总管理员', '生活委员', '普通同学'].map(r => `<option ${r === sel ? 'selected' : ''}>${r}</option>`).join('');
+  openModal('编辑账号', `
+	<div class="form-line"><label>姓名</label><input class="field" id="an" value="${esc(a.name)}" maxlength="20"></div>
+	<div class="form-line"><label>学号（不可修改）</label><input class="field" value="${esc(a.student_id)}" readonly style="opacity:.6"></div>
+	<div class="form-line"><label>角色</label><select class="field" id="ar" ${isSelf ? 'disabled' : ''}>${roleOpts(a.role)}</select>${isSelf ? '<div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">超级管理员角色不可修改</div>' : ''}</div>
+	<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveAcc('${sid}')">保存</button></div>
+  `);
+}
+async function saveAcc(sid) {
+  if (!isAdmin()) return;
+  const name = document.getElementById('an').value.trim();
+  const role = document.getElementById('ar').value;
+  if (!name) { toast('请填写姓名', 'warn'); return; }
+  if (!busyStart()) return;
+  try {
+	await apiPatch('accounts', sid, { name, role }, 'student_id');
+	const acc = DB.accounts.find(x => x.student_id === sid);
+	if (acc) { acc.name = name; acc.role = role; }
+	closeModal();
+	render();
+	toast('账号已更新', 'success');
+  } catch (e) { toast('操作失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
+}
+async function delAcc(sid) {
+  if (!isAdmin()) return;
+  if (sid === '00') { toast('超级管理员不可删除', 'warn'); return; }
+  const acc = DB.accounts.find(x => x.student_id === sid);
+  confirmAction('删除账号', `确定删除账号「<b>${acc ? esc(acc.name) : sid}</b>」？<br><span style="font-size:12px;color:#8A6A22;">⚠️ 需同时到 Supabase 后台 Authentication → Users 删除对应的 Auth 用户</span>`, '删除', true, async () => {
+	if (!busyStart()) return;
+	try {
+	  await apiDelete('accounts', sid, 'student_id');
+	  DB.accounts = DB.accounts.filter(x => x.student_id !== sid);
+	  render();
+	  toast('账号已删除（记得去后台删 Auth 用户）', 'success');
+	} catch (e) { toast('删除失败: ' + e.message, 'error'); }
+	finally { busyEnd(); }
+  });
+}
+
+function vwNotice() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); return `<div class="mt" style="font-size:16px">📢 公告与班级名</div><div class="card" style="margin-top:14px"><div class="form-line"><label>班级名称</label><input class="field" id="cn" maxlength="30" value="${esc(DB.settings.class_name)}"></div><div class="form-line"><label>通知内容</label><textarea class="field" id="nt" rows="4" maxlength="300">${esc(DB.settings.notice || '')}</textarea></div><button class="btn btn-primary btn-block" onclick="saveNotice()">保存</button></div>`; }
+async function saveNotice() {
+  const className = document.getElementById('cn').value.trim();
+  const notice = document.getElementById('nt').value.trim();
+  if (!className) { toast('班级名称不能为空', 'warn'); return; }
+  const sid = DB.settings && DB.settings.id != null ? DB.settings.id : 1;
+  if (!busyStart()) return;
+  try {
+	await apiPatch('settings', sid, { class_name: className, notice: notice });
+	DB.settings.class_name = className;
+	DB.settings.notice = notice;
+	toast('已保存', 'success');
+	render();
+  } catch (e) { toast('保存失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
+}
+
+function vwLog() {
+  if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面');
+  const visitLogs = DB.logs.map(l => ({ ...l, _tbl: 'logs', type: '访问', action: '访问了平台' }));
+  const opLogs = DB.oplogs.map(l => ({ ...l, _tbl: 'oplogs', type: '操作', action: l.action || '' }));
+  const allLogs = [...visitLogs, ...opLogs].sort((a, b) => b.time - a.time).slice(0, 300);
+
+  const logHtml = allLogs.map(l => `
+	<div class="kv" style="align-items:flex-start;">
+	  <input type="checkbox" class="log-check" data-tbl="${l._tbl}" data-id="${esc(l.id || '')}" data-time="${l.time}" onchange="updateLogSelCount()" style="margin-top:6px;flex-shrink:0;width:16px;height:16px;cursor:pointer;">
+	  <div class="k">
+		<div class="n">${esc(l.type)} ${esc(l.action)}</div>
+		<div class="s">${esc(l.operator || l.nickname || '系统')} · ${l.detail ? esc(l.detail) : ''} · ${new Date(l.time).toLocaleString('zh-CN')}</div>
+	  </div>
+	</div>
+  `).join('');
+
+  return `
+	<div class="mt" style="font-size:16px">📋 全部日志</div>
+	<div style="text-align:center;font-size:12px;color:var(--ink-soft);margin:-4px 0 12px;">显示最近 ${allLogs.length} 条</div>
+	<div style="display:flex;gap:8px;margin-bottom:12px;">
+	  <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="deleteOldLogs()">🗑️ 清除 30 天前</button>
+	  <button class="btn btn-red btn-sm" style="flex:1;" onclick="deleteAllLogs()">⚠️ 清空全部</button>
+	</div>
+	<div class="card" style="margin-top:14px;padding:8px 16px 8px 20px;">
+	  ${allLogs.length ? logHtml : emptyBox('📋', '暂无日志')}
+	</div>
+	${allLogs.length ? `<button class="btn btn-red btn-block" id="delSelBtn" style="margin-top:12px;" onclick="deleteSelectedLogs()" disabled>删除选中（0）</button>` : ''}
+  `;
+}
+
+function updateLogSelCount(){
+  const checks = document.querySelectorAll('.log-check:checked');
+  const btn = document.getElementById('delSelBtn');
+  if (btn) { btn.textContent = `删除选中（${checks.length}）`; btn.disabled = checks.length === 0; }
+}
+
+async function deleteOldLogs(){
+  const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
+  const oldVisits = DB.logs.filter(l => l.time < cutoff && l.id);
+  const oldOps = DB.oplogs.filter(l => l.time < cutoff && l.id);
+  const total = oldVisits.length + oldOps.length;
+  if (total === 0) { toast('没有需要清除的日志', 'info'); return; }
+  confirmAction('清除 30 天前的日志', `将删除 <b>${total}</b> 条 30 天前的日志，操作不可恢复。`, '确认清除', true, async () => {
+	if (!busyStart()) return;
+	try {
+	  const cloudVisits = oldVisits.filter(l => !String(l.id).startsWith('local-'));
+	  const cloudOps = oldOps.filter(l => !String(l.id).startsWith('local-'));
+	  for (const l of cloudVisits) { await apiDelete('logs', l.id); }
+	  for (const l of cloudOps) { await apiDelete('oplogs', l.id); }
+	  DB.logs = DB.logs.filter(l => l.time >= cutoff);
+	  DB.oplogs = DB.oplogs.filter(l => l.time >= cutoff);
+	  toast(`已清除 ${total} 条日志`, 'success');
+	  render();
+	} catch (e) { toast('清除失败: ' + e.message, 'error'); }
+	finally { busyEnd(); }
+  });
+}
+
+async function deleteAllLogs(){
+  const total = DB.logs.length + DB.oplogs.length;
+  if (total === 0) { toast('没有日志可删除', 'info'); return; }
+  confirmAction('清空全部日志', `将删除 <b>${total}</b> 条日志，操作不可恢复。`, '确认清空', true, async () => {
+	if (!busyStart()) return;
+	try {
+	  for (const l of DB.logs) { if (l.id && !String(l.id).startsWith('local-')) await apiDelete('logs', l.id); }
+	  for (const l of DB.oplogs) { if (l.id && !String(l.id).startsWith('local-')) await apiDelete('oplogs', l.id); }
+	  DB.logs = [];
+	  DB.oplogs = [];
+	  toast('已清空全部日志', 'success');
+	  render();
+	} catch (e) { toast('清空失败: ' + e.message, 'error'); }
+	finally { busyEnd(); }
+  });
+}
+
+async function deleteSelectedLogs(){
+  const checks = Array.from(document.querySelectorAll('.log-check:checked'));
+  if (!checks.length) return;
+  const logsIds = checks.filter(c => c.dataset.tbl === 'logs' && c.dataset.id).map(c => c.dataset.id);
+  const opsIds = checks.filter(c => c.dataset.tbl === 'oplogs' && c.dataset.id).map(c => c.dataset.id);
+  const totalDel = logsIds.length + opsIds.length;
+  confirmAction('删除选中日志', `将删除 <b>${totalDel}</b> 条日志，操作不可恢复。`, '确认删除', true, async () => {
+	if (!busyStart()) return;
+	try {
+	  for (const id of logsIds) { if (!String(id).startsWith('local-')) await apiDelete('logs', id); }
+	  for (const id of opsIds) { if (!String(id).startsWith('local-')) await apiDelete('oplogs', id); }
+	  DB.logs = DB.logs.filter(l => !logsIds.includes(l.id));
+	  DB.oplogs = DB.oplogs.filter(l => !opsIds.includes(l.id));
+	  toast(`已删除 ${totalDel} 条日志`, 'success');
+	  render();
+	} catch (e) { toast('删除失败: ' + e.message, 'error'); }
+	finally { busyEnd(); }
+  });
+}
+
+function openLogin(){
+  openModal('登录', `
+	<div class="form-line"><label>学号</label><input class="field" id="lgId" placeholder="如 20" onkeydown="if(event.key==='Enter')document.getElementById('lgPw').focus()" autocomplete="username"></div>
+	<div class="form-line"><label>密码</label><input class="field" id="lgPw" type="password" placeholder="请输入密码" onkeydown="if(event.key==='Enter')doLogin()" autocomplete="current-password"></div>
+	<button class="btn btn-primary btn-block" id="loginBtn" onclick="doLogin()">登录</button>
+  `, 'm-admin');
+}
+
+async function doLogin(){
+  const id = document.getElementById('lgId').value.trim();
+  const pw = document.getElementById('lgPw').value.trim();
+  if (!id || !pw) { toast('请输入学号和密码', 'warn'); return; }
+  const email = id + '@banfei.local';
+  const btn = document.getElementById('loginBtn');
+  try {
+	await runWithLoader(btn, LOADER_BARS_HTML + '<span>登录中…</span>', async () => {
+	  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+	  if (error) { throw new Error('学号或密码错误'); }
+	  const acc = await apiGetOne('accounts', 'student_id', id, 'student_id,name,role');
+	  if (!acc) throw new Error('账号信息缺失，请联系管理员');
+	  state.user = { studentId: acc.student_id, role: acc.role, name: acc.name };
+	});
+	closeModal();
+	toast(`欢迎回来，${state.user.name}`, 'success');
+	logVisit(state.user.name);
+	state.history = ['home'];
+	go('main', false);
+  } catch (e) { console.error(e); toast(e.message || '登录失败', 'error'); }
+}
+
+function enterBrowse() {
+  state.user = null;
+  logVisit('访客');
+  state.noticeAck = false;
+  state.history = ['home'];
+  go('main', false);
+}
+
+function openImg(id) {
+  const sem = curSem();
+  const r = sem ? recordsOf(sem.id).find(x => x.id === id) : null;
+  if (!r || !r.invoice) { toast('该记录无发票图片', 'info'); return; }
+  const src = safeImgSrc(r.invoice);
+  if (!src) { toast('发票链接无效', 'warn'); return; }
+  document.getElementById('imgBody').innerHTML = `
+	<button class="modal-close" onclick="closeModal()">×</button>
+	<div class="m-tab">发票 / 收据</div>
+	<div class="m-strip"></div>
+	<div class="m-body" style="padding:16px 14px 14px;">
+	  <div class="inv-modal-body">
+		<img src="${esc(src)}" alt="发票" onclick="openInvFullscreen('${esc(src)}')">
+	  </div>
+	  <p style="font-size:12px;color:var(--ink-soft);text-align:center;margin:10px 0 0">${r.date} · 经手：${esc(r.handler)}</p>
+	  <p class="inv-modal-full-hint">💡 点击图片可全屏查看并缩放</p>
+	</div>
+  `;
+  document.getElementById('imgBody').className = 'modal';
+  openMask('imgMask');
+}
+
+function openInvFullscreen(src) {
+  const s = safeImgSrc(src);
+  if (!s) return;
+  const box = document.getElementById('invFullscreen');
+  const img = document.getElementById('invFullscreenImg');
+  img.src = s;
+  img.style.transform = 'scale(1)';
+  box.classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeInvFullscreen() {
+  const box = document.getElementById('invFullscreen');
+  box.classList.remove('show');
+  document.getElementById('invFullscreenImg').src = '';
+  document.body.style.overflow = '';
+}
+
+function openModal(title, body, variant) {
+  const variantClass = variant ? (' ' + variant) : '';
+  const el = document.getElementById('modalBody');
+  el.className = 'modal' + variantClass;
+  el.innerHTML = `
+	<button class="modal-close" onclick="closeModal()">×</button>
+	<div class="m-tab">${esc(title)}</div>
+	<div class="m-strip"></div>
+	<div class="m-body">${body}</div>
+  `;
+  openMask('modal');
+}
+function openMask(id) { document.getElementById(id).classList.add('show'); }
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+  document.getElementById('imgMask').classList.remove('show');
+  closeToolFab();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+	if (document.getElementById('invFullscreen').classList.contains('show')) {
+	  closeInvFullscreen();
+	  return;
+	}
+	closeModal();
+  }
+});
+
+let _lastLoad = 0;
+async function silentRefresh() {
+  if (state._refreshing || !DB.semesters.length) return;
+  if (document.getElementById('modal').classList.contains('show')) return;
+  if (document.getElementById('imgMask').classList.contains('show')) return;
+  if (state.view === 'edit' || state.view === 'feedback') return;
+  state._refreshing = true;
+  topbar('loading');
+  try {
+	const snap = JSON.stringify([DB.semesters, DB.records, DB.applications, DB.feedbacks, DB.settings]);
+	const ok = await loadAllData(true);
+	if (ok) {
+	  _lastLoad = Date.now();
+	  const after = JSON.stringify([DB.semesters, DB.records, DB.applications, DB.feedbacks, DB.settings]);
+	  if (after !== snap) {
+		if (state.view === 'records') { refreshRecords(); }
+		else { render(); }
+		toast('数据已更新', 'info');
+	  } else {
+		updateRedDots();
+	  }
+	}
+  } catch (e) { }
+  finally { state._refreshing = false; topbar('done'); }
+}
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && Date.now() - _lastLoad > 20000) silentRefresh();
+});
+setInterval(() => { if (Date.now() - _lastLoad > 60000) silentRefresh(); }, 30000);
+
+window.onload = async function() {
+  loadTheme();
+  loadSettings();
+
+  const msgEl = document.getElementById('bootTextMsg');
+  if (msgEl) msgEl.textContent = '正在唤醒云端数据库（首次访问约需 3~10 秒）';
+
+  const slowTimer = setTimeout(() => {
+	stopBootTicker();
+	const el = document.getElementById('bootTextMsg');
+	if (el) el.textContent = '云端响应较慢，请稍候……';
+  }, 3000);
+
+  try {
+	const { data: { session } } = await sb.auth.getSession();
+	if (session && session.user && session.user.email) {
+	  const sid = session.user.email.replace('@banfei.local', '');
+	  const acc = await apiGetOne('accounts', 'student_id', sid, 'student_id,name,role');
+	  if (acc) {
+		state.user = { studentId: acc.student_id, role: acc.role, name: acc.name };
+		console.log('✅ 已恢复登录:', acc.name);
+	  } else {
+		await sb.auth.signOut();
+	  }
+	}
+  } catch (e) { console.warn('恢复登录态失败:', e); }
+
+  const ok = await loadAllData();
+  clearTimeout(slowTimer);
+
+  if (ok) {
+	_lastLoad = Date.now();
+	document.body.classList.remove('booting');
+	stopBootTicker();
+	go(state.user ? 'main' : 'home', false);
+	console.log('🚀 测试版启动成功！版本 ' + APP_VERSION);
+  }
+};
+</script>
+</body>
+</html>
