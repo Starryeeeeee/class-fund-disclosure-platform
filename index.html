@@ -194,69 +194,15 @@
   body.dark-mode .mt .cls{color:var(--cls-fixed-dark)}
   .sub{font-size:13px;color:var(--ink-soft);text-align:center}
 
-  /* ==================== 启动页加载器 ====================
-	 - 默认（快设备）：原版 box-shadow，含"连线感"
-	 - 慢设备（body.slow-device）：九宫格方块波浪
-	 ==================================================== */
+  /* ==================== 启动页加载器（九宫格） ==================== */
   .boot-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 108px);gap:22px;}
 
-  /* --- 原版 box-shadow 启动动画 --- */
-  .boot-loader-orig{
-	position: relative;
-	width: 2.5em;
-	height: 2.5em;
-	transform: rotate(165deg);
-	font-size: 16px;
-	display: inline-block;
-	flex-shrink: 0;
-  }
-  .boot-loader-orig::before,
-  .boot-loader-orig::after{
-	content: "";
-	position: absolute;
-	top: 50%; left: 50%;
-	display: block;
-	width: 0.5em; height: 0.5em;
-	border-radius: 0.25em;
-	transform: translate(-50%, -50%);
-  }
-  .boot-loader-orig::before { animation: bootOrigBefore 2s infinite; }
-  .boot-loader-orig::after  { animation: bootOrigAfter  2s infinite; }
-  @keyframes bootOrigBefore {
-	0%   { width: 0.5em; box-shadow: 1em -0.5em rgba(201,136,120,.85), -1em 0.5em rgba(143,169,178,.85); }
-	35%  { width: 2.5em; box-shadow: 0 -0.5em rgba(201,136,120,.85),    0 0.5em rgba(143,169,178,.85); }
-	70%  { width: 0.5em; box-shadow: -1em -0.5em rgba(201,136,120,.85), 1em 0.5em rgba(143,169,178,.85); }
-	100% { box-shadow: 1em -0.5em rgba(201,136,120,.85), -1em 0.5em rgba(143,169,178,.85); }
-  }
-  @keyframes bootOrigAfter {
-	0%   { height: 0.5em; box-shadow: 0.5em 1em rgba(143,168,144,.85),  -0.5em -1em rgba(201,170,112,.85); }
-	35%  { height: 2.5em; box-shadow: 0.5em 0 rgba(143,168,144,.85),    -0.5em 0 rgba(201,170,112,.85); }
-	70%  { height: 0.5em; box-shadow: 0.5em -1em rgba(143,168,144,.85), -0.5em 1em rgba(201,170,112,.85); }
-	100% { box-shadow: 0.5em 1em rgba(143,168,144,.85),  -0.5em -1em rgba(201,170,112,.85); }
-  }
-  /* 暗色提亮 */
-  body.dark-mode .boot-loader-orig::before { animation-name: bootOrigBeforeDark; }
-  body.dark-mode .boot-loader-orig::after  { animation-name: bootOrigAfterDark;  }
-  @keyframes bootOrigBeforeDark {
-	0%   { width: 0.5em; box-shadow: 1em -0.5em rgba(230,160,142,.95), -1em 0.5em rgba(170,200,212,.95); }
-	35%  { width: 2.5em; box-shadow: 0 -0.5em rgba(230,160,142,.95),    0 0.5em rgba(170,200,212,.95); }
-	70%  { width: 0.5em; box-shadow: -1em -0.5em rgba(230,160,142,.95), 1em 0.5em rgba(170,200,212,.95); }
-	100% { box-shadow: 1em -0.5em rgba(230,160,142,.95), -1em 0.5em rgba(170,200,212,.95); }
-  }
-  @keyframes bootOrigAfterDark {
-	0%   { height: 0.5em; box-shadow: 0.5em 1em rgba(170,200,178,.95),  -0.5em -1em rgba(230,200,140,.95); }
-	35%  { height: 2.5em; box-shadow: 0.5em 0 rgba(170,200,178,.95),    -0.5em 0 rgba(230,200,140,.95); }
-	70%  { height: 0.5em; box-shadow: 0.5em -1em rgba(170,200,178,.95), -0.5em 1em rgba(230,200,140,.95); }
-	100% { box-shadow: 0.5em 1em rgba(170,200,178,.95),  -0.5em -1em rgba(230,200,140,.95); }
-  }
-
-  /* --- 九宫格降级启动动画 --- */
   .boot-loader-grid{
 	--sq-size: 8px;
 	--sq-gap: 4px;
 	--sq-radius: 2px;
 	--sq-color: #C1633E;
-	display: none; /* 默认隐藏，慢设备通过 body.slow-device 显示 */
+	display: inline-grid;
 	grid-template-columns:repeat(3,var(--sq-size));
 	grid-template-rows:repeat(3,var(--sq-size));
 	gap:var(--sq-gap);
@@ -288,15 +234,6 @@
 	0%,65%,100%{opacity:.3;transform:scale(.55)}
 	30%{opacity:1;transform:scale(1)}
   }
-
-  /* 慢设备：隐藏原版，显示九宫格，并彻底取消原版动画（含伪元素），避免后台空转 */
-  body.slow-device .boot-loader-orig,
-  body.slow-device .boot-loader-orig::before,
-  body.slow-device .boot-loader-orig::after{
-	display: none !important;
-	animation: none !important;
-  }
-  body.slow-device .boot-loader-grid{ display: inline-grid; }
 
   /* 启动文字使用系统字体，避免字体加载重排 */
   .boot-text{display:flex;align-items:center;gap:1px;font-size:13px;color:var(--ink-soft);letter-spacing:.02em;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;}
@@ -831,7 +768,7 @@
   body.dark-mode .btn-red:active{background:#4A2E2A;transform:translate(3px,3px);box-shadow:0 0 0 0}
 
   body.reduce-motion *,body.reduce-motion *::before,body.reduce-motion *::after {animation-duration: .01ms !important;animation-iteration-count: 1 !important;transition-duration: .01ms !important;}
-  body.reduce-motion .loader-bars > span,body.reduce-motion .loader-grid > span,body.reduce-motion .boot-dots i,body.reduce-motion .boot-loader-orig::before,body.reduce-motion .boot-loader-orig::after,body.reduce-motion .boot-loader-grid > span,body.reduce-motion .btn-loader::before,body.reduce-motion .btn-loader::after {animation-duration: inherit !important;animation-iteration-count: infinite !important;}
+  body.reduce-motion .loader-bars > span,body.reduce-motion .loader-grid > span,body.reduce-motion .boot-dots i,body.reduce-motion .boot-loader-grid > span,body.reduce-motion .btn-loader::before,body.reduce-motion .btn-loader::after {animation-duration: inherit !important;animation-iteration-count: infinite !important;}
 
   @media (prefers-reduced-motion: reduce){
 		*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -842,24 +779,11 @@
 </head>
 <body class="booting">
 <script>
-/* 提前应用暗色偏好 + 慢设备检测，防止闪烁 & 决定启动动画 */
+/* 提前应用暗色偏好，防止加载闪烁 */
 (function(){
   try {
-	/* 暗色偏好 */
 	if (localStorage.getItem('theme') === 'dark') {
 	  document.body.classList.add('dark-mode');
-	}
-	/* 慢设备检测：仅针对老安卓（<8） + 老 iOS（<14） → 启动动画降级为九宫格
-	   微信用户现在也使用原版粒子动画（分批请求已解决主线程抢占问题） */
-	var ua = navigator.userAgent || '';
-	var isOldAndroid = false;
-	var mAndroid = ua.match(/Android\s([0-9]+)/i);
-	if (mAndroid) { isOldAndroid = parseInt(mAndroid[1], 10) < 8; }
-	var isOldIOS = false;
-	var mIOS = ua.match(/iPhone OS (\d+)_/i);
-	if (mIOS) { isOldIOS = parseInt(mIOS[1], 10) < 14; }
-	if (isOldAndroid || isOldIOS) {
-	  document.body.classList.add('slow-device');
 	}
   } catch(e){}
 })();
@@ -877,7 +801,6 @@
   </nav>
   <div id="content">
 	<div class="boot-loading">
-	  <span class="boot-loader-orig" aria-hidden="true"></span>
 	  <span class="boot-loader-grid" aria-hidden="true">
 		<span></span><span></span><span></span>
 		<span></span><span></span><span></span>
@@ -937,7 +860,7 @@
 <div id="toastWrap"></div>
 
 <script>
-const APP_VERSION = 'v3.3.4';
+const APP_VERSION = 'v3.3.5';
 const APP_DATE = '2026年10月1日';
 const MIN_BOOT_MS = 2000; // 最短启动时间
 
@@ -1627,7 +1550,6 @@ async function loadAllData(silent = false) {
 async function retryLoad() {
   document.getElementById('content').innerHTML = `
 	<div class="boot-loading">
-	  <span class="boot-loader-orig" aria-hidden="true"></span>
 	  <span class="boot-loader-grid" aria-hidden="true">
 		<span></span><span></span><span></span>
 		<span></span><span></span><span></span>
