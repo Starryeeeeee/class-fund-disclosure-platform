@@ -849,16 +849,16 @@
 	if (localStorage.getItem('theme') === 'dark') {
 	  document.body.classList.add('dark-mode');
 	}
-	/* 慢设备检测：微信 + 老安卓（<8） + 老 iOS（<14） → 启动动画降级为九宫格 */
+	/* 慢设备检测：仅针对老安卓（<8） + 老 iOS（<14） → 启动动画降级为九宫格
+	   微信用户现在也使用原版粒子动画（分批请求已解决主线程抢占问题） */
 	var ua = navigator.userAgent || '';
-	var isWeChat = /MicroMessenger/i.test(ua);
 	var isOldAndroid = false;
 	var mAndroid = ua.match(/Android\s([0-9]+)/i);
 	if (mAndroid) { isOldAndroid = parseInt(mAndroid[1], 10) < 8; }
 	var isOldIOS = false;
 	var mIOS = ua.match(/iPhone OS (\d+)_/i);
 	if (mIOS) { isOldIOS = parseInt(mIOS[1], 10) < 14; }
-	if (isWeChat || isOldAndroid || isOldIOS) {
+	if (isOldAndroid || isOldIOS) {
 	  document.body.classList.add('slow-device');
 	}
   } catch(e){}
@@ -937,7 +937,7 @@
 <div id="toastWrap"></div>
 
 <script>
-const APP_VERSION = 'v3.3.3';
+const APP_VERSION = 'v3.3.4';
 const APP_DATE = '2026年10月1日';
 const MIN_BOOT_MS = 2000; // 最短启动时间
 
