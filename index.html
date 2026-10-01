@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="./subset/result.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-/* 提前应用暗色偏好，防止加载闪烁（第一步：给 html 上保险背景色） */
+/* 提前应用暗色偏好，防止加载闪烁 */
 (function(){
   try {
 	if (localStorage.getItem('theme') === 'dark') {
@@ -143,18 +143,12 @@
   .theme-switch .theme-switch-input:checked + svg #container{ fill: #2b4360; }
   .theme-switch .theme-switch-input:checked + svg #button{ transform: translate(28px, 2.333px); }
   .theme-switch #sun{
-	opacity: 1;
-	transform: rotate(0deg);
-	transform-box: fill-box;
-	transform-origin: center;
+	opacity: 1; transform: rotate(0deg); transform-box: fill-box; transform-origin: center;
 	transition: opacity .28s ease, transform .45s cubic-bezier(0.34, 1.4, 0.64, 1);
   }
   .theme-switch .theme-switch-input:checked + svg #sun{ opacity: 0; transform: rotate(45deg); }
   .theme-switch #moon{
-	opacity: 0;
-	transform: rotate(-45deg);
-	transform-box: fill-box;
-	transform-origin: center;
+	opacity: 0; transform: rotate(-45deg); transform-box: fill-box; transform-origin: center;
 	transition: opacity .28s ease .06s, transform .45s cubic-bezier(0.34, 1.4, 0.64, 1);
   }
   .theme-switch .theme-switch-input:checked + svg #moon{ opacity: 1; transform: rotate(0deg); }
@@ -170,45 +164,55 @@
   body.dark-mode .mt .cls{color:var(--cls-fixed-dark)}
   .sub{font-size:13px;color:var(--ink-soft);text-align:center}
 
-  /* ==================== 启动页加载器（九宫格） ==================== */
+  /* ==================== 启动页加载器（原版粒子动画） ==================== */
   .boot-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 108px);gap:22px;}
 
-  .boot-loader-grid{
-	--sq-size: 8px;
-	--sq-gap: 4px;
-	--sq-radius: 2px;
-	--sq-color: #C1633E;
-	display: inline-grid;
-	grid-template-columns:repeat(3,var(--sq-size));
-	grid-template-rows:repeat(3,var(--sq-size));
-	gap:var(--sq-gap);
-	vertical-align:middle;
+  .boot-loader-orig{
+	position: relative;
+	width: 2.5em;
+	height: 2.5em;
+	transform: rotate(165deg);
+	font-size: 16px;
+	display: inline-block;
 	flex-shrink: 0;
   }
-  body.dark-mode .boot-loader-grid{ --sq-color: #E8B452; }
-  .boot-loader-grid > span{
-	display:block;
-	width:var(--sq-size);
-	height:var(--sq-size);
-	background:var(--sq-color);
-	border-radius:var(--sq-radius);
-	opacity:.3;
-	transform:scale(.55);
-	animation:bootSqWave 1.15s ease-in-out infinite;
-	will-change:transform,opacity;
+  .boot-loader-orig::before,
+  .boot-loader-orig::after{
+	content: "";
+	position: absolute;
+	top: 50%; left: 50%;
+	display: block;
+	width: 0.5em; height: 0.5em;
+	border-radius: 0.25em;
+	transform: translate(-50%, -50%);
   }
-  .boot-loader-grid > span:nth-child(1){ animation-delay: 0s; }
-  .boot-loader-grid > span:nth-child(2){ animation-delay: 0.09s; }
-  .boot-loader-grid > span:nth-child(3){ animation-delay: 0.18s; }
-  .boot-loader-grid > span:nth-child(4){ animation-delay: 0.09s; }
-  .boot-loader-grid > span:nth-child(5){ animation-delay: 0.18s; }
-  .boot-loader-grid > span:nth-child(6){ animation-delay: 0.27s; }
-  .boot-loader-grid > span:nth-child(7){ animation-delay: 0.18s; }
-  .boot-loader-grid > span:nth-child(8){ animation-delay: 0.27s; }
-  .boot-loader-grid > span:nth-child(9){ animation-delay: 0.36s; }
-  @keyframes bootSqWave{
-	0%,65%,100%{opacity:.3;transform:scale(.55)}
-	30%{opacity:1;transform:scale(1)}
+  .boot-loader-orig::before { animation: bootOrigBefore 2s infinite; }
+  .boot-loader-orig::after  { animation: bootOrigAfter  2s infinite; }
+  @keyframes bootOrigBefore {
+	0%   { width: 0.5em; box-shadow: 1em -0.5em rgba(201,136,120,.85), -1em 0.5em rgba(143,169,178,.85); }
+	35%  { width: 2.5em; box-shadow: 0 -0.5em rgba(201,136,120,.85),    0 0.5em rgba(143,169,178,.85); }
+	70%  { width: 0.5em; box-shadow: -1em -0.5em rgba(201,136,120,.85), 1em 0.5em rgba(143,169,178,.85); }
+	100% { box-shadow: 1em -0.5em rgba(201,136,120,.85), -1em 0.5em rgba(143,169,178,.85); }
+  }
+  @keyframes bootOrigAfter {
+	0%   { height: 0.5em; box-shadow: 0.5em 1em rgba(143,168,144,.85),  -0.5em -1em rgba(201,170,112,.85); }
+	35%  { height: 2.5em; box-shadow: 0.5em 0 rgba(143,168,144,.85),    -0.5em 0 rgba(201,170,112,.85); }
+	70%  { height: 0.5em; box-shadow: 0.5em -1em rgba(143,168,144,.85), -0.5em 1em rgba(201,170,112,.85); }
+	100% { box-shadow: 0.5em 1em rgba(143,168,144,.85),  -0.5em -1em rgba(201,170,112,.85); }
+  }
+  body.dark-mode .boot-loader-orig::before { animation-name: bootOrigBeforeDark; }
+  body.dark-mode .boot-loader-orig::after  { animation-name: bootOrigAfterDark;  }
+  @keyframes bootOrigBeforeDark {
+	0%   { width: 0.5em; box-shadow: 1em -0.5em rgba(230,160,142,.95), -1em 0.5em rgba(170,200,212,.95); }
+	35%  { width: 2.5em; box-shadow: 0 -0.5em rgba(230,160,142,.95),    0 0.5em rgba(170,200,212,.95); }
+	70%  { width: 0.5em; box-shadow: -1em -0.5em rgba(230,160,142,.95), 1em 0.5em rgba(170,200,212,.95); }
+	100% { box-shadow: 1em -0.5em rgba(230,160,142,.95), -1em 0.5em rgba(170,200,212,.95); }
+  }
+  @keyframes bootOrigAfterDark {
+	0%   { height: 0.5em; box-shadow: 0.5em 1em rgba(170,200,178,.95),  -0.5em -1em rgba(230,200,140,.95); }
+	35%  { height: 2.5em; box-shadow: 0.5em 0 rgba(170,200,178,.95),    -0.5em 0 rgba(230,200,140,.95); }
+	70%  { height: 0.5em; box-shadow: 0.5em -1em rgba(170,200,178,.95), -0.5em 1em rgba(230,200,140,.95); }
+	100% { box-shadow: 0.5em 1em rgba(170,200,178,.95),  -0.5em -1em rgba(230,200,140,.95); }
   }
 
   .boot-text{display:flex;align-items:center;gap:1px;font-size:13px;color:var(--ink-soft);letter-spacing:.02em;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;}
@@ -347,7 +351,6 @@
 
   body.dark-mode .modal .m-body{ color: var(--ink); }
   body.dark-mode .modal .m-body .form-line label{ color: var(--ink-soft); }
-
   body.dark-mode .modal .m-body .field{background: rgba(255,255,255,.05);border: 1.5px solid rgba(255,255,255,.35);color: #fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 -1px 0 rgba(0,0,0,.15);}
   body.dark-mode .modal .m-body .field::placeholder{ color: rgba(255,255,255,.35); }
   body.dark-mode .modal .m-body .field:focus{background: rgba(255,255,255,.08);border-color: #fff;box-shadow:0 0 0 3px rgba(255,255,255,.15),inset 0 1px 0 rgba(255,255,255,.25),inset 0 -1px 0 rgba(0,0,0,.15);}
@@ -462,15 +465,6 @@
 	0%, 100% { transform: scale(1, 1); }
 	50% { transform: scale(1.2, 1); }
   }
-
-  .loader-bars{--bar-color: currentColor;--bar-width: 2px;--bar-height: 8px;--bar-gap: 2.5px;--bar-radius: 1px;display:inline-flex;align-items:center;justify-content:center;gap:var(--bar-gap);vertical-align:middle;height:calc(var(--bar-height) * 1.7);flex-shrink:0}
-  .loader-bars > span{display:block;width:var(--bar-width);height:var(--bar-height);background:var(--bar-color);border-radius:var(--bar-radius);animation: loader-bars 0.9s infinite ease-in-out}
-  .loader-bars > span:nth-child(1){ animation-delay: -0.32s; }
-  .loader-bars > span:nth-child(2){ animation-delay: -0.16s; }
-  .loader-bars > span:nth-child(3){ animation-delay: 0s; }
-  @keyframes loader-bars{0%,80%,100%{height:var(--bar-height);opacity:.55}40%{height:calc(var(--bar-height)*1.7);opacity:1}}
-  .loader-bars.xs{ --bar-width:2px;   --bar-height:8px;  --bar-gap:2.5px; --bar-radius:1px; }
-  .loader-bars.on-primary{ --bar-color: #fff; }
 
   .loader-grid{--sq-size: 6px;--sq-gap: 3px;--sq-radius: 1.5px;--sq-color: currentColor;display:inline-grid;grid-template-columns:repeat(3,var(--sq-size));grid-template-rows:repeat(3,var(--sq-size));gap:var(--sq-gap);vertical-align:middle;flex-shrink:0}
   .loader-grid > span{display:block;width:var(--sq-size);height:var(--sq-size);background:var(--sq-color);border-radius:var(--sq-radius);opacity:.3;transform:scale(.55);animation:sq-wave 1.15s ease-in-out infinite;will-change:transform,opacity}
@@ -700,29 +694,12 @@
   .tool-item.i2{ --tx: 58px; --ty: -32px; }
 
   .red-dot{
-	position: absolute;
-	top: -4px;
-	right: -4px;
-	min-width: 16px;
-	height: 16px;
-	padding: 0 4px;
-	border-radius: 8px;
-	background: #E05048;
-	color: #fff;
-	font-size: 10px;
-	font-weight: 700;
-	line-height: 16px;
-	text-align: center;
-	box-sizing: border-box;
-	box-shadow: 0 0 0 2px var(--card);
-	pointer-events: none;
-	z-index: 3;
-	font-variant-numeric: tabular-nums;
-	transition: opacity .2s ease;
+	position: absolute;top: -4px;right: -4px;min-width: 16px;height: 16px;padding: 0 4px;
+	border-radius: 8px;background: #E05048;color: #fff;font-size: 10px;font-weight: 700;
+	line-height: 16px;text-align: center;box-sizing: border-box;box-shadow: 0 0 0 2px var(--card);
+	pointer-events: none;z-index: 3;font-variant-numeric: tabular-nums;transition: opacity .2s ease;
   }
-  .tool-main .red-dot{
-	box-shadow: 0 0 0 2px var(--orange);
-  }
+  .tool-main .red-dot{ box-shadow: 0 0 0 2px var(--orange); }
   .red-dot.hidden{ display: none; }
 
   .modal::-webkit-scrollbar{width:5px}
@@ -736,18 +713,18 @@
   body.dark-mode .btn-red:active{background:#4A2E2A;transform:translate(3px,3px);box-shadow:0 0 0 0}
 
   body.reduce-motion *,body.reduce-motion *::before,body.reduce-motion *::after {animation-duration: .01ms !important;animation-iteration-count: 1 !important;transition-duration: .01ms !important;}
-  body.reduce-motion .loader-bars > span,body.reduce-motion .loader-grid > span,body.reduce-motion .boot-dots i,body.reduce-motion .boot-loader-grid > span,body.reduce-motion .btn-loader::before,body.reduce-motion .btn-loader::after {animation-duration: inherit !important;animation-iteration-count: infinite !important;}
+  body.reduce-motion .loader-grid > span,body.reduce-motion .boot-dots i,body.reduce-motion .boot-loader-orig::before,body.reduce-motion .boot-loader-orig::after,body.reduce-motion .btn-loader::before,body.reduce-motion .btn-loader::after {animation-duration: inherit !important;animation-iteration-count: infinite !important;}
 
   @media (prefers-reduced-motion: reduce){
 		*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-		.flow,.stamp-mini,.loader-bars>span,.loader-grid>span,.boot-dots i{animation:none}
+		.flow,.stamp-mini,.loader-grid>span,.boot-dots i{animation:none}
 		#backTop{transform: translateY(0) scale(1);}
   }
 </style>
 </head>
 <body class="booting">
 <script>
-/* 提前应用暗色偏好，防止加载闪烁 */
+/* 提前应用暗色偏好 */
 (function(){
   try {
 	if (localStorage.getItem('theme') === 'dark') {
@@ -769,11 +746,7 @@
   </nav>
   <div id="content">
 	<div class="boot-loading">
-	  <span class="boot-loader-grid" aria-hidden="true">
-		<span></span><span></span><span></span>
-		<span></span><span></span><span></span>
-		<span></span><span></span><span></span>
-	  </span>
+	  <span class="boot-loader-orig" aria-hidden="true"></span>
 	  <div class="boot-text">
 		<span id="bootTextMsg">正在连接云端数据库</span><span class="boot-dots"><i>.</i><i>.</i><i>.</i></span>
 	  </div>
@@ -827,7 +800,7 @@
 <div id="toastWrap"></div>
 
 <script>
-const APP_VERSION = 'v3.3.6';
+const APP_VERSION = 'v3.3.7';
 const APP_DATE = '2026年10月1日';
 
 const BOOT_TEXTS = [
@@ -900,11 +873,9 @@ function applyPrimaryTheme(themeId){
   const t = THEMES[themeId] || THEMES.orange;
   const isDark = document.body.classList.contains('dark-mode');
   const c = isDark ? t.dark : t.light;
-
   document.documentElement.style.setProperty('--orange', c.main);
   document.documentElement.style.setProperty('--orange-dark', c.dark);
   document.documentElement.style.setProperty('--orange-soft', c.soft);
-
   document.body.style.setProperty('--orange', c.main);
   document.body.style.setProperty('--orange-dark', c.dark);
   document.body.style.setProperty('--orange-soft', c.soft);
@@ -961,12 +932,10 @@ function openSettings(){
 
   openModal('设置', `
 	${personalSection}
-
 	<div class="settings-section">
 	  <div class="settings-label">主题色</div>
 	  <div class="theme-swatches">${themeSwatchesHtml}</div>
 	</div>
-
 	<div class="settings-section">
 	  <div class="settings-label">卡片圆角</div>
 	  <div class="segmented" id="segRadius">
@@ -975,7 +944,6 @@ function openSettings(){
 		<button data-r="lg" class="${radius === 'lg' ? 'active' : ''}" onclick="selectRadius('lg')">大</button>
 	  </div>
 	</div>
-
 	<div class="settings-section">
 	  <div class="settings-label">动效</div>
 	  <div class="segmented" id="segMotion">
@@ -983,7 +951,6 @@ function openSettings(){
 		<button data-m="off" class="${!motion ? 'active' : ''}" onclick="selectMotion(false)">关闭</button>
 	  </div>
 	</div>
-
 	<div class="settings-section">
 	  <div class="settings-label">数据</div>
 	  <button class="reset-btn" onclick="resetSettings()">
@@ -994,7 +961,6 @@ function openSettings(){
 		重置本地设置
 	  </button>
 	</div>
-
 	<div class="settings-section">
 	  <div class="settings-label">关于</div>
 	  <div class="settings-about">
@@ -1014,25 +980,18 @@ function selectTheme(id){
 	else el.classList.remove('active');
   });
 }
-
 function selectRadius(size){
   localStorage.setItem('theme_radius', size);
   applyRadius(size);
   const seg = document.getElementById('segRadius');
-  if (seg) seg.querySelectorAll('button').forEach(b => {
-	b.classList.toggle('active', b.dataset.r === size);
-  });
+  if (seg) seg.querySelectorAll('button').forEach(b => { b.classList.toggle('active', b.dataset.r === size); });
 }
-
 function selectMotion(enabled){
   localStorage.setItem('theme_motion', enabled ? 'on' : 'off');
   applyMotion(enabled);
   const seg = document.getElementById('segMotion');
-  if (seg) seg.querySelectorAll('button').forEach(b => {
-	b.classList.toggle('active', (b.dataset.m === 'on') === enabled);
-  });
+  if (seg) seg.querySelectorAll('button').forEach(b => { b.classList.toggle('active', (b.dataset.m === 'on') === enabled); });
 }
-
 function resetSettings(){
   confirmAction('重置本地设置', '将把主题色、圆角、动效恢复到默认值。此操作只影响本机，不影响云端数据。', '确认重置', true, () => {
 	localStorage.removeItem('theme_primary');
@@ -1059,7 +1018,6 @@ function openEditName(){
 	</div>
   `);
 }
-
 async function saveNewName(){
   const newName = document.getElementById('newName').value.trim();
   if (!newName) { toast('昵称不能为空', 'warn'); return; }
@@ -1077,9 +1035,8 @@ async function saveNewName(){
 	toast('昵称已更新', 'success');
 	closeModal();
 	render();
-  } catch (e) {
-	toast('更新失败: ' + e.message, 'error');
-  } finally { busyEnd(); }
+  } catch (e) { toast('更新失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
 }
 
 function openChangePassword(){
@@ -1097,7 +1054,6 @@ function openChangePassword(){
 	</div>
   `);
 }
-
 async function saveNewPassword(){
   const pw1 = document.getElementById('newPw').value;
   const pw2 = document.getElementById('newPw2').value;
@@ -1112,9 +1068,8 @@ async function saveNewPassword(){
 	});
 	toast('密码已更新', 'success');
 	closeModal();
-  } catch (e) {
-	toast('更新失败: ' + e.message, 'error');
-  } finally { busyEnd(); }
+  } catch (e) { toast('更新失败: ' + e.message, 'error'); }
+  finally { busyEnd(); }
 }
 
 /* ============================================================
@@ -1148,10 +1103,7 @@ async function fetchWithRetry(url, options = {}, { timeout = 20000, retry = 2 } 
 	  return r;
 	} catch (e) {
 	  lastErr = e;
-	  if (i < retry) {
-		console.warn(`请求失败，${(i+1)*600}ms 后重试...`, e.message);
-		await new Promise(res => setTimeout(res, 600 * (i + 1)));
-	  }
+	  if (i < retry) { await new Promise(res => setTimeout(res, 600 * (i + 1))); }
 	}
   }
   throw lastErr || new Error('请求失败');
@@ -1305,8 +1257,8 @@ const isLoggedIn = () => !!state.user;
 
 const curSem = () => {
   if (state.currentSemesterId) {
-		const found = DB.semesters.find(s => s.id === state.currentSemesterId);
-		if (found) return found;
+	const found = DB.semesters.find(s => s.id === state.currentSemesterId);
+	if (found) return found;
   }
   return DB.semesters[0] || null;
 };
@@ -1335,29 +1287,14 @@ function getUnreadCount() {
   const key = 'inbox_last_seen_' + state.user.studentId;
   const lastSeen = Number(localStorage.getItem(key) || 0);
   let count = 0;
-
   if (isAdmin()) {
 	count += DB.applications.filter(a => a.status === 'pending' && (a.time || 0) > lastSeen).length;
 	count += DB.feedbacks.filter(f => f.status === 'pending' && (f.created_at || 0) > lastSeen).length;
   } else if (isKeeper()) {
-	count += DB.applications.filter(a =>
-	  a.applicant_student_id === state.user.studentId &&
-	  a.status !== 'pending' &&
-	  (a.time || 0) > lastSeen
-	).length;
-	count += DB.feedbacks.filter(f =>
-	  f.submitter_id === state.user.studentId &&
-	  f.status === 'public' &&
-	  f.admin_reply &&
-	  (f.updated_at || f.created_at || 0) > lastSeen
-	).length;
+	count += DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status !== 'pending' && (a.time || 0) > lastSeen).length;
+	count += DB.feedbacks.filter(f => f.submitter_id === state.user.studentId && f.status === 'public' && f.admin_reply && (f.updated_at || f.created_at || 0) > lastSeen).length;
   } else {
-	count += DB.feedbacks.filter(f =>
-	  f.submitter_id === state.user.studentId &&
-	  f.status === 'public' &&
-	  f.admin_reply &&
-	  (f.updated_at || f.created_at || 0) > lastSeen
-	).length;
+	count += DB.feedbacks.filter(f => f.submitter_id === state.user.studentId && f.status === 'public' && f.admin_reply && (f.updated_at || f.created_at || 0) > lastSeen).length;
   }
   return count;
 }
@@ -1366,8 +1303,7 @@ function updateRedDots() {
   const count = getUnreadCount();
   const show = count > 0;
   const text = count > 9 ? '9+' : String(count);
-  const ids = ['inboxDot', 'toolMainDot'];
-  ids.forEach(id => {
+  ['inboxDot', 'toolMainDot'].forEach(id => {
 	const el = document.getElementById(id);
 	if (!el) return;
 	if (show) { el.textContent = text; el.classList.remove('hidden'); }
@@ -1383,9 +1319,9 @@ function markInboxSeen() {
 async function addOpLog(action, detail) {
   if (!state.user) return;
   try {
-		const logEntry = { time: Date.now(), operator: state.user.name + '(' + state.user.studentId + ')', action: action, detail: detail };
-		await apiPost('oplogs', logEntry);
-		DB.oplogs.push({ ...logEntry, id: 'local-' + uid() });
+	const logEntry = { time: Date.now(), operator: state.user.name + '(' + state.user.studentId + ')', action: action, detail: detail };
+	await apiPost('oplogs', logEntry);
+	DB.oplogs.push({ ...logEntry, id: 'local-' + uid() });
   } catch (e) { console.warn('日志记录失败:', e); }
 }
 
@@ -1404,7 +1340,6 @@ async function loadAllData(silent = false) {
 
   for (let attempt = 1; attempt <= maxAttempt; attempt++) {
 	try {
-	  /* 分批请求：避免 8 个请求同时发送抢占主线程 */
 	  const batch1 = await Promise.allSettled([
 		apiGet('semesters'),
 		apiGet('records'),
@@ -1425,31 +1360,18 @@ async function loadAllData(silent = false) {
 	  ]);
 
 	  const results = [
-		batch1[0], // semesters
-		batch2[0], // accounts
-		batch1[1], // records
-		batch2[1], // applications
-		batch2[2], // feedbacks
-		batch3[0], // logs
-		batch3[1], // oplogs
-		batch1[2]  // settings
+		batch1[0], batch2[0], batch1[1], batch2[1], batch2[2], batch3[0], batch3[1], batch1[2]
 	  ];
 
 	  const critical = ['semesters', 'records', 'settings'];
 	  const names = ['semesters','accounts','records','applications','feedbacks','logs','oplogs','settings'];
 	  const failed = [];
-	  results.forEach((r, i) => {
-		if (r.status === 'rejected') failed.push(names[i]);
-	  });
+	  results.forEach((r, i) => { if (r.status === 'rejected') failed.push(names[i]); });
 
 	  const criticalFailed = failed.filter(n => critical.includes(n));
-	  if (criticalFailed.length > 0) {
-		throw new Error(`关键表加载失败：${criticalFailed.join(', ')}`);
-	  }
+	  if (criticalFailed.length > 0) { throw new Error(`关键表加载失败：${criticalFailed.join(', ')}`); }
 
-	  const [sems, accs, recs, apps, fbs, logs, oplogs, set] = results.map(r =>
-		r.status === 'fulfilled' ? r.value : []
-	  );
+	  const [sems, accs, recs, apps, fbs, logs, oplogs, set] = results.map(r => r.status === 'fulfilled' ? r.value : []);
 
 	  DB.semesters = sems || [];
 	  DB.accounts = accs || [];
@@ -1465,16 +1387,11 @@ async function loadAllData(silent = false) {
 		if (saved && DB.semesters.some(s => s.id === saved)) { state.currentSemesterId = saved; }
 		else { state.currentSemesterId = DB.semesters[0].id; }
 	  }
-
-	  if (failed.length && !silent) {
-		console.warn('部分表加载失败（不影响主流程）：', failed);
-	  }
 	  return true;
 
 	} catch (e) {
 	  lastErr = e;
 	  console.warn(`第 ${attempt}/${maxAttempt} 次加载失败:`, e.message);
-
 	  if (attempt < maxAttempt) {
 		if (!silent) {
 		  const msgEl = document.getElementById('bootTextMsg');
@@ -1507,11 +1424,7 @@ async function loadAllData(silent = false) {
 async function retryLoad() {
   document.getElementById('content').innerHTML = `
 	<div class="boot-loading">
-	  <span class="boot-loader-grid" aria-hidden="true">
-		<span></span><span></span><span></span>
-		<span></span><span></span><span></span>
-		<span></span><span></span><span></span>
-	  </span>
+	  <span class="boot-loader-orig" aria-hidden="true"></span>
 	  <div class="boot-text">
 		<span id="bootTextMsg">正在重新连接云端数据库</span><span class="boot-dots"><i>.</i><i>.</i><i>.</i></span>
 	  </div>
@@ -1528,27 +1441,22 @@ async function retryLoad() {
 function go(view, push = true) {
   if (push) state.history.push(state.view);
   state.view = view;
-  if (view === 'inbox' && state.user) {
-	markInboxSeen();
-  }
+  if (view === 'inbox' && state.user) { markInboxSeen(); }
   render();
   try {
-		if (push) history.pushState({ v: view }, '', '#' + view);
-		else history.replaceState({ v: view }, '', '#' + view);
+	if (push) history.pushState({ v: view }, '', '#' + view);
+	else history.replaceState({ v: view }, '', '#' + view);
   } catch (e) { }
 }
-
 window.addEventListener('popstate', function () {
   if (state.history.length > 1) { state.view = state.history.pop(); }
   else { state.view = 'home'; }
   render();
 });
-
 function back() {
   if (state.history.length > 1) { history.back(); }
   else { go('home', false); }
 }
-
 function toggleTheme() {
   document.body.classList.toggle('dark-mode');
   const isDark = document.body.classList.contains('dark-mode');
@@ -1558,7 +1466,6 @@ function toggleTheme() {
   const primaryId = localStorage.getItem('theme_primary') || 'orange';
   applyPrimaryTheme(primaryId);
 }
-
 function loadTheme() {
   if (localStorage.getItem('theme') === 'dark' && !document.body.classList.contains('dark-mode')) {
 	document.body.classList.add('dark-mode');
@@ -1574,12 +1481,8 @@ function toast(msg, type = 'info', dur = 2400) {
   el.innerHTML = `<span class="t-ico">${TOAST_ICONS[type] || TOAST_ICONS.info}</span><span>${esc(msg)}</span>`;
   wrap.appendChild(el);
   requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
-  setTimeout(() => {
-		el.classList.remove('show'); el.classList.add('hide');
-		setTimeout(() => el.remove(), 320);
-  }, dur);
+  setTimeout(() => { el.classList.remove('show'); el.classList.add('hide'); setTimeout(() => el.remove(), 320); }, dur);
 }
-
 function topbar(mode) {
   const bar = document.getElementById('topbar');
   if (!bar) return;
@@ -1587,48 +1490,45 @@ function topbar(mode) {
   else if (mode === 'done') { bar.className = 'done'; setTimeout(() => { bar.className = ''; }, 420); }
   else { bar.className = ''; }
 }
-
 function confirmAction(title, msgHtml, okLabel, danger, onOk) {
   openModal(esc(title), `
-		<p style="font-size:14px;color:var(--ink-soft);line-height:1.75;margin:0 0 18px;">${msgHtml}</p>
-		<div style="display:flex;gap:10px">
-		  <button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button>
-		  <button class="btn ${danger ? 'btn-red' : 'btn-primary'} btn-block" id="cfmOkBtn">${esc(okLabel)}</button>
-		</div>
+	<p style="font-size:14px;color:var(--ink-soft);line-height:1.75;margin:0 0 18px;">${msgHtml}</p>
+	<div style="display:flex;gap:10px">
+	  <button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button>
+	  <button class="btn ${danger ? 'btn-red' : 'btn-primary'} btn-block" id="cfmOkBtn">${esc(okLabel)}</button>
+	</div>
   `);
   const btn = document.getElementById('cfmOkBtn');
   if (btn) btn.onclick = () => { closeModal(); onOk(); };
 }
-
 function animateNums() {
   document.querySelectorAll('#content .stat .v[data-v]').forEach(el => {
-		const target = parseFloat(el.dataset.v) || 0;
-		if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-		  el.textContent = '¥' + fmtMoney(target); return;
-		}
-		const dur = 650, t0 = performance.now();
-		const step = now => {
-		  const p = Math.min((now - t0) / dur, 1);
-		  const eased = 1 - Math.pow(1 - p, 3);
-		  el.textContent = '¥' + fmtMoney(target * eased);
-		  if (p < 1) requestAnimationFrame(step);
-		};
-		requestAnimationFrame(step);
+	const target = parseFloat(el.dataset.v) || 0;
+	if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+	  el.textContent = '¥' + fmtMoney(target); return;
+	}
+	const dur = 650, t0 = performance.now();
+	const step = now => {
+	  const p = Math.min((now - t0) / dur, 1);
+	  const eased = 1 - Math.pow(1 - p, 3);
+	  el.textContent = '¥' + fmtMoney(target * eased);
+	  if (p < 1) requestAnimationFrame(step);
+	};
+	requestAnimationFrame(step);
   });
 }
-
 function openAbout() {
   openModal('关于', `
-		<div class="about-title">${esc(DB.settings.class_name)}</div>
-		<div class="about-sub">班费公示平台</div>
-		<div class="about-section">
-		  <div class="about-row"><span class="lbl">版本</span><span class="val">${APP_VERSION}</span></div>
-		  <div class="about-row"><span class="lbl">最近更新</span><span class="val">${APP_DATE}</span></div>
-		  <div class="about-row"><span class="lbl">了解更多</span><span class="val"><a href="https://github.com/starryeeeeee/class-fund-disclosure-platform" target="_blank">点击跳转至 GitHub 仓库</a></span></div>
-		</div>
-		<div style="display:flex;gap:10px;margin-top:20px;">
-		  <button class="btn btn-primary btn-block" onclick="closeModal()">我知道了</button>
-		</div>
+	<div class="about-title">${esc(DB.settings.class_name)}</div>
+	<div class="about-sub">班费公示平台</div>
+	<div class="about-section">
+	  <div class="about-row"><span class="lbl">版本</span><span class="val">${APP_VERSION}</span></div>
+	  <div class="about-row"><span class="lbl">最近更新</span><span class="val">${APP_DATE}</span></div>
+	  <div class="about-row"><span class="lbl">了解更多</span><span class="val"><a href="https://github.com/starryeeeeee/class-fund-disclosure-platform" target="_blank">点击跳转至 GitHub 仓库</a></span></div>
+	</div>
+	<div style="display:flex;gap:10px;margin-top:20px;">
+	  <button class="btn btn-primary btn-block" onclick="closeModal()">我知道了</button>
+	</div>
   `);
 }
 
@@ -1638,17 +1538,17 @@ function render() {
   const isHome = state.view === 'home';
 
   if (state.user && state.view === 'main') {
-		navBack.classList.remove('hidden');
-		navLabel.textContent = '退出';
-		const svg = navBack.querySelector('svg');
-		if (svg) svg.style.display = 'none';
+	navBack.classList.remove('hidden');
+	navLabel.textContent = '退出';
+	const svg = navBack.querySelector('svg');
+	if (svg) svg.style.display = 'none';
   } else if (!isHome) {
-		navBack.classList.remove('hidden');
-		navLabel.textContent = '返回';
-		const svg = navBack.querySelector('svg');
-		if (svg) svg.style.display = 'block';
+	navBack.classList.remove('hidden');
+	navLabel.textContent = '返回';
+	const svg = navBack.querySelector('svg');
+	if (svg) svg.style.display = 'block';
   } else {
-		navBack.classList.add('hidden');
+	navBack.classList.add('hidden');
   }
 
   const fab = document.getElementById('toolFab');
@@ -1658,11 +1558,11 @@ function render() {
   let title = '班费公示平台';
   if (state.view === 'home') title = '班费公示平台';
   else if (state.view === 'main') {
-		if (isVisitor()) title = '访客主页';
-		else if (isAdmin()) title = '总管理员主页';
-		else if (isKeeper()) title = '生活委员主页';
-		else if (isLoggedIn()) title = '班级成员主页';
-		else title = '访客主页';
+	if (isVisitor()) title = '访客主页';
+	else if (isAdmin()) title = '总管理员主页';
+	else if (isKeeper()) title = '生活委员主页';
+	else if (isLoggedIn()) title = '班级成员主页';
+	else title = '访客主页';
   } else if (state.view === 'records') title = '全部流水';
   else if (state.view === 'edit') title = state.editingId ? '修改记录' : '新增记录';
   else if (state.view === 'admin') title = '管理后台';
@@ -1676,55 +1576,54 @@ function render() {
 
   const isDarkMode = document.body.classList.contains('dark-mode');
   let right = `
-		<label class="theme-switch" aria-label="切换昼夜模式">
-		  <input type="checkbox" class="theme-switch-input" ${isDarkMode ? 'checked' : ''} onchange="toggleTheme()">
-		  <svg viewBox="0 0 69.667 44" xmlns="http://www.w3.org/2000/svg">
-			<g transform="translate(3.5 3.5)">
-			  <g transform="matrix(1, 0, 0, 1, -3.5, -3.5)" filter="url(#container)">
-				<rect id="container" width="60.667" height="35" rx="17.5" transform="translate(3.5 3.5)" fill="#83cbd8"/>
+	<label class="theme-switch" aria-label="切换昼夜模式">
+	  <input type="checkbox" class="theme-switch-input" ${isDarkMode ? 'checked' : ''} onchange="toggleTheme()">
+	  <svg viewBox="0 0 69.667 44" xmlns="http://www.w3.org/2000/svg">
+		<g transform="translate(3.5 3.5)">
+		  <g transform="matrix(1, 0, 0, 1, -3.5, -3.5)" filter="url(#container)">
+			<rect id="container" width="60.667" height="35" rx="17.5" transform="translate(3.5 3.5)" fill="#83cbd8"/>
+		  </g>
+		  <g id="button" transform="translate(2.333 2.333)">
+			<g id="sun">
+			  <g transform="matrix(1, 0, 0, 1, -5.83, -5.83)" filter="url(#sun-outer)">
+				<circle cx="15.167" cy="15.167" r="15.167" transform="translate(5.83 5.83)" fill="#f8e664"/>
 			  </g>
-			  <g id="button" transform="translate(2.333 2.333)">
-				<g id="sun">
-				  <g transform="matrix(1, 0, 0, 1, -5.83, -5.83)" filter="url(#sun-outer)">
-					<circle cx="15.167" cy="15.167" r="15.167" transform="translate(5.83 5.83)" fill="#f8e664"/>
-				  </g>
-				  <g transform="matrix(1, 0, 0, 1, -5.83, -5.83)" filter="url(#sun)">
-					<path d="M11.667,0A11.667,11.667,0,1,1,0,11.667,11.667,11.667,0,0,1,11.667,0Z" transform="translate(9.33 9.33)" fill="rgba(246,254,247,0.29)"/>
-				  </g>
-				  <circle cx="7" cy="7" r="7" transform="translate(8.167 8.167)" fill="#fcf4b9"/>
-				</g>
-				<g id="moon">
-				  <g transform="matrix(1, 0, 0, 1, -31.5, -5.83)" filter="url(#moon)">
-					<circle cx="15.167" cy="15.167" r="15.167" transform="translate(31.5 5.83)" fill="#cce6ee"/>
-				  </g>
-				  <g id="patches" transform="translate(-24.415 -1.009)" fill="#a6cad0">
-					<circle cx="2" cy="2" r="2" transform="translate(43.009 4.496)"/>
-					<circle cx="2" cy="2" r="2" transform="translate(39.366 17.952)"/>
-					<circle cx="1" cy="1" r="1" transform="translate(33.016 8.044)"/>
-					<circle cx="1" cy="1" r="1" transform="translate(51.081 18.888)"/>
-					<circle cx="1" cy="1" r="1" transform="translate(33.016 22.503)"/>
-					<circle cx="1.5" cy="1.5" r="1.5" transform="translate(50.081 10.53)"/>
-				  </g>
-				</g>
+			  <g transform="matrix(1, 0, 0, 1, -5.83, -5.83)" filter="url(#sun)">
+				<path d="M11.667,0A11.667,11.667,0,1,1,0,11.667,11.667,11.667,0,0,1,11.667,0Z" transform="translate(9.33 9.33)" fill="rgba(246,254,247,0.29)"/>
 			  </g>
-			  <g transform="matrix(1, 0, 0, 1, -3.5, -3.5)" filter="url(#cloud)">
-				<path id="cloud" d="M3512.81,173.815a4.463,4.463,0,0,1,2.243.62.95.95,0,0,1,.72-1.281,4.852,4.852,0,0,1,2.623.519c.034.02-.5-1.968.281-2.716a2.117,2.117,0,0,1,2.829-.274,1.821,1.821,0,0,1,.854,1.858c.063.037,2.594-.049,3.285,1.273s-.865,2.544-.807,2.626a12.192,12.192,0,0,1,2.278.892c.553.448,1.106,1.992-1.62,2.927a7.742,7.742,0,0,1-3.762-.3c-1.28-.49-1.181-2.65-1.137-2.624s-1.417,2.2-2.623,2.2a4.172,4.172,0,0,1-2.394-1.206,3.825,3.825,0,0,1-2.771.774c-3.429-.46-2.333-3.267-2.2-3.55A3.721,3.721,0,0,1,3512.81,173.815Z" transform="translate(-3466.47 -160.94)" fill="#fff"/>
+			  <circle cx="7" cy="7" r="7" transform="translate(8.167 8.167)" fill="#fcf4b9"/>
+			</g>
+			<g id="moon">
+			  <g transform="matrix(1, 0, 0, 1, -31.5, -5.83)" filter="url(#moon)">
+				<circle cx="15.167" cy="15.167" r="15.167" transform="translate(31.5 5.83)" fill="#cce6ee"/>
 			  </g>
-			  <g id="stars" transform="translate(3.585 1.325)" fill="#def8ff">
-				<path d="M.774,0,.566.559,0,.539.458.933.25,1.492l.485-.361.458.394L1.024.953,1.509.592.943.572Z" transform="matrix(-1, 0.017, -0.017, -1, 24.231, 3.055)"/>
-				<path d="M1.341.529.836.472.736,0,.505.46,0,.4.4.729l-.231.46L.605.932l.4.326L.9.786Z" transform="matrix(-0.777, 0.629, -0.629, -0.777, 23.185, 12.358)"/>
-				<path d="M.015,1.065.475.9l.285.365L.766.772l.46-.164L.745.494.751,0,.481.407,0,.293.285.658Z" transform="matrix(0.438, 0.899, -0.899, 0.438, 23.177, 29.735)"/>
-				<path d="M1.161,1.6,1.059,1,1.574.722.962.607.86,0,.613.572,0,.457.446.881.2,1.454l.516-.274Z" transform="translate(12.677 0.388) rotate(104)"/>
-				<path d="M.873,1.648l.114-.62L1.579.945,1.03.62,1.144,0,.706.464.157.139.438.7,0,1.167l.592-.083Z" transform="matrix(-0.07, 0.998, -0.998, -0.07, 11.066, 15.457)"/>
-				<path d="M.593,0,.638.724,0,.982l.7.211.045.724.36-.64.7.211L1.342.935,1.7.294,1.063.552Z" transform="translate(8.326 28.061) rotate(11)"/>
-				<path d="M.816,0,.5.455,0,.311.323.767l-.312.455.516-.215.323.456L.827.911,1.343.7.839.552Z" transform="translate(5.012 5.962) rotate(172)"/>
-				<path d="M1.261,0,.774.571.114.3.487.967,0,1.538.728,1.32l.372.662.047-.749.728-.218L1.215.749Z" transform="translate(2.218 14.616) rotate(169)"/>
+			  <g id="patches" transform="translate(-24.415 -1.009)" fill="#a6cad0">
+				<circle cx="2" cy="2" r="2" transform="translate(43.009 4.496)"/>
+				<circle cx="2" cy="2" r="2" transform="translate(39.366 17.952)"/>
+				<circle cx="1" cy="1" r="1" transform="translate(33.016 8.044)"/>
+				<circle cx="1" cy="1" r="1" transform="translate(51.081 18.888)"/>
+				<circle cx="1" cy="1" r="1" transform="translate(33.016 22.503)"/>
+				<circle cx="1.5" cy="1.5" r="1.5" transform="translate(50.081 10.53)"/>
 			  </g>
 			</g>
-		  </svg>
-		</label>
+		  </g>
+		  <g transform="matrix(1, 0, 0, 1, -3.5, -3.5)" filter="url(#cloud)">
+			<path id="cloud" d="M3512.81,173.815a4.463,4.463,0,0,1,2.243.62.95.95,0,0,1,.72-1.281,4.852,4.852,0,0,1,2.623.519c.034.02-.5-1.968.281-2.716a2.117,2.117,0,0,1,2.829-.274,1.821,1.821,0,0,1,.854,1.858c.063.037,2.594-.049,3.285,1.273s-.865,2.544-.807,2.626a12.192,12.192,0,0,1,2.278.892c.553.448,1.106,1.992-1.62,2.927a7.742,7.742,0,0,1-3.762-.3c-1.28-.49-1.181-2.65-1.137-2.624s-1.417,2.2-2.623,2.2a4.172,4.172,0,0,1-2.394-1.206,3.825,3.825,0,0,1-2.771.774c-3.429-.46-2.333-3.267-2.2-3.55A3.721,3.721,0,0,1,3512.81,173.815Z" transform="translate(-3466.47 -160.94)" fill="#fff"/>
+		  </g>
+		  <g id="stars" transform="translate(3.585 1.325)" fill="#def8ff">
+			<path d="M.774,0,.566.559,0,.539.458.933.25,1.492l.485-.361.458.394L1.024.953,1.509.592.943.572Z" transform="matrix(-1, 0.017, -0.017, -1, 24.231, 3.055)"/>
+			<path d="M1.341.529.836.472.736,0,.505.46,0,.4.4.729l-.231.46L.605.932l.4.326L.9.786Z" transform="matrix(-0.777, 0.629, -0.629, -0.777, 23.185, 12.358)"/>
+			<path d="M.015,1.065.475.9l.285.365L.766.772l.46-.164L.745.494.751,0,.481.407,0,.293.285.658Z" transform="matrix(0.438, 0.899, -0.899, 0.438, 23.177, 29.735)"/>
+			<path d="M1.161,1.6,1.059,1,1.574.722.962.607.86,0,.613.572,0,.457.446.881.2,1.454l.516-.274Z" transform="translate(12.677 0.388) rotate(104)"/>
+			<path d="M.873,1.648l.114-.62L1.579.945,1.03.62,1.144,0,.706.464.157.139.438.7,0,1.167l.592-.083Z" transform="matrix(-0.07, 0.998, -0.998, -0.07, 11.066, 15.457)"/>
+			<path d="M.593,0,.638.724,0,.982l.7.211.045.724.36-.64.7.211L1.342.935,1.7.294,1.063.552Z" transform="translate(8.326 28.061) rotate(11)"/>
+			<path d="M.816,0,.5.455,0,.311.323.767l-.312.455.516-.215.323.456L.827.911,1.343.7.839.552Z" transform="translate(5.012 5.962) rotate(172)"/>
+			<path d="M1.261,0,.774.571.114.3.487.967,0,1.538.728,1.32l.372.662.047-.749.728-.218L1.215.749Z" transform="translate(2.218 14.616) rotate(169)"/>
+		  </g>
+		</g>
+	  </svg>
+	</label>
   `;
-
   document.getElementById('navRight').innerHTML = right;
 
   const V = { home: vwHome, main: vwMain, records: vwRecords, edit: vwEdit, admin: vwAdmin, semester: vwSemester, account: vwAccount, notice: vwNotice, log: vwLog, inbox: vwInbox, feedback: vwFeedback };
@@ -1738,14 +1637,12 @@ function render() {
   oldContent.parentNode.replaceChild(newContent, oldContent);
 
   window.scrollTo(0, 0);
-
   updateRedDots();
-
   requestAnimationFrame(() => {
-		requestAnimationFrame(() => {
-		  newContent.classList.add('active');
-		  animateNums();
-		});
+	requestAnimationFrame(() => {
+	  newContent.classList.add('active');
+	  animateNums();
+	});
   });
 }
 
@@ -1753,7 +1650,6 @@ function handleNavLeft() {
   if (state.user && state.view === 'main') { logout(); return; }
   back();
 }
-
 async function logout() {
   try { await sb.auth.signOut(); } catch (e) { console.warn('登出失败:', e); }
   state.user = null;
@@ -1766,34 +1662,30 @@ function vwHome() {
   const isLoggedInUser = !!state.user;
   return `
   <div class="home-wrap">
-		<div class="logo"><img src="logo.gif" alt="班级Logo" onerror="this.style.display='none'"></div>
-		<div class="home-title">${esc(DB.settings.class_name)} 班费公示平台</div>
-		<div class="home-desc">随时查看班费流向📋🤩公开透明</div>
-
-		<div class="login-form">
-		  <p>
-			<svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor">
-			  <path d="M9.6 4C5.4 6.1 3 9.6 3 14.2c0 3.2 2.1 5.8 5.1 5.8 2.6 0 4.5-2 4.5-4.5 0-2.4-1.8-4.3-4.2-4.3-.4 0-.9.1-1 .1.3-2.4 2.4-5.1 4.6-6.3L9.6 4zm10.4 0c-4.2 2.1-6.6 5.6-6.6 10.2 0 3.2 2.1 5.8 5.1 5.8 2.6 0 4.5-2 4.5-4.5 0-2.4-1.8-4.3-4.2-4.3-.4 0-.9.1-1 .1.3-2.4 2.4-5.1 4.6-6.3L20 4z"/>
-			</svg>
-			${isLoggedInUser ? `你好，${esc(state.user.name)}` : '欢迎回来'}<span>${isLoggedInUser ? '你已登录' : '请选择登录方式'}</span>
-		  </p>
-
-		  ${isLoggedInUser ? `
-			<button class="lf-btn" type="button" onclick="go('main', false)">进入主页</button>
-			<button class="lf-btn" type="button" onclick="logout()">退出登录</button>
-		  ` : `
-			<button class="lf-btn" type="button" onclick="openLogin()">管理员登录</button>
-			<button class="lf-btn" type="button" onclick="openLogin()">班级成员登录</button>
-
-			<div class="lf-sep"><div></div><span>OR</span><div></div></div>
-
-			<button class="lf-btn" type="button" onclick="enterBrowse()">以访客身份访问</button>
-		  `}
-		</div>
+	<div class="logo"><img src="logo.gif" alt="班级Logo" onerror="this.style.display='none'"></div>
+	<div class="home-title">${esc(DB.settings.class_name)} 班费公示平台</div>
+	<div class="home-desc">随时查看班费流向📋🤩公开透明</div>
+	<div class="login-form">
+	  <p>
+		<svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor">
+		  <path d="M9.6 4C5.4 6.1 3 9.6 3 14.2c0 3.2 2.1 5.8 5.1 5.8 2.6 0 4.5-2 4.5-4.5 0-2.4-1.8-4.3-4.2-4.3-.4 0-.9.1-1 .1.3-2.4 2.4-5.1 4.6-6.3L9.6 4zm10.4 0c-4.2 2.1-6.6 5.6-6.6 10.2 0 3.2 2.1 5.8 5.1 5.8 2.6 0 4.5-2 4.5-4.5 0-2.4-1.8-4.3-4.2-4.3-.4 0-.9.1-1 .1.3-2.4 2.4-5.1 4.6-6.3L20 4z"/>
+		</svg>
+		${isLoggedInUser ? `你好，${esc(state.user.name)}` : '欢迎回来'}<span>${isLoggedInUser ? '你已登录' : '请选择登录方式'}</span>
+	  </p>
+	  ${isLoggedInUser ? `
+		<button class="lf-btn" type="button" onclick="go('main', false)">进入主页</button>
+		<button class="lf-btn" type="button" onclick="logout()">退出登录</button>
+	  ` : `
+		<button class="lf-btn" type="button" onclick="openLogin()">管理员登录</button>
+		<button class="lf-btn" type="button" onclick="openLogin()">班级成员登录</button>
+		<div class="lf-sep"><div></div><span>OR</span><div></div></div>
+		<button class="lf-btn" type="button" onclick="enterBrowse()">以访客身份访问</button>
+	  `}
+	</div>
   </div>
   <div class="foot">
-		<div>如发现bug或安全问题欢迎指出🤓不胜感激😘</div>
-		<div class="foot-actions"><a onclick="openAbout()">关于</a></div>
+	<div>如发现bug或安全问题欢迎指出🤓不胜感激😘</div>
+	<div class="foot-actions"><a onclick="openAbout()">关于</a></div>
   </div>`;
 }
 
@@ -1834,19 +1726,19 @@ function flowHTML(r, idx) {
   const pend = r.pending_delete ? `<span class="tag pending">⏳ 待删除</span>` : '';
   let ops = '';
   if (!r.pending_delete && canManageFlow()) {
-		ops += `<button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();editRecord('${r.id}')">改</button>`;
-		if (isAdmin()) {
-		  ops += `<button class="btn btn-red btn-xs" onclick="event.stopPropagation();adminDelete('${r.id}', event)">删</button>`;
-		} else if (isKeeper()) {
-		  ops += `<button class="btn btn-red btn-xs" onclick="event.stopPropagation();applyDelete('${r.id}')">删除</button>`;
-		}
+	ops += `<button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();editRecord('${r.id}')">改</button>`;
+	if (isAdmin()) {
+	  ops += `<button class="btn btn-red btn-xs" onclick="event.stopPropagation();adminDelete('${r.id}', event)">删</button>`;
+	} else if (isKeeper()) {
+	  ops += `<button class="btn btn-red btn-xs" onclick="event.stopPropagation();applyDelete('${r.id}')">删除</button>`;
+	}
   }
   const tap = r.invoice ? `onclick="openImg('${r.id}')"` : (isVisitor() ? '' : `onclick="editRecord('${r.id}')"`);
   const delay = typeof idx === 'number' ? ` style="animation-delay:${Math.min(idx, 14) * 28}ms"` : '';
   return `<div class="flow" ${tap}${delay}>
   <div class="date"><span class="d">${d}</span><span style="font-size:9px;display:block;color:var(--ink-soft)">${m}月</span></div>
   <div class="body"><div class="purpose">${esc(r.purpose)}</div>
-		<div class="meta">${invTag}${pend}经手：${esc(r.handler)}</div></div>
+	<div class="meta">${invTag}${pend}经手：${esc(r.handler)}</div></div>
   <div class="amt ${r.type}">${sign}¥${fmtMoney(r.amount)}</div>
   ${ops ? `<div class="ops">${ops}</div>` : ''}
   </div>`;
@@ -1891,38 +1783,38 @@ function renderPublicFeedbacks() {
 function vwMain() {
   const sem = curSem();
   if (!sem) {
-		if (isAdmin()) {
-		  return `<div class="mt">还没有学期数据</div><div class="sub">请先到管理后台创建一个学期</div>
-				<div class="func" style="margin-top:18px"><button class="btn btn-blue btn-block" onclick="go('admin')">⚙ 进入管理后台</button></div>`;
-		}
-		return `<div class="mt">还没有学期数据</div><div class="sub">请联系管理员在后台添加学期</div>`;
+	if (isAdmin()) {
+	  return `<div class="mt">还没有学期数据</div><div class="sub">请先到管理后台创建一个学期</div>
+			<div class="func" style="margin-top:18px"><button class="btn btn-blue btn-block" onclick="go('admin')">⚙ 进入管理后台</button></div>`;
+	}
+	return `<div class="mt">还没有学期数据</div><div class="sub">请联系管理员在后台添加学期</div>`;
   }
   let func = '';
   if (canManageFlow()) {
-		const pending = DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length;
-		const myAppsLabel = isAdmin() ? '审批申请' : '我的申请';
-		func = `<div class="func">
-		<button class="action-btn teal" onclick="newRecord()">
-		  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-		  新增记录
-		</button>
-		<button class="action-btn sunflower" onclick="state.inboxTab = 'applications'; go('inbox')">
-		  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>
-		  ${myAppsLabel}${pending ? ` (${pending})` : ''}
-		</button>
-		</div>`;
-		if (isAdmin()) {
-		  func += `<div class="func" style="margin-top:8px"><button class="btn btn-blue" onclick="go('admin')">⚙ 管理后台</button></div>`;
-		}
+	const pending = DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length;
+	const myAppsLabel = isAdmin() ? '审批申请' : '我的申请';
+	func = `<div class="func">
+	<button class="action-btn teal" onclick="newRecord()">
+	  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+	  新增记录
+	</button>
+	<button class="action-btn sunflower" onclick="state.inboxTab = 'applications'; go('inbox')">
+	  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>
+	  ${myAppsLabel}${pending ? ` (${pending})` : ''}
+	</button>
+	</div>`;
+	if (isAdmin()) {
+	  func += `<div class="func" style="margin-top:8px"><button class="btn btn-blue" onclick="go('admin')">⚙ 管理后台</button></div>`;
+	}
   }
   const recent = recordsOf(sem.id).filter(r => !r.pending_delete).slice()
-		.sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.created_at || 0) - (a.created_at || 0))
-		.slice(0, 6);
+	.sort((a, b) => (b.date || '').localeCompare(a.date || '') || (b.created_at || 0) - (a.created_at || 0))
+	.slice(0, 6);
   const feedbackSection = renderPublicFeedbacks();
 
   let feedbackBtn = '';
   if (!isAdmin()) {
-		feedbackBtn = `<div style="display:flex;justify-content:flex-end;margin:0 0 3px;"><button class="btn btn-feedback" onclick="go('feedback')">💬 我要反馈</button></div>`;
+	feedbackBtn = `<div style="display:flex;justify-content:flex-end;margin:0 0 3px;"><button class="btn btn-feedback" onclick="go('feedback')">💬 我要反馈</button></div>`;
   }
 
   return `
@@ -1965,18 +1857,18 @@ function vwRecords() {
   const f = state.filters;
   const recs = getFilteredRecords();
   const monthChips = `<span class="chip ${f.month === 'all' ? 'on' : ''}" onclick="setMonth('all')">全部月份</span>` +
-		months.map(m => `<span class="chip ${f.month === m ? 'on' : ''}" onclick="setMonth('${m}')">${m.slice(5)}月</span>`).join('');
+	months.map(m => `<span class="chip ${f.month === m ? 'on' : ''}" onclick="setMonth('${m}')">${m.slice(5)}月</span>`).join('');
   return `
   <div class="mt" style="font-size:16px;margin-bottom:14px">全部流水明细</div>
   ${semSelect()}
   ${statsHTML(sem.id)}
 
   <div class="filters">
-		<div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-		<input class="field" id="kw" placeholder="搜索用途关键词…" value="${esc(f.keyword)}" oninput="f_keyword(this.value)"></div>
-		<div class="filter-row"><span class="chip ${f.type === 'all' ? 'on' : ''}" onclick="setType('all')">全部</span><span class="chip ${f.type === 'income' ? 'on' : ''}" onclick="setType('income')">仅收入</span><span class="chip ${f.type === 'expense' ? 'on' : ''}" onclick="setType('expense')">仅支出</span></div>
-		<div class="filter-row">${monthChips}</div>
-		<div class="filter-row"><input class="field" type="date" id="ds" value="${f.start}" onchange="f_start(this.value)"><span style="color:var(--ink-soft)">至</span><input class="field" type="date" id="de" value="${f.end}" onchange="f_end(this.value)"><button class="btn btn-ghost btn-sm" onclick="resetDate()">清除</button></div>
+	<div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+	<input class="field" id="kw" placeholder="搜索用途关键词…" value="${esc(f.keyword)}" oninput="f_keyword(this.value)"></div>
+	<div class="filter-row"><span class="chip ${f.type === 'all' ? 'on' : ''}" onclick="setType('all')">全部</span><span class="chip ${f.type === 'income' ? 'on' : ''}" onclick="setType('income')">仅收入</span><span class="chip ${f.type === 'expense' ? 'on' : ''}" onclick="setType('expense')">仅支出</span></div>
+	<div class="filter-row">${monthChips}</div>
+	<div class="filter-row"><input class="field" type="date" id="ds" value="${f.start}" onchange="f_start(this.value)"><span style="color:var(--ink-soft)">至</span><input class="field" type="date" id="de" value="${f.end}" onchange="f_end(this.value)"><button class="btn btn-ghost btn-sm" onclick="resetDate()">清除</button></div>
   </div>
 
   <div class="folder">
@@ -1994,21 +1886,15 @@ function openExportDialog() {
   openModal('导出数据', `
 	<div class="export-options">
 	  <button class="export-opt" onclick="exportRecords('html'); closeModal();">
-		<div class="ico">
-		  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-		</div>
+		<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
 		<div class="name">下载 HTML</div>
 	  </button>
 	  <button class="export-opt" onclick="exportRecords('md'); closeModal();">
-		<div class="ico">
-		  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
-		</div>
+		<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg></div>
 		<div class="name">下载 Markdown</div>
 	  </button>
 	  <button class="export-opt" onclick="exportRecords('pdf'); closeModal();">
-		<div class="ico">
-		  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-		</div>
+		<div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></div>
 		<div class="name">下载 PDF</div>
 	  </button>
 	</div>
@@ -2095,7 +1981,6 @@ function exportRecords(format) {
 	let md = `# ${className} · ${sem.name} 班费流水\n\n`;
 	md += `> 导出时间：${exportTime}\n`;
 	md += `> 共 ${recCount} 条记录 · 时间范围 ${minDate || '—'} 至 ${maxDate || '—'}\n\n`;
-
 	md += `## 📊 概览\n\n`;
 	md += `| 项目 | 金额 |\n| --- | ---: |\n`;
 	md += `| 当前余额 | ¥${fmtMoney(semStats.balance)} |\n`;
@@ -2126,7 +2011,6 @@ function exportRecords(format) {
 	  md += writeTable(recs);
 	  md += `\n`;
 	}
-
 	md += `---\n\n*本文档由班费公示平台 ${APP_VERSION} 生成*\n`;
 	downloadFile(md, `班费流水_${sem.name}_${dateStr}.md`, 'text/markdown');
 	toast('Markdown 已导出', 'success');
@@ -2189,26 +2073,19 @@ function exportRecords(format) {
 		td.amt-cell{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;}
 		tr:nth-child(even) td{background:#FAF8F3;}
 		.footer{text-align:center;color:#c9c2b4;font-size:11px;margin-top:24px;padding-top:12px;border-top:1px solid #eae3d6;}
-		@media print{
-		  body{font-size:12px;}
-		  .stats-row{page-break-inside:avoid;}
-		  .month-section{page-break-inside:auto;}
-		}
+		@media print{ body{font-size:12px;} .stats-row{page-break-inside:avoid;} .month-section{page-break-inside:auto;} }
 	  </style></head><body>
 	  <div class="cover">
 		<h1>📚 ${esc(className)}</h1>
 		<div class="sem-name">${esc(sem.name)} 班费流水明细</div>
 		<div class="meta">导出时间：${exportTime}　·　共 ${recs.length} 条记录</div>
 	  </div>
-
 	  <div class="stats-row">
 		<div class="sc balance"><div class="label">当前余额</div><div class="value">¥${fmtMoney(semStats.balance)}</div></div>
 		<div class="sc income"><div class="label">总收入</div><div class="value">¥${fmtMoney(semStats.income)}</div></div>
 		<div class="sc expense"><div class="label">总支出</div><div class="value">¥${fmtMoney(semStats.expense)}</div></div>
 	  </div>
-
 	  ${bodyHtml}
-
 	  <div class="footer">由班费公示平台导出 · 数据来源于云端 · ${APP_VERSION}</div>
 	  </body></html>`;
 
@@ -2229,32 +2106,20 @@ function exportRecords(format) {
 		try {
 		  const w = window.open('', '_blank');
 		  if (w) {
-			w.document.open();
-			w.document.write(htmlContent);
-			w.document.close();
+			w.document.open(); w.document.write(htmlContent); w.document.close();
 			setTimeout(() => { try { w.focus(); w.print(); } catch (e) {} }, 300);
 			toast('已在新窗口打开，请选择"另存为 PDF"', 'info', 3500);
-		  } else {
-			toast('请允许弹出窗口，然后重试', 'warn');
-		  }
-		} catch (e2) {
-		  toast('导出失败：' + e2.message, 'error');
-		}
+		  } else { toast('请允许弹出窗口，然后重试', 'warn'); }
+		} catch (e2) { toast('导出失败：' + e2.message, 'error'); }
 	  }
 	  setTimeout(() => { if (iframe.parentNode) iframe.remove(); }, 1500);
 	};
 
 	iframe.onload = () => setTimeout(doPrint, 80);
-
 	try {
 	  const doc = iframe.contentWindow.document;
-	  doc.open();
-	  doc.write(htmlContent);
-	  doc.close();
-	} catch (e) {
-	  console.warn('iframe 写入失败，改为直接打印:', e);
-	}
-
+	  doc.open(); doc.write(htmlContent); doc.close();
+	} catch (e) { console.warn('iframe 写入失败:', e); }
 	setTimeout(doPrint, 900);
 	return;
   }
@@ -2264,11 +2129,8 @@ function downloadFile(content, filename, mime) {
   const blob = new Blob([content], { type: (mime || 'text/plain') + ';charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 5000);
 }
 
@@ -2291,7 +2153,6 @@ function f_end(v) { state.filters.end = v; refreshRecords(); }
 function setType(t) { state.filters.type = t; refreshRecords(); }
 function setMonth(m) { state.filters.month = m; refreshRecords(); }
 function resetDate() { state.filters.start = ''; state.filters.end = ''; refreshRecords(); }
-
 function refreshRecords() {
   if (state.view !== 'records') return;
   const card = document.getElementById('recordsListCard');
@@ -2299,7 +2160,6 @@ function refreshRecords() {
   const recs = getFilteredRecords();
   card.innerHTML = `<div class="flow-list">${recs.map((r, i) => flowHTML(r, i)).join('')}</div>${recs.length ? '' : emptyBox('🔍', '没有符合条件的记录')}`;
 }
-
 function switchSem(id) {
   state.currentSemesterId = id;
   localStorage.setItem('currentSemesterId', id);
@@ -2309,36 +2169,34 @@ function switchSem(id) {
 
 function vwFeedback() {
   if (!isLoggedIn()) {
-		return `
-		  <div class="mt" style="font-size:16px">💬 我要反馈</div>
-		  <div class="card" style="margin-top:14px;text-align:center;">
-			<div style="font-size:36px;margin-bottom:10px;">🔐</div>
-			<div style="font-size:14px;color:var(--ink-soft);line-height:1.8;margin-bottom:18px;">
-			  反馈需要登录后才能提交<br>请先登录你的账号
-			</div>
-			<button class="btn btn-primary btn-block" onclick="openLogin()">立即登录</button>
-			<button class="btn btn-ghost btn-block" style="margin-top:10px;" onclick="back()">返回</button>
-		  </div>
-		`;
+	return `
+	  <div class="mt" style="font-size:16px">💬 我要反馈</div>
+	  <div class="card" style="margin-top:14px;text-align:center;">
+		<div style="font-size:36px;margin-bottom:10px;">🔐</div>
+		<div style="font-size:14px;color:var(--ink-soft);line-height:1.8;margin-bottom:18px;">反馈需要登录后才能提交<br>请先登录你的账号</div>
+		<button class="btn btn-primary btn-block" onclick="openLogin()">立即登录</button>
+		<button class="btn btn-ghost btn-block" style="margin-top:10px;" onclick="back()">返回</button>
+	  </div>
+	`;
   }
   let formHtml = `<div class="mt" style="font-size:16px">💬 我要反馈</div><div class="card" style="margin-top:14px">`;
   formHtml += `<div style="font-size:14px;color:var(--ink-soft);margin-bottom:12px;">👤 ${esc(state.user.name)} (${esc(state.user.role)})</div>`;
   formHtml += `
-		<div class="form-line"><label>反馈内容</label>
-		  <textarea class="field" id="fb_content" rows="4" placeholder="请描述你的问题或建议（不超过200字）" maxlength="200" oninput="const c=document.getElementById('fb_count'); if(c)c.textContent=this.value.length"></textarea>
-		  <div class="char-count" style="text-align:right;font-size:12px;color:var(--ink-soft);margin-top:4px;"><span id="fb_count">0</span>/200</div>
-		</div>
-		<div class="form-line">
-		  <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
-			<input type="checkbox" id="fb_anon"> 匿名提交
-		  </label>
-		</div>
-		<div style="display:flex;gap:10px;margin-top:6px">
-		  <button class="btn btn-ghost btn-block" onclick="back()">取消</button>
-		  <button class="btn btn-primary btn-block" onclick="submitFeedback()">提交反馈</button>
-		</div>
-		</div>
-		<div style="font-size:13px;color:var(--ink-soft);text-align:center;margin-top:8px;">你的反馈会在管理员审核后公开显示</div>
+	<div class="form-line"><label>反馈内容</label>
+	  <textarea class="field" id="fb_content" rows="4" placeholder="请描述你的问题或建议（不超过200字）" maxlength="200" oninput="const c=document.getElementById('fb_count'); if(c)c.textContent=this.value.length"></textarea>
+	  <div class="char-count" style="text-align:right;font-size:12px;color:var(--ink-soft);margin-top:4px;"><span id="fb_count">0</span>/200</div>
+	</div>
+	<div class="form-line">
+	  <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+		<input type="checkbox" id="fb_anon"> 匿名提交
+	  </label>
+	</div>
+	<div style="display:flex;gap:10px;margin-top:6px">
+	  <button class="btn btn-ghost btn-block" onclick="back()">取消</button>
+	  <button class="btn btn-primary btn-block" onclick="submitFeedback()">提交反馈</button>
+	</div>
+	</div>
+	<div style="font-size:13px;color:var(--ink-soft);text-align:center;margin-top:8px;">你的反馈会在管理员审核后公开显示</div>
   `;
   return formHtml;
 }
@@ -2351,18 +2209,18 @@ async function submitFeedback() {
   const isAnon = document.getElementById('fb_anon') && document.getElementById('fb_anon').checked;
   const submitter_name = isAnon ? '匿名' : state.user.name;
   const feedback = {
-		id: uid(), content, submitter_name,
-		submitter_role: isAnon ? '匿名' : state.user.role,
-		submitter_id: state.user.studentId,
-		status: 'pending', admin_reply: '',
-		created_at: Date.now(), updated_at: Date.now()
+	id: uid(), content, submitter_name,
+	submitter_role: isAnon ? '匿名' : state.user.role,
+	submitter_id: state.user.studentId,
+	status: 'pending', admin_reply: '',
+	created_at: Date.now(), updated_at: Date.now()
   };
   if (!busyStart()) return;
   try {
-		await apiPost('feedbacks', feedback);
-		DB.feedbacks.push(feedback);
-		toast('反馈已提交，感谢你的建议！', 'success');
-		back();
+	await apiPost('feedbacks', feedback);
+	DB.feedbacks.push(feedback);
+	toast('反馈已提交，感谢你的建议！', 'success');
+	back();
   } catch (e) { toast('提交失败: ' + e.message, 'error'); }
   finally { busyEnd(); }
 }
@@ -2409,39 +2267,23 @@ function invoiceFieldHTML() {
 	</div>
   `;
 }
-
 function renderInvoiceField() {
   const box = document.getElementById('invPreview');
   if (box) box.innerHTML = invoiceFieldHTML();
 }
-
 async function onInvoiceSelect(input) {
   const f = input && input.files && input.files[0];
   if (!f) return;
-  if (!f.type || !f.type.startsWith('image/')) {
-	toast('请选择图片文件', 'warn');
-	input.value = '';
-	return;
-  }
-  if (f.size > INVOICE_MAX_SIZE) {
-	toast(`原图不能超过 ${(INVOICE_MAX_SIZE / 1024 / 1024).toFixed(0)}MB`, 'warn');
-	input.value = '';
-	return;
-  }
+  if (!f.type || !f.type.startsWith('image/')) { toast('请选择图片文件', 'warn'); input.value = ''; return; }
+  if (f.size > INVOICE_MAX_SIZE) { toast(`原图不能超过 ${(INVOICE_MAX_SIZE / 1024 / 1024).toFixed(0)}MB`, 'warn'); input.value = ''; return; }
   state._invLoading = true;
   renderInvoiceField();
   try {
 	const dataUrl = await compressImage(f);
 	state._invDataUrl = dataUrl;
-  } catch (e) {
-	toast('图片处理失败: ' + e.message, 'error');
-	input.value = '';
-  } finally {
-	state._invLoading = false;
-	renderInvoiceField();
-  }
+  } catch (e) { toast('图片处理失败: ' + e.message, 'error'); input.value = ''; }
+  finally { state._invLoading = false; renderInvoiceField(); }
 }
-
 function clearInvoiceField() {
   state._invDataUrl = null;
   state._invUrl = null;
@@ -2460,30 +2302,30 @@ function vwEdit() {
   return `
   <div class="mt" style="font-size:16px">${editing ? '修改记录' : '新增记录'}</div>
   <div class="card" style="margin-top:14px">
-		<div class="form-line"><label>交易日期</label><input class="field" id="f_date" type="date" value="${r ? r.date : today}"></div>
-		<div class="form-line"><label>收支类型</label>
-		<div class="radio-row">
-		  <label><input type="radio" name="tp" value="income" ${r ? (r.type === 'income' ? 'checked' : '') : 'checked'}> 收入</label>
-		  <label><input type="radio" name="tp" value="expense" ${r ? (r.type === 'expense' ? 'checked' : '') : ''}> 支出</label>
-		</div></div>
-		<div class="form-line"><label>用途或事由（必填）</label>
-		  <input class="field" id="f_purpose" maxlength="200" value="${r ? esc(r.purpose) : ''}" placeholder="如：班级活动物料">
-		  <div style="font-size:12px;color:var(--ink-soft);margin-top:2px;">不超过 200 个字符</div>
-		</div>
-		<div class="form-line"><label>金额（正数）</label>
-		  <input class="field" id="f_amount" type="number" min="0.01" max="999.99" step="0.01" value="${r ? r.amount : ''}" placeholder="0.00">
-		  <div style="font-size:12px;color:var(--ink-soft);margin-top:2px;">单笔不超过 ¥999.99</div>
-		</div>
-		<div class="form-line"><label>经手人</label><input class="field" id="f_handler" value="${r ? esc(r.handler) : ''}" placeholder="填写经手人"></div>
-		<div class="form-line">
-		  <label>发票 / 收据（可选）</label>
-		  <input type="file" id="f_invoice" accept="image/*" onchange="onInvoiceSelect(this)" style="display:none">
-		  <div id="invPreview">${invoiceFieldHTML()}</div>
-		</div>
-		<div style="display:flex;gap:10px;margin-top:6px">
-		<button class="btn btn-ghost btn-block" onclick="back()">取消</button>
-		<button class="btn btn-primary btn-block" id="saveRecordBtn" onclick="saveRecord()">保存</button>
-		</div>
+	<div class="form-line"><label>交易日期</label><input class="field" id="f_date" type="date" value="${r ? r.date : today}"></div>
+	<div class="form-line"><label>收支类型</label>
+	<div class="radio-row">
+	  <label><input type="radio" name="tp" value="income" ${r ? (r.type === 'income' ? 'checked' : '') : 'checked'}> 收入</label>
+	  <label><input type="radio" name="tp" value="expense" ${r ? (r.type === 'expense' ? 'checked' : '') : ''}> 支出</label>
+	</div></div>
+	<div class="form-line"><label>用途或事由（必填）</label>
+	  <input class="field" id="f_purpose" maxlength="200" value="${r ? esc(r.purpose) : ''}" placeholder="如：班级活动物料">
+	  <div style="font-size:12px;color:var(--ink-soft);margin-top:2px;">不超过 200 个字符</div>
+	</div>
+	<div class="form-line"><label>金额（正数）</label>
+	  <input class="field" id="f_amount" type="number" min="0.01" max="999.99" step="0.01" value="${r ? r.amount : ''}" placeholder="0.00">
+	  <div style="font-size:12px;color:var(--ink-soft);margin-top:2px;">单笔不超过 ¥999.99</div>
+	</div>
+	<div class="form-line"><label>经手人</label><input class="field" id="f_handler" value="${r ? esc(r.handler) : ''}" placeholder="填写经手人"></div>
+	<div class="form-line">
+	  <label>发票 / 收据（可选）</label>
+	  <input type="file" id="f_invoice" accept="image/*" onchange="onInvoiceSelect(this)" style="display:none">
+	  <div id="invPreview">${invoiceFieldHTML()}</div>
+	</div>
+	<div style="display:flex;gap:10px;margin-top:6px">
+	<button class="btn btn-ghost btn-block" onclick="back()">取消</button>
+	<button class="btn btn-primary btn-block" id="saveRecordBtn" onclick="saveRecord()">保存</button>
+	</div>
   </div>`;
 }
 
@@ -2505,12 +2347,10 @@ async function saveRecord() {
   const semester_id = sem.id;
 
   if (!busyStart()) return;
-
   const btn = document.getElementById('saveRecordBtn');
   try {
 	await runWithLoader(btn, LOADER_BARS_HTML + '<span>保存中…</span>', async () => {
 	  const finalInvoice = state._invDataUrl || state._invUrl || null;
-
 	  if (state.editingId) {
 		const old = DB.records.find(r => r.id === state.editingId);
 		if (!old) throw new Error('记录不存在');
@@ -2530,17 +2370,14 @@ async function saveRecord() {
 		await addOpLog('添加记录', `添加记录 "${purpose}" 金额 ¥${fmtMoney(amount)}${finalInvoice ? '（含发票）' : ''}`);
 	  }
 	});
-
 	state.editingId = null;
 	state._invDataUrl = null;
 	state._invUrl = null;
 	state._invLoading = false;
 	toast('已保存', 'success');
 	go(state._editFrom === 'records' ? 'records' : 'main', false);
-  } catch (e) {
-	toast('保存失败: ' + e.message, 'error');
-	console.error(e);
-  } finally { busyEnd(); }
+  } catch (e) { toast('保存失败: ' + e.message, 'error'); console.error(e); }
+  finally { busyEnd(); }
 }
 
 function applyDelete(id) {
@@ -2555,7 +2392,6 @@ function applyDelete(id) {
   <div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-red btn-block" onclick="submitApply()">提交申请</button></div>
   `);
 }
-
 async function submitApply() {
   const reason = document.getElementById('appReason').value.trim();
   if (!reason) { toast('请填写删除原因', 'warn'); return; }
@@ -2564,19 +2400,19 @@ async function submitApply() {
   if (!r) return;
   if (!busyStart()) return;
   try {
-		const app = {
-		  id: uid(), record_id: r.id, record: r,
-		  applicant_student_id: state.user.studentId, applicant_name: state.user.name,
-		  reason, status: 'pending', reply: '', time: Date.now()
-		};
-		await apiPost('applications', app);
-		DB.applications.push(app);
-		const idx = DB.records.findIndex(x => x.id === r.id);
-		if (idx >= 0) { DB.records[idx].pending_delete = true; await apiPatch('records', r.id, { pending_delete: true }); }
-		await addOpLog('申请删除', `申请删除记录 "${r.purpose}" 金额 ¥${fmtMoney(r.amount)}，原因：${reason}`);
-		closeModal();
-		toast('已提交，等待总管理员审批', 'success');
-		go('main', false);
+	const app = {
+	  id: uid(), record_id: r.id, record: r,
+	  applicant_student_id: state.user.studentId, applicant_name: state.user.name,
+	  reason, status: 'pending', reply: '', time: Date.now()
+	};
+	await apiPost('applications', app);
+	DB.applications.push(app);
+	const idx = DB.records.findIndex(x => x.id === r.id);
+	if (idx >= 0) { DB.records[idx].pending_delete = true; await apiPatch('records', r.id, { pending_delete: true }); }
+	await addOpLog('申请删除', `申请删除记录 "${r.purpose}" 金额 ¥${fmtMoney(r.amount)}，原因：${reason}`);
+	closeModal();
+	toast('已提交，等待总管理员审批', 'success');
+	go('main', false);
   } catch (e) { toast('提交失败: ' + e.message, 'error'); }
   finally { busyEnd(); }
 }
@@ -2585,16 +2421,16 @@ function adminDelete(id, e) {
   if (e) e.stopPropagation();
   if (!isAdmin()) { toast('当前身份无权限操作', 'warn'); return; }
   confirmAction('删除记录', '确定<b>直接删除</b>该记录？删除后不可恢复。', '直接删除', true, async () => {
-		if (!busyStart()) return;
-		try {
-		  const r = DB.records.find(x => x.id === id);
-		  await apiDelete('records', id);
-		  DB.records = DB.records.filter(x => x.id !== id);
-		  if (r) addOpLog('直接删除', `直接删除了记录 "${r.purpose}" 金额 ¥${fmtMoney(r.amount)}`);
-		  toast('记录已删除', 'success');
-		  render();
-		} catch (err) { toast('删除失败: ' + err.message, 'error'); }
-		finally { busyEnd(); }
+	if (!busyStart()) return;
+	try {
+	  const r = DB.records.find(x => x.id === id);
+	  await apiDelete('records', id);
+	  DB.records = DB.records.filter(x => x.id !== id);
+	  if (r) addOpLog('直接删除', `直接删除了记录 "${r.purpose}" 金额 ¥${fmtMoney(r.amount)}`);
+	  toast('记录已删除', 'success');
+	  render();
+	} catch (err) { toast('删除失败: ' + err.message, 'error'); }
+	finally { busyEnd(); }
   });
 }
 
@@ -2602,53 +2438,52 @@ function vwInbox() {
   if (!state.user) return emptyBox('🔐', '请先登录');
   let activeTab = state.inboxTab || 'applications';
   if (isAdmin()) {
-		const tabs = [
-		  { id: 'applications', label: `📋 申请审批 (${DB.applications.filter(a => a.status === 'pending').length})` },
-		  { id: 'feedbacks', label: `💬 反馈管理 (${DB.feedbacks.filter(f => f.status === 'pending').length})` }
-		];
-		let content = activeTab === 'applications' ? renderApplications() : renderAdminFeedbacks();
-		return `<div class="mt" style="font-size:16px">📩 审批中心</div>
-		  <div class="tab-bar">${tabs.map(t => `<span class="tab ${t.id === activeTab ? 'active' : ''}" onclick="switchInboxTab('${t.id}')">${t.label}</span>`).join('')}</div>
-		  ${content}`;
+	const tabs = [
+	  { id: 'applications', label: `📋 申请审批 (${DB.applications.filter(a => a.status === 'pending').length})` },
+	  { id: 'feedbacks', label: `💬 反馈管理 (${DB.feedbacks.filter(f => f.status === 'pending').length})` }
+	];
+	let content = activeTab === 'applications' ? renderApplications() : renderAdminFeedbacks();
+	return `<div class="mt" style="font-size:16px">📩 审批中心</div>
+	  <div class="tab-bar">${tabs.map(t => `<span class="tab ${t.id === activeTab ? 'active' : ''}" onclick="switchInboxTab('${t.id}')">${t.label}</span>`).join('')}</div>
+	  ${content}`;
   } else {
-		const tabs = [
-		  { id: 'applications', label: `📋 我的申请 (${DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length})` },
-		  { id: 'myfeedbacks', label: `💬 我的反馈 (${DB.feedbacks.filter(f => f.submitter_id === state.user.studentId && f.status === 'pending').length})` }
-		];
-		let content = activeTab === 'applications' ? renderMyApplications() : renderMyFeedbacks();
-		return `<div class="mt" style="font-size:16px">📩 我的信箱</div>
-		  <div class="tab-bar">${tabs.map(t => `<span class="tab ${t.id === activeTab ? 'active' : ''}" onclick="switchInboxTab('${t.id}')">${t.label}</span>`).join('')}</div>
-		  ${content}`;
+	const tabs = [
+	  { id: 'applications', label: `📋 我的申请 (${DB.applications.filter(a => a.applicant_student_id === state.user.studentId && a.status === 'pending').length})` },
+	  { id: 'myfeedbacks', label: `💬 我的反馈 (${DB.feedbacks.filter(f => f.submitter_id === state.user.studentId && f.status === 'pending').length})` }
+	];
+	let content = activeTab === 'applications' ? renderMyApplications() : renderMyFeedbacks();
+	return `<div class="mt" style="font-size:16px">📩 我的信箱</div>
+	  <div class="tab-bar">${tabs.map(t => `<span class="tab ${t.id === activeTab ? 'active' : ''}" onclick="switchInboxTab('${t.id}')">${t.label}</span>`).join('')}</div>
+	  ${content}`;
   }
 }
-
 function switchInboxTab(tab) { state.inboxTab = tab; render(); }
 
 function renderApplications() {
   const apps = DB.applications.slice().sort((a, b) => b.time - a.time);
   if (!apps.length) return emptyBox('📭', '暂无申请');
   return apps.map(a => {
-		const r = a.record || { purpose: '记录已变动', amount: 0, type: 'expense' };
-		let statusHtml = '';
-		if (a.status === 'pending') statusHtml = `<span class="st pending">⏳ 待审</span>`;
-		else if (a.status === 'approved') statusHtml = `<span class="stamp-mini">已批准</span>`;
-		else if (a.status === 'rejected') statusHtml = `<span class="stamp-mini">已拒绝</span>`;
-		let ops = '';
-		if (a.status === 'pending') {
-		  ops = `<div class="ops" style="margin-top:8px;display:flex;gap:8px;">
-				<button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">✅ 批准</button>
-				<button class="btn btn-red btn-xs" onclick="rejectApp('${a.id}')">❌ 拒绝</button>
-		  </div>`;
-		}
-		if (a.status === 'rejected') {
-		  ops = `<div class="ops" style="margin-top:8px;"><button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">改为批准</button></div>`;
-		}
-		return `<div class="appr">
-		<div class="top"><span>${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</span>${statusHtml}</div>
-		<div class="reason">申请人：${esc(a.applicant_name)}　原因：${esc(a.reason)}</div>
-		${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
-		${ops}
-		</div>`;
+	const r = a.record || { purpose: '记录已变动', amount: 0, type: 'expense' };
+	let statusHtml = '';
+	if (a.status === 'pending') statusHtml = `<span class="st pending">⏳ 待审</span>`;
+	else if (a.status === 'approved') statusHtml = `<span class="stamp-mini">已批准</span>`;
+	else if (a.status === 'rejected') statusHtml = `<span class="stamp-mini">已拒绝</span>`;
+	let ops = '';
+	if (a.status === 'pending') {
+	  ops = `<div class="ops" style="margin-top:8px;display:flex;gap:8px;">
+			<button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">✅ 批准</button>
+			<button class="btn btn-red btn-xs" onclick="rejectApp('${a.id}')">❌ 拒绝</button>
+	  </div>`;
+	}
+	if (a.status === 'rejected') {
+	  ops = `<div class="ops" style="margin-top:8px;"><button class="btn btn-primary btn-xs" onclick="approveApp('${a.id}')">改为批准</button></div>`;
+	}
+	return `<div class="appr">
+	<div class="top"><span>${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</span>${statusHtml}</div>
+	<div class="reason">申请人：${esc(a.applicant_name)}　原因：${esc(a.reason)}</div>
+	${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
+	${ops}
+	</div>`;
   }).join('');
 }
 
@@ -2656,23 +2491,21 @@ function renderMyApplications() {
   const apps = DB.applications.filter(a => a.applicant_student_id === state.user.studentId).sort((a, b) => b.time - a.time);
   if (!apps.length) return emptyBox('📭', '暂无申请');
   return apps.map(a => {
-		const r = a.record || { purpose: '记录已变动', amount: 0, type: 'expense' };
-		let statusHtml = '';
-		if (a.status === 'pending') statusHtml = `<span class="st pending">⏳ 待审</span>`;
-		else if (a.status === 'approved') statusHtml = `<span class="stamp-mini">已批准</span>`;
-		else if (a.status === 'rejected') statusHtml = `<span class="stamp-mini">已拒绝</span>`;
-		let ops = '';
-		if (a.status === 'pending') {
-		  ops = `<div class="ops" style="margin-top:8px;">
-			<button class="btn btn-ghost btn-xs" onclick="withdrawApp('${a.id}')">撤回申请</button>
-		  </div>`;
-		}
-		return `<div class="appr">
-		<div class="top"><span>${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</span>${statusHtml}</div>
-		<div class="reason">原因：${esc(a.reason)}</div>
-		${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
-		${ops}
-		</div>`;
+	const r = a.record || { purpose: '记录已变动', amount: 0, type: 'expense' };
+	let statusHtml = '';
+	if (a.status === 'pending') statusHtml = `<span class="st pending">⏳ 待审</span>`;
+	else if (a.status === 'approved') statusHtml = `<span class="stamp-mini">已批准</span>`;
+	else if (a.status === 'rejected') statusHtml = `<span class="stamp-mini">已拒绝</span>`;
+	let ops = '';
+	if (a.status === 'pending') {
+	  ops = `<div class="ops" style="margin-top:8px;"><button class="btn btn-ghost btn-xs" onclick="withdrawApp('${a.id}')">撤回申请</button></div>`;
+	}
+	return `<div class="appr">
+	<div class="top"><span>${esc(r.purpose)} · ${r.type === 'income' ? '+' : '-'}¥${fmtMoney(r.amount)}</span>${statusHtml}</div>
+	<div class="reason">原因：${esc(a.reason)}</div>
+	${a.reply ? `<div class="reply">管理员回复：${esc(a.reply)}</div>` : ''}
+	${ops}
+	</div>`;
   }).join('');
 }
 
@@ -2682,7 +2515,6 @@ async function withdrawApp(id) {
   if (!a) { toast('申请不存在', 'warn'); return; }
   if (a.applicant_student_id !== state.user.studentId) { toast('无权限', 'warn'); return; }
   if (a.status !== 'pending') { toast('该申请已被处理，无法撤回', 'warn'); return; }
-
   confirmAction('撤回删除申请', `确定撤回对「<b>${esc(a.record ? a.record.purpose : '该记录')}</b>」的删除申请吗？撤回后该记录将恢复正常显示。`, '确认撤回', false, async () => {
 	if (!busyStart()) return;
 	try {
@@ -2691,16 +2523,13 @@ async function withdrawApp(id) {
 	  const rec = DB.records.find(x => x.id === a.record_id);
 	  if (rec) {
 		rec.pending_delete = false;
-		try { await apiPatch('records', a.record_id, { pending_delete: false }); } catch(e){ console.warn('恢复记录失败:', e); }
+		try { await apiPatch('records', a.record_id, { pending_delete: false }); } catch(e){ }
 	  }
 	  await addOpLog('撤回申请', `撤回了对记录 "${a.record ? a.record.purpose : a.record_id}" 的删除申请`);
 	  toast('已撤回', 'success');
 	  render();
-	} catch (e) {
-	  toast('撤回失败: ' + e.message, 'error');
-	} finally {
-	  busyEnd();
-	}
+	} catch (e) { toast('撤回失败: ' + e.message, 'error'); }
+	finally { busyEnd(); }
   });
 }
 
@@ -2708,23 +2537,23 @@ function renderAdminFeedbacks() {
   const fbs = DB.feedbacks.slice().sort((a, b) => b.created_at - a.created_at);
   if (!fbs.length) return emptyBox('💬', '暂无反馈');
   return fbs.map(f => {
-		const statusMap = { pending: '⏳ 待处理', read: '✅ 已读', public: '📢 已公开' };
-		let ops = '';
-		if (f.status === 'pending' || f.status === 'read') {
-		  ops += `<button class="btn btn-primary btn-xs" onclick="markFeedbackRead('${f.id}')">确认已读</button>`;
-		}
-		if (f.status !== 'public') {
-		  ops += `<button class="btn btn-blue btn-xs" onclick="openFeedbackReply('${f.id}')">公开回复</button>`;
-		}
-		ops += `<button class="btn btn-red btn-xs" onclick="deleteFeedback('${f.id}')">🗑️ 删除</button>`;
-		const idLine = f.submitter_id ? `学号 ${esc(f.submitter_id)}` : '访客';
-		return `<div class="appr">
-		<div class="top"><span><strong>${esc(f.submitter_name)}</strong> · ${esc(f.submitter_role || '访客')} · <span style="color:var(--ink-faint);font-size:11.5px;">${idLine}</span></span><span class="st ${f.status}">${statusMap[f.status] || f.status}</span></div>
-		<div class="reason" style="margin-top:4px;">${esc(f.content)}</div>
-		<div style="font-size:12px;color:var(--ink-soft);margin-bottom:6px;">${new Date(f.created_at).toLocaleString('zh-CN')}</div>
-		${f.admin_reply ? `<div class="reply">💬 管理员回复：${esc(f.admin_reply)}</div>` : ''}
-		${ops ? `<div class="ops">${ops}</div>` : ''}
-		</div>`;
+	const statusMap = { pending: '⏳ 待处理', read: '✅ 已读', public: '📢 已公开' };
+	let ops = '';
+	if (f.status === 'pending' || f.status === 'read') {
+	  ops += `<button class="btn btn-primary btn-xs" onclick="markFeedbackRead('${f.id}')">确认已读</button>`;
+	}
+	if (f.status !== 'public') {
+	  ops += `<button class="btn btn-blue btn-xs" onclick="openFeedbackReply('${f.id}')">公开回复</button>`;
+	}
+	ops += `<button class="btn btn-red btn-xs" onclick="deleteFeedback('${f.id}')">🗑️ 删除</button>`;
+	const idLine = f.submitter_id ? `学号 ${esc(f.submitter_id)}` : '访客';
+	return `<div class="appr">
+	<div class="top"><span><strong>${esc(f.submitter_name)}</strong> · ${esc(f.submitter_role || '访客')} · <span style="color:var(--ink-faint);font-size:11.5px;">${idLine}</span></span><span class="st ${f.status}">${statusMap[f.status] || f.status}</span></div>
+	<div class="reason" style="margin-top:4px;">${esc(f.content)}</div>
+	<div style="font-size:12px;color:var(--ink-soft);margin-bottom:6px;">${new Date(f.created_at).toLocaleString('zh-CN')}</div>
+	${f.admin_reply ? `<div class="reply">💬 管理员回复：${esc(f.admin_reply)}</div>` : ''}
+	${ops ? `<div class="ops">${ops}</div>` : ''}
+	</div>`;
   }).join('');
 }
 
@@ -2732,21 +2561,21 @@ async function markFeedbackRead(id) {
   const f = DB.feedbacks.find(x => x.id === id);
   if (!f) return;
   try {
-		await apiPatch('feedbacks', id, { status: 'read', updated_at: Date.now() });
-		f.status = 'read';
-		f.updated_at = Date.now();
-		render();
+	await apiPatch('feedbacks', id, { status: 'read', updated_at: Date.now() });
+	f.status = 'read';
+	f.updated_at = Date.now();
+	render();
   } catch (e) { toast('操作失败: ' + e.message, 'error'); }
 }
 
 function openFeedbackReply(id) {
   openModal('公开回复', `
-		<div class="form-line"><label>回复内容（访客端可见）</label>
-		  <textarea class="field" id="fb_reply" rows="3" placeholder="请输入回复内容" maxlength="200"></textarea>
-		  <div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">不超过200字</div>
-		</div>
-		<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button>
-		<button class="btn btn-primary btn-block" onclick="submitFeedbackReply('${id}')">确认公开回复</button></div>
+	<div class="form-line"><label>回复内容（访客端可见）</label>
+	  <textarea class="field" id="fb_reply" rows="3" placeholder="请输入回复内容" maxlength="200"></textarea>
+	  <div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">不超过200字</div>
+	</div>
+	<div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button>
+	<button class="btn btn-primary btn-block" onclick="submitFeedbackReply('${id}')">确认公开回复</button></div>
   `);
 }
 
@@ -2757,11 +2586,11 @@ async function submitFeedbackReply(id) {
   if (!f) return;
   if (!busyStart()) return;
   try {
-		await apiPatch('feedbacks', id, { status: 'public', admin_reply: reply, updated_at: Date.now() });
-		f.status = 'public'; f.admin_reply = reply; f.updated_at = Date.now();
-		closeModal();
-		render();
-		toast('已公开回复', 'success');
+	await apiPatch('feedbacks', id, { status: 'public', admin_reply: reply, updated_at: Date.now() });
+	f.status = 'public'; f.admin_reply = reply; f.updated_at = Date.now();
+	closeModal();
+	render();
+	toast('已公开回复', 'success');
   } catch (e) { toast('操作失败: ' + e.message, 'error'); }
   finally { busyEnd(); }
 }
@@ -2769,14 +2598,14 @@ async function submitFeedbackReply(id) {
 async function deleteFeedback(id) {
   if (!isAdmin()) { toast('无权限', 'warn'); return; }
   confirmAction('删除反馈', '确定删除这条反馈吗？删除后不可恢复。', '删除', true, async () => {
-		if (!busyStart()) return;
-		try {
-		  await apiDelete('feedbacks', id);
-		  DB.feedbacks = DB.feedbacks.filter(f => f.id !== id);
-		  render();
-		  toast('反馈已删除', 'success');
-		} catch (e) { toast('删除失败: ' + e.message, 'error'); }
-		finally { busyEnd(); }
+	if (!busyStart()) return;
+	try {
+	  await apiDelete('feedbacks', id);
+	  DB.feedbacks = DB.feedbacks.filter(f => f.id !== id);
+	  render();
+	  toast('反馈已删除', 'success');
+	} catch (e) { toast('删除失败: ' + e.message, 'error'); }
+	finally { busyEnd(); }
   });
 }
 
@@ -2785,12 +2614,12 @@ function renderMyFeedbacks() {
   if (!fbs.length) return emptyBox('💬', '暂无反馈，点击主页「我要反馈」提交');
   const statusMap = { pending: '⏳ 待处理', read: '✅ 已读', public: '📢 已公开回复' };
   return fbs.map(f => `
-		<div class="appr">
-		  <div class="top"><span>我的反馈</span><span class="st ${f.status}">${statusMap[f.status] || f.status}</span></div>
-		  <div class="reason">${esc(f.content)}</div>
-		  <div style="font-size:12px;color:var(--ink-soft);">${new Date(f.created_at).toLocaleString('zh-CN')}</div>
-		  ${f.admin_reply ? `<div class="reply">💬 管理员回复：${esc(f.admin_reply)}</div>` : ''}
-		</div>
+	<div class="appr">
+	  <div class="top"><span>我的反馈</span><span class="st ${f.status}">${statusMap[f.status] || f.status}</span></div>
+	  <div class="reason">${esc(f.content)}</div>
+	  <div style="font-size:12px;color:var(--ink-soft);">${new Date(f.created_at).toLocaleString('zh-CN')}</div>
+	  ${f.admin_reply ? `<div class="reply">💬 管理员回复：${esc(f.admin_reply)}</div>` : ''}
+	</div>
   `).join('');
 }
 
@@ -2800,14 +2629,14 @@ async function approveApp(id) {
   if (!a) return;
   if (!busyStart()) return;
   try {
-		await apiPatch('applications', id, { status: 'approved' });
-		a.status = 'approved';
-		await apiDelete('records', a.record_id);
-		DB.records = DB.records.filter(x => x.id !== a.record_id);
-		const rec = a.record;
-		await addOpLog('批准删除', rec ? `批准删除记录 "${rec.purpose}" 金额 ¥${fmtMoney(rec.amount)}` : '批准删除了一条记录');
-		toast('已批准并删除该记录', 'success');
-		render();
+	await apiPatch('applications', id, { status: 'approved' });
+	a.status = 'approved';
+	await apiDelete('records', a.record_id);
+	DB.records = DB.records.filter(x => x.id !== a.record_id);
+	const rec = a.record;
+	await addOpLog('批准删除', rec ? `批准删除记录 "${rec.purpose}" 金额 ¥${fmtMoney(rec.amount)}` : '批准删除了一条记录');
+	toast('已批准并删除该记录', 'success');
+	render();
   } catch (e) { toast('操作失败: ' + e.message, 'error'); }
   finally { busyEnd(); }
 }
@@ -2826,14 +2655,14 @@ async function doReject(id) {
   if (!a) return;
   if (!busyStart()) return;
   try {
-		await apiPatch('applications', id, { status: 'rejected', reply });
-		a.status = 'rejected'; a.reply = reply;
-		const idx = DB.records.findIndex(x => x.id === a.record_id);
-		if (idx >= 0) { DB.records[idx].pending_delete = false; await apiPatch('records', a.record_id, { pending_delete: false }); }
-		await addOpLog('拒绝删除', `拒绝了 "${a.applicant_name}" 的删除申请，理由：${reply}`);
-		closeModal();
-		render();
-		toast('已拒绝该申请', 'info');
+	await apiPatch('applications', id, { status: 'rejected', reply });
+	a.status = 'rejected'; a.reply = reply;
+	const idx = DB.records.findIndex(x => x.id === a.record_id);
+	if (idx >= 0) { DB.records[idx].pending_delete = false; await apiPatch('records', a.record_id, { pending_delete: false }); }
+	await addOpLog('拒绝删除', `拒绝了 "${a.applicant_name}" 的删除申请，理由：${reply}`);
+	closeModal();
+	render();
+	toast('已拒绝该申请', 'info');
   } catch (e) { toast('操作失败: ' + e.message, 'error'); }
   finally { busyEnd(); }
 }
@@ -2845,11 +2674,11 @@ function vwAdmin() {
   const pend = DB.applications.filter(a => a.status === 'pending').length;
   const item = (ico, t, d, fn) => `<div class="menu-item" onclick="${fn}"><div class="mi-ico">${ico}</div><div><div class="mi-t">${t}</div><div class="mi-d">${d}</div></div><div class="arrow">›</div></div>`;
   const I = {
-		sem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>',
-		acc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><path d="M16 11l2 2 4-4"/></svg>',
-		note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>',
-		log: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 6 4-12 2 6h6"/></svg>',
-		data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>'
+	sem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/></svg>',
+	acc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><path d="M16 11l2 2 4-4"/></svg>',
+	note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>',
+	log: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 6 4-12 2 6h6"/></svg>',
+	data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>'
   };
   return `
   <div class="mt" style="font-size:16px">⚙️ 管理后台</div>
@@ -2867,35 +2696,31 @@ function openDataMgr() {
   openModal('数据管理', `
   <p style="font-size:13px;color:var(--ink-soft)">清空后所有流水记录将被删除，操作不可撤销。学期、账号、设置将保留。</p>
   <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
-		<button class="btn btn-red btn-block" onclick="clearRecords()">清空全部流水记录</button>
-		<button class="btn btn-ghost btn-block" onclick="closeModal()">关闭</button>
+	<button class="btn btn-red btn-block" onclick="clearRecords()">清空全部流水记录</button>
+	<button class="btn btn-ghost btn-block" onclick="closeModal()">关闭</button>
   </div>`);
 }
 async function clearRecords() {
   confirmAction('清空全部流水', '确定清空<b>全部</b>流水记录？该操作不可撤销，学期、账号、设置将保留。', '确认清空', true, async () => {
-		if (!busyStart()) return;
-		try {
-		  await apiDeleteAll('records');
-		  DB.records = [];
-		  await addOpLog('清空记录', '清空了全部流水记录');
-		  toast('已清空全部流水记录', 'success');
-		  render();
-		} catch (e) { toast('清空失败: ' + e.message, 'error'); }
-		finally { busyEnd(); }
+	if (!busyStart()) return;
+	try {
+	  await apiDeleteAll('records');
+	  DB.records = [];
+	  await addOpLog('清空记录', '清空了全部流水记录');
+	  toast('已清空全部流水记录', 'success');
+	  render();
+	} catch (e) { toast('清空失败: ' + e.message, 'error'); }
+	finally { busyEnd(); }
   });
 }
 
 function vwSemester() { if (!isAdmin()) return emptyBox('🔐', '暂无权限查看此页面'); return `<div class="mt" style="font-size:16px">📅 学期管理</div><div class="card" style="margin-top:14px">${DB.semesters.map(s => `<div class="kv"><div class="k"><div class="n">${esc(s.name)} ${s.is_current ? '<span class="tag inv">当前</span>' : ''}</div><div class="s">起始余额 ¥${fmtMoney(s.start_balance)} · ${recordsOf(s.id).length} 条记录</div></div><button class="btn btn-ghost btn-xs" onclick="editSem('${s.id}')">编辑</button><button class="btn btn-ghost btn-xs" onclick="setCurSem('${s.id}')">设为当前</button><button class="btn btn-red btn-xs" onclick="delSem('${s.id}')">删除</button></div>`).join('')}<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="addSem()">+ 新增学期</button></div>`; }
-
 function addSem() {
   if (!isAdmin()) return;
   let defaultBal = '';
   if (DB.semesters.length > 0) {
 	const last = DB.semesters[DB.semesters.length - 1];
-	if (last) {
-	  const bal = stats(last.id).balance;
-	  defaultBal = bal;
-	}
+	if (last) { defaultBal = stats(last.id).balance; }
   }
   const valAttr = (defaultBal === '' || defaultBal === null || isNaN(defaultBal)) ? '' : ` value="${defaultBal}"`;
   openModal('新增学期', `<div class="form-line"><label>学期名称</label><input class="field" id="sn" placeholder="如：高二下"></div><div class="form-line"><label>起始余额</label><input class="field" id="sb" type="number" step="0.01" placeholder="0"${valAttr}><div style="font-size:12px;color:var(--ink-soft);margin-top:4px;">已自动填入上一学期期末余额，可手动修改</div></div><div style="display:flex;gap:10px"><button class="btn btn-ghost btn-block" onclick="closeModal()">取消</button><button class="btn btn-primary btn-block" onclick="saveSem(null)">创建</button></div>`);
@@ -2908,18 +2733,18 @@ async function saveSem(id) {
   if (name.length > 30) { toast('学期名称不能超过30个字符', 'warn'); return; }
   if (!busyStart()) return;
   try {
-		if (id) {
-		  await apiPatch('semesters', id, { name, start_balance: bal });
-		  const sem = DB.semesters.find(s => s.id === id);
-		  if (sem) { sem.name = name; sem.start_balance = bal; }
-		} else {
-		  const newSem = { id: uid(), name, start_balance: bal, is_current: false };
-		  await apiPost('semesters', newSem);
-		  DB.semesters.push(newSem);
-		}
-		closeModal();
-		toast(id ? '学期已更新' : '学期已创建', 'success');
-		render();
+	if (id) {
+	  await apiPatch('semesters', id, { name, start_balance: bal });
+	  const sem = DB.semesters.find(s => s.id === id);
+	  if (sem) { sem.name = name; sem.start_balance = bal; }
+	} else {
+	  const newSem = { id: uid(), name, start_balance: bal, is_current: false };
+	  await apiPost('semesters', newSem);
+	  DB.semesters.push(newSem);
+	}
+	closeModal();
+	toast(id ? '学期已更新' : '学期已创建', 'success');
+	render();
   } catch (e) { toast('操作失败: ' + e.message, 'error'); }
   finally { busyEnd(); }
 }
@@ -2928,8 +2753,8 @@ async function setCurSem(id) {
   const staleIds = DB.semesters.filter(s => s.is_current && s.id !== id).map(s => s.id);
   DB.semesters = DB.semesters.map(s => ({ ...s, is_current: s.id === id }));
   try {
-		for (const sid of staleIds) { await apiPatch('semesters', sid, { is_current: false }); }
-		await apiPatch('semesters', id, { is_current: true });
+	for (const sid of staleIds) { await apiPatch('semesters', sid, { is_current: false }); }
+	await apiPatch('semesters', id, { is_current: true });
   } catch (e) { console.warn('同步当前学期标记失败:', e); }
 }
 async function delSem(id) {
@@ -2937,20 +2762,20 @@ async function delSem(id) {
   if (!s) return;
   const cnt = recordsOf(id).length;
   confirmAction('删除学期', `确定删除学期「<b>${esc(s.name)}</b>」？该学期下 <b>${cnt}</b> 条记录将一并删除，且不可恢复。`, '确认删除', true, async () => {
-		if (!busyStart()) return;
-		try {
-		  await apiDelete('semesters', id);
-		  await apiDeleteByFilter('records', 'semester_id', id);
-		  DB.semesters = DB.semesters.filter(x => x.id !== id);
-		  DB.records = DB.records.filter(r => r.semester_id !== id);
-		  if (state.currentSemesterId === id) {
-				state.currentSemesterId = DB.semesters[0]?.id || null;
-				if (state.currentSemesterId) localStorage.setItem('currentSemesterId', state.currentSemesterId);
-		  }
-		  render();
-		  toast('学期已删除', 'success');
-		} catch (e) { toast('删除失败: ' + e.message, 'error'); }
-		finally { busyEnd(); }
+	if (!busyStart()) return;
+	try {
+	  await apiDelete('semesters', id);
+	  await apiDeleteByFilter('records', 'semester_id', id);
+	  DB.semesters = DB.semesters.filter(x => x.id !== id);
+	  DB.records = DB.records.filter(r => r.semester_id !== id);
+	  if (state.currentSemesterId === id) {
+		state.currentSemesterId = DB.semesters[0]?.id || null;
+		if (state.currentSemesterId) localStorage.setItem('currentSemesterId', state.currentSemesterId);
+	  }
+	  render();
+	  toast('学期已删除', 'success');
+	} catch (e) { toast('删除失败: ' + e.message, 'error'); }
+	finally { busyEnd(); }
   });
 }
 
@@ -2992,12 +2817,12 @@ async function saveAcc(sid) {
   if (!name) { toast('请填写姓名', 'warn'); return; }
   if (!busyStart()) return;
   try {
-		await apiPatch('accounts', sid, { name, role }, 'student_id');
-		const acc = DB.accounts.find(x => x.student_id === sid);
-		if (acc) { acc.name = name; acc.role = role; }
-		closeModal();
-		render();
-		toast('账号已更新', 'success');
+	await apiPatch('accounts', sid, { name, role }, 'student_id');
+	const acc = DB.accounts.find(x => x.student_id === sid);
+	if (acc) { acc.name = name; acc.role = role; }
+	closeModal();
+	render();
+	toast('账号已更新', 'success');
   } catch (e) { toast('操作失败: ' + e.message, 'error'); }
   finally { busyEnd(); }
 }
@@ -3006,14 +2831,14 @@ async function delAcc(sid) {
   if (sid === '00') { toast('超级管理员不可删除', 'warn'); return; }
   const acc = DB.accounts.find(x => x.student_id === sid);
   confirmAction('删除账号', `确定删除账号「<b>${acc ? esc(acc.name) : sid}</b>」？<br><span style="font-size:12px;color:#8A6A22;">⚠️ 需同时到 Supabase 后台 Authentication → Users 删除对应的 Auth 用户</span>`, '删除', true, async () => {
-		if (!busyStart()) return;
-		try {
-		  await apiDelete('accounts', sid, 'student_id');
-		  DB.accounts = DB.accounts.filter(x => x.student_id !== sid);
-		  render();
-		  toast('账号已删除（记得去后台删 Auth 用户）', 'success');
-		} catch (e) { toast('删除失败: ' + e.message, 'error'); }
-		finally { busyEnd(); }
+	if (!busyStart()) return;
+	try {
+	  await apiDelete('accounts', sid, 'student_id');
+	  DB.accounts = DB.accounts.filter(x => x.student_id !== sid);
+	  render();
+	  toast('账号已删除（记得去后台删 Auth 用户）', 'success');
+	} catch (e) { toast('删除失败: ' + e.message, 'error'); }
+	finally { busyEnd(); }
   });
 }
 
@@ -3025,11 +2850,11 @@ async function saveNotice() {
   const sid = DB.settings && DB.settings.id != null ? DB.settings.id : 1;
   if (!busyStart()) return;
   try {
-		await apiPatch('settings', sid, { class_name: className, notice: notice });
-		DB.settings.class_name = className;
-		DB.settings.notice = notice;
-		toast('已保存', 'success');
-		render();
+	await apiPatch('settings', sid, { class_name: className, notice: notice });
+	DB.settings.class_name = className;
+	DB.settings.notice = notice;
+	toast('已保存', 'success');
+	render();
   } catch (e) { toast('保存失败: ' + e.message, 'error'); }
   finally { busyEnd(); }
 }
@@ -3067,10 +2892,7 @@ function vwLog() {
 function updateLogSelCount(){
   const checks = document.querySelectorAll('.log-check:checked');
   const btn = document.getElementById('delSelBtn');
-  if (btn) {
-	btn.textContent = `删除选中（${checks.length}）`;
-	btn.disabled = checks.length === 0;
-  }
+  if (btn) { btn.textContent = `删除选中（${checks.length}）`; btn.disabled = checks.length === 0; }
 }
 
 async function deleteOldLogs(){
@@ -3149,9 +2971,7 @@ async function doLogin(){
   try {
 	await runWithLoader(btn, LOADER_BARS_HTML + '<span>登录中…</span>', async () => {
 	  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
-	  if (error) {
-		throw new Error('学号或密码错误');
-	  }
+	  if (error) { throw new Error('学号或密码错误'); }
 	  const acc = await apiGetOne('accounts', 'student_id', id, 'student_id,name,role');
 	  if (!acc) throw new Error('账号信息缺失，请联系管理员');
 	  state.user = { studentId: acc.student_id, role: acc.role, name: acc.name };
@@ -3161,10 +2981,7 @@ async function doLogin(){
 	logVisit(state.user.name);
 	state.history = ['home'];
 	go('main', false);
-  } catch (e) {
-	console.error(e);
-	toast(e.message || '登录失败', 'error');
-  }
+  } catch (e) { console.error(e); toast(e.message || '登录失败', 'error'); }
 }
 
 function enterBrowse() {
@@ -3252,19 +3069,19 @@ async function silentRefresh() {
   state._refreshing = true;
   topbar('loading');
   try {
-		const snap = JSON.stringify([DB.semesters, DB.records, DB.applications, DB.feedbacks, DB.settings]);
-		const ok = await loadAllData(true);
-		if (ok) {
-		  _lastLoad = Date.now();
-		  const after = JSON.stringify([DB.semesters, DB.records, DB.applications, DB.feedbacks, DB.settings]);
-		  if (after !== snap) {
-			if (state.view === 'records') { refreshRecords(); }
-			else { render(); }
-			toast('数据已更新', 'info');
-		  } else {
-			updateRedDots();
-		  }
-		}
+	const snap = JSON.stringify([DB.semesters, DB.records, DB.applications, DB.feedbacks, DB.settings]);
+	const ok = await loadAllData(true);
+	if (ok) {
+	  _lastLoad = Date.now();
+	  const after = JSON.stringify([DB.semesters, DB.records, DB.applications, DB.feedbacks, DB.settings]);
+	  if (after !== snap) {
+		if (state.view === 'records') { refreshRecords(); }
+		else { render(); }
+		toast('数据已更新', 'info');
+	  } else {
+		updateRedDots();
+	  }
+	}
   } catch (e) { }
   finally { state._refreshing = false; topbar('done'); }
 }
@@ -3273,9 +3090,6 @@ document.addEventListener('visibilitychange', () => {
 });
 setInterval(() => { if (Date.now() - _lastLoad > 60000) silentRefresh(); }, 30000);
 
-/* ============================================================
-   启动：加载完成立即进入，无延迟
-   ============================================================ */
 window.onload = async function() {
   loadTheme();
   loadSettings();
@@ -3283,11 +3097,10 @@ window.onload = async function() {
   const msgEl = document.getElementById('bootTextMsg');
   if (msgEl) msgEl.textContent = '正在唤醒云端数据库（首次访问约需 3~10 秒）';
 
-  /* 慢加载提示（超过 3 秒还没加载好） */
   const slowTimer = setTimeout(() => {
 	stopBootTicker();
 	const el = document.getElementById('bootTextMsg');
-	if (el) el.textContent = '云端响应较慢，请稍候……';
+	if (el) el.textContent = '云端响应较慢，请稍候';
   }, 3000);
 
   try {
@@ -3302,9 +3115,7 @@ window.onload = async function() {
 		await sb.auth.signOut();
 	  }
 	}
-  } catch (e) {
-	console.warn('恢复登录态失败:', e);
-  }
+  } catch (e) { console.warn('恢复登录态失败:', e); }
 
   const ok = await loadAllData();
   clearTimeout(slowTimer);
