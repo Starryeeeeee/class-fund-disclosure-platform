@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="班费公示平台——公开透明的班级班费收支流水、删除审批与反馈系统">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E📒%3C/text%3E%3C/svg%3E">
-<title>高二(1)班 班费公示平台（测试版）</title>
+<title>高二(1)班 班费公示平台</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
@@ -125,7 +125,7 @@
 		color:var(--ink);letter-spacing:.04em;text-align:center}
   .nav-right{flex:1;display:flex;align-items:center;justify-content:flex-end;gap:10px;padding-right:8px}
 
-  /* ==================== 胶囊开关（增强动效） ==================== */
+  /* ==================== 胶囊开关 ==================== */
   .theme-switch{
 	position: relative; display: inline-flex; align-items: center;
 	width: 56px; cursor: pointer; flex-shrink: 0;
@@ -164,13 +164,9 @@
   body.dark-mode .mt .cls{color:var(--cls-fixed-dark)}
   .sub{font-size:13px;color:var(--ink-soft);text-align:center}
 
-  /* ==================== 启动页加载器 ====================
-	 测试版：第一处使用原版粒子动画（boot-loader-orig）
-	 retryLoad 里仍使用九宫格（boot-loader-grid）
-	 ==================================================== */
+  /* ==================== 启动页加载器（原版粒子动画） ==================== */
   .boot-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 108px);gap:22px;}
 
-  /* --- 原版 box-shadow 启动动画 --- */
   .boot-loader-orig{
 	position: relative;
 	width: 2.5em;
@@ -219,45 +215,6 @@
 	100% { box-shadow: 0.5em 1em rgba(170,200,178,.95),  -0.5em -1em rgba(230,200,140,.95); }
   }
 
-  /* --- 九宫格（供 retryLoad 使用） --- */
-  .boot-loader-grid{
-	--sq-size: 8px;
-	--sq-gap: 4px;
-	--sq-radius: 2px;
-	--sq-color: #C1633E;
-	display: inline-grid;
-	grid-template-columns:repeat(3,var(--sq-size));
-	grid-template-rows:repeat(3,var(--sq-size));
-	gap:var(--sq-gap);
-	vertical-align:middle;
-	flex-shrink: 0;
-  }
-  body.dark-mode .boot-loader-grid{ --sq-color: #E8B452; }
-  .boot-loader-grid > span{
-	display:block;
-	width:var(--sq-size);
-	height:var(--sq-size);
-	background:var(--sq-color);
-	border-radius:var(--sq-radius);
-	opacity:.3;
-	transform:scale(.55);
-	animation:bootSqWave 1.15s ease-in-out infinite;
-	will-change:transform,opacity;
-  }
-  .boot-loader-grid > span:nth-child(1){ animation-delay: 0s; }
-  .boot-loader-grid > span:nth-child(2){ animation-delay: 0.09s; }
-  .boot-loader-grid > span:nth-child(3){ animation-delay: 0.18s; }
-  .boot-loader-grid > span:nth-child(4){ animation-delay: 0.09s; }
-  .boot-loader-grid > span:nth-child(5){ animation-delay: 0.18s; }
-  .boot-loader-grid > span:nth-child(6){ animation-delay: 0.27s; }
-  .boot-loader-grid > span:nth-child(7){ animation-delay: 0.18s; }
-  .boot-loader-grid > span:nth-child(8){ animation-delay: 0.27s; }
-  .boot-loader-grid > span:nth-child(9){ animation-delay: 0.36s; }
-  @keyframes bootSqWave{
-	0%,65%,100%{opacity:.3;transform:scale(.55)}
-	30%{opacity:1;transform:scale(1)}
-  }
-
   .boot-text{display:flex;align-items:center;gap:1px;font-size:13px;color:var(--ink-soft);letter-spacing:.02em;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;}
   .boot-dots{ display:inline-flex; margin-left:1px; }
   .boot-dots i{display:inline-block;font-style:normal;line-height:1;animation:bootDot 1.2s infinite ease-in-out;}
@@ -283,6 +240,268 @@
   body.dark-mode .error-card .btn-ghost{background:rgba(255,255,255,.12);color:#F0EAE3;box-shadow:3px 3px 0 0 #6B4848;border-color:rgba(255,255,255,.12);}
   body.dark-mode .error-card .btn-ghost:active{background:rgba(255,255,255,.2);transform:translate(3px,3px);box-shadow:0 0 0 0;}
 
+  /* ==================== 加载失败 · 电视机动画（方案B） ==================== */
+  .err-tv-card{
+	background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+	padding:24px 16px 20px;display:flex;flex-direction:column;align-items:center;
+	box-shadow:var(--shadow-card);position:relative;overflow:hidden;
+  }
+  .err-tv-card::before{
+	content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+	background:var(--card-left-line);border-radius:var(--radius) 0 0 var(--radius);opacity:.6;
+  }
+  .err-tv-card::after{
+	content:'';position:absolute;left:3px;top:0;bottom:0;width:1px;
+	background:var(--card-left-line);opacity:.2;
+  }
+  .tv-frame{
+	width:280px;height:240px;display:flex;align-items:flex-end;justify-content:center;
+	overflow:hidden;position:relative;margin:0 auto;
+  }
+  .main_wrapper{
+	font-size:8px;flex-shrink:0;transform:scale(0.85);transform-origin:center bottom;
+	display:flex;align-items:center;justify-content:center;width:30em;height:30em;
+  }
+  .main_wrapper .main{
+	display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:5em;
+  }
+  .main_wrapper .antenna{
+	width:5em;height:5em;border-radius:50%;border:2px solid black;background-color:#f27405;
+	margin-bottom:-6em;margin-left:0;z-index:-1;
+  }
+  .main_wrapper .antenna_shadow{
+	position:absolute;background-color:transparent;width:50px;height:56px;margin-left:1.68em;
+	border-radius:45%;transform:rotate(140deg);border:4px solid transparent;
+	box-shadow:inset 0px 16px #a85103,inset 0px 16px 1px 1px #a85103;
+  }
+  .main_wrapper .antenna::after{
+	content:"";position:absolute;margin-top:-9.4em;margin-left:0.4em;
+	transform:rotate(-25deg);width:1em;height:0.5em;border-radius:50%;background-color:#f69e50;
+  }
+  .main_wrapper .antenna::before{
+	content:"";position:absolute;margin-top:0.2em;margin-left:1.25em;
+	transform:rotate(-20deg);width:1.5em;height:0.8em;border-radius:50%;background-color:#f69e50;
+  }
+  .main_wrapper .a1{
+	position:relative;top:-102%;left:-130%;width:12em;height:5.5em;border-radius:50px;
+	background-image:linear-gradient(#171717,#171717,#353535,#353535,#171717);
+	transform:rotate(-29deg);clip-path:polygon(50% 0%,49% 100%,52% 100%);
+  }
+  .main_wrapper .a1d{
+	position:relative;top:-211%;left:-35%;transform:rotate(45deg);width:0.5em;height:0.5em;
+	border-radius:50%;border:2px solid black;background-color:#979797;z-index:99;
+  }
+  .main_wrapper .a2{
+	position:relative;top:-210%;left:-10%;width:12em;height:4em;border-radius:50px;
+	background-color:#171717;background-image:linear-gradient(#171717,#171717,#353535,#353535,#171717);
+	margin-right:5em;
+	clip-path:polygon(47% 0,47% 0,34% 34%,54% 25%,32% 100%,29% 96%,49% 32%,30% 38%);
+	transform:rotate(-8deg);
+  }
+  .main_wrapper .a2d{
+	position:relative;top:-294%;left:94%;width:0.5em;height:0.5em;border-radius:50%;
+	border:2px solid black;background-color:#979797;z-index:99;
+  }
+  .main_wrapper .notfound_text{
+	background-color:black;padding-left:0.3em;padding-right:0.3em;
+	font-size:0.75em;color:white;letter-spacing:0;border-radius:5px;z-index:10;
+  }
+  .main_wrapper .tv{
+	width:17em;height:9em;margin-top:3em;border-radius:15px;background-color:#d36604;
+	display:flex;justify-content:center;border:2px solid #1d0e01;
+	box-shadow:inset 0.2em 0.2em #e69635;
+  }
+  .main_wrapper .tv::after{
+	content:"";position:absolute;width:17em;height:9em;border-radius:15px;
+	background:
+	  repeating-radial-gradient(#d36604 0 0.0001%,#00000070 0 0.0002%) 50% 0/2500px 2500px,
+	  repeating-conic-gradient(#d36604 0 0.0001%,#00000070 0 0.0002%) 60% 60%/2500px 2500px;
+	background-blend-mode:difference;opacity:0.09;
+  }
+  .main_wrapper .curve_svg{
+	position:absolute;margin-top:0.25em;margin-left:-0.25em;height:12px;width:12px;
+  }
+  .main_wrapper .curve_svg path{fill:#1d0e01;}
+  .main_wrapper .display_div{
+	display:flex;align-items:center;align-self:center;justify-content:center;
+	border-radius:15px;box-shadow:3.5px 3.5px 0px #e69635;
+  }
+  .main_wrapper .screen_out{width:auto;height:auto;border-radius:10px;}
+  .main_wrapper .screen_out1{
+	width:11em;height:7.75em;display:flex;align-items:center;justify-content:center;border-radius:10px;
+  }
+  .main_wrapper .screen{
+	width:13em;height:7.85em;font-family:Montserrat,sans-serif;border:2px solid #1d0e01;
+	background:
+	  repeating-radial-gradient(#000 0 0.0001%,#ffffff 0 0.0002%) 50% 0/2500px 2500px,
+	  repeating-conic-gradient(#000 0 0.0001%,#ffffff 0 0.0002%) 60% 60%/2500px 2500px;
+	background-blend-mode:difference;animation:b 0.2s infinite alternate;
+	border-radius:10px;z-index:99;display:flex;align-items:center;justify-content:center;
+	font-weight:bold;color:#252525;letter-spacing:0.15em;text-align:center;
+  }
+  @keyframes b{100%{background-position:50% 0,60% 50%;}}
+  .main_wrapper .lines{display:flex;column-gap:0.1em;align-self:flex-end;}
+  .main_wrapper .line1,.main_wrapper .line3{
+	width:2px;height:0.5em;background-color:black;border-radius:25px 25px 0px 0px;margin-top:0.5em;
+  }
+  .main_wrapper .line2{
+	flex-grow:1;width:2px;height:1em;background-color:black;border-radius:25px 25px 0px 0px;
+  }
+  .main_wrapper .buttons_div{
+	width:4.25em;align-self:center;height:8em;background-color:#e69635;border:2px solid #1d0e01;
+	padding:0.6em;border-radius:10px;display:flex;align-items:center;justify-content:center;
+	flex-direction:column;row-gap:0.75em;box-shadow:3px 3px 0px #e69635;
+  }
+  .main_wrapper .b1{
+	width:1.65em;height:1.65em;border-radius:50%;background-color:#7f5934;border:2px solid black;
+	box-shadow:inset 2px 2px 1px #b49577,-2px 0px #513721,-2px 0px 0px 1px black;
+  }
+  .main_wrapper .b1::before{
+	content:"";position:absolute;margin-top:1em;margin-left:0.5em;transform:rotate(47deg);
+	border-radius:5px;width:0.1em;height:0.4em;background-color:#000;
+  }
+  .main_wrapper .b1::after{
+	content:"";position:absolute;margin-top:0.9em;margin-left:0.8em;transform:rotate(47deg);
+	border-radius:5px;width:0.1em;height:0.55em;background-color:#000;
+  }
+  .main_wrapper .b1 div{
+	content:"";position:absolute;margin-top:-0.1em;margin-left:0.65em;transform:rotate(45deg);
+	width:0.15em;height:1.5em;background-color:#000;
+  }
+  .main_wrapper .b2{
+	width:1.65em;height:1.65em;border-radius:50%;background-color:#7f5934;border:2px solid black;
+	box-shadow:inset 2px 2px 1px #b49577,-2px 0px #513721,-2px 0px 0px 1px black;
+  }
+  .main_wrapper .b2::before{
+	content:"";position:absolute;margin-top:1.05em;margin-left:0.8em;transform:rotate(-45deg);
+	border-radius:5px;width:0.15em;height:0.4em;background-color:#000;
+  }
+  .main_wrapper .b2::after{
+	content:"";position:absolute;margin-top:-0.1em;margin-left:0.65em;transform:rotate(-45deg);
+	width:0.15em;height:1.5em;background-color:#000;
+  }
+  .main_wrapper .speakers{display:flex;flex-direction:column;row-gap:0.5em;}
+  .main_wrapper .speakers .g1{display:flex;column-gap:0.25em;}
+  .main_wrapper .speakers .g1 .g11,
+  .main_wrapper .speakers .g1 .g12,
+  .main_wrapper .speakers .g1 .g13{
+	width:0.65em;height:0.65em;border-radius:50%;background-color:#7f5934;border:2px solid black;
+	box-shadow:inset 1.25px 1.25px 1px #b49577;
+  }
+  .main_wrapper .speakers .g{width:auto;height:2px;background-color:#171717;}
+  .main_wrapper .bottom{
+	width:100%;height:auto;display:flex;align-items:center;justify-content:center;column-gap:8.7em;
+  }
+  .main_wrapper .base1{
+	height:1em;width:2em;border:2px solid #171717;background-color:#4d4d4d;margin-top:-0.15em;z-index:-1;
+  }
+  .main_wrapper .base2{
+	height:1em;width:2em;border:2px solid #171717;background-color:#4d4d4d;margin-top:-0.15em;z-index:-1;
+  }
+  .main_wrapper .base3{
+	position:absolute;height:0.15em;width:17.5em;background-color:#171717;margin-top:0.8em;
+  }
+  .main_wrapper .text_404{
+	position:absolute;display:flex;flex-direction:row;column-gap:6em;z-index:-5;margin-bottom:2em;
+	align-items:center;justify-content:center;opacity:0.5;font-family:Montserrat,sans-serif;font-size:1em;
+  }
+  .main_wrapper .text_4041,.main_wrapper .text_4042,.main_wrapper .text_4043{
+	transform:scaleY(24.5) scaleX(9);
+  }
+
+  /* 方案B：平台适配配色 */
+  .tv-themed .antenna{background-color:#C1633E;border-color:#2B2A27;}
+  .tv-themed .antenna_shadow{box-shadow:inset 0px 16px #8A4228,inset 0px 16px 1px 1px #8A4228;}
+  .tv-themed .antenna::after{background-color:#D68A64;}
+  .tv-themed .antenna::before{background-color:#D68A64;}
+  .tv-themed .a1{background-image:linear-gradient(#2B2A27,#2B2A27,#5C5A55,#5C5A55,#2B2A27);}
+  .tv-themed .a2{
+	background-color:#2B2A27;
+	background-image:linear-gradient(#2B2A27,#2B2A27,#5C5A55,#5C5A55,#2B2A27);
+  }
+  .tv-themed .a1d,.tv-themed .a2d{border-color:#2B2A27;background-color:#B5A18F;}
+  .tv-themed .tv{
+	background-color:#C1633E;border-color:#2B2A27;box-shadow:inset 0.2em 0.2em #D68A64;
+  }
+  .tv-themed .tv::after{
+	background:
+	  repeating-radial-gradient(#C1633E 0 0.0001%,#00000070 0 0.0002%) 50% 0/2500px 2500px,
+	  repeating-conic-gradient(#C1633E 0 0.0001%,#00000070 0 0.0002%) 60% 60%/2500px 2500px;
+	background-blend-mode:difference;opacity:0.09;
+  }
+  .tv-themed .display_div{box-shadow:3.5px 3.5px 0px #D68A64;}
+  .tv-themed .screen{border-color:#2B2A27;}
+  .tv-themed .curve_svg path{fill:#2B2A27;}
+  .tv-themed .line1,.tv-themed .line2,.tv-themed .line3{background-color:#2B2A27;}
+  .tv-themed .buttons_div{
+	background-color:#D68A64;border-color:#2B2A27;box-shadow:3px 3px 0px #D68A64;
+  }
+  .tv-themed .b1,.tv-themed .b2{
+	background-color:#8A6045;border-color:#2B2A27;
+	box-shadow:inset 2px 2px 1px #C9A88B,-2px 0px #5A3A22,-2px 0px 0px 1px #2B2A27;
+  }
+  .tv-themed .b1::before,.tv-themed .b1::after,.tv-themed .b1 div,
+  .tv-themed .b2::before,.tv-themed .b2::after{background-color:#2B2A27;}
+  .tv-themed .speakers .g11,.tv-themed .speakers .g12,.tv-themed .speakers .g13{
+	background-color:#8A6045;border-color:#2B2A27;box-shadow:inset 1.25px 1.25px 1px #C9A88B;
+  }
+  .tv-themed .speakers .g{background-color:#2B2A27;}
+  .tv-themed .base1,.tv-themed .base2{background-color:#5C5A55;border-color:#2B2A27;}
+  .tv-themed .base3{background-color:#2B2A27;}
+  .tv-themed .text_404{color:#C1633E;opacity:0.18;}
+
+  /* 暗色适配 */
+  body.dark-mode .tv-themed .antenna{background-color:#D67A55;}
+  body.dark-mode .tv-themed .antenna::after,
+  body.dark-mode .tv-themed .antenna::before{background-color:#E8A07C;}
+  body.dark-mode .tv-themed .antenna_shadow{
+	box-shadow:inset 0px 16px #8A4228,inset 0px 16px 1px 1px #8A4228;
+  }
+  body.dark-mode .tv-themed .tv{
+	background-color:#D67A55;box-shadow:inset 0.2em 0.2em #E8A07C;
+  }
+  body.dark-mode .tv-themed .tv::after{
+	background:
+	  repeating-radial-gradient(#D67A55 0 0.0001%,#00000070 0 0.0002%) 50% 0/2500px 2500px,
+	  repeating-conic-gradient(#D67A55 0 0.0001%,#00000070 0 0.0002%) 60% 60%/2500px 2500px;
+	background-blend-mode:difference;opacity:0.09;
+  }
+  body.dark-mode .tv-themed .display_div{box-shadow:3.5px 3.5px 0px #E8A07C;}
+  body.dark-mode .tv-themed .buttons_div{
+	background-color:#E8A07C;box-shadow:3px 3px 0px #E8A07C;
+  }
+  body.dark-mode .tv-themed .b1,
+  body.dark-mode .tv-themed .b2{
+	background-color:#9C6E53;
+	box-shadow:inset 2px 2px 1px #C9A88B,-2px 0px #5A3A22,-2px 0px 0px 1px #2B2A27;
+  }
+  body.dark-mode .tv-themed .speakers .g11,
+  body.dark-mode .tv-themed .speakers .g12,
+  body.dark-mode .tv-themed .speakers .g13{background-color:#9C6E53;}
+  body.dark-mode .tv-themed .text_404{color:#D67A55;opacity:0.22;}
+
+  /* 错误文字区 */
+  .err-text{margin-top:12px;text-align:center;max-width:320px;width:100%;}
+  .err-text .title{font-size:15px;font-weight:700;margin-bottom:6px;color:var(--ink);}
+  .err-text .detail{font-size:12.5px;color:var(--red);margin-bottom:6px;word-break:break-word;}
+  .err-text .hint{font-size:12px;color:var(--ink-soft);line-height:1.7;}
+  .err-btns{display:flex;gap:8px;margin-top:14px;width:100%;}
+  .err-btns button{
+	flex:1;padding:10px 12px;border:none;border-radius:6px;font-family:inherit;
+	font-size:13px;font-weight:600;cursor:pointer;transition:transform .1s,box-shadow .1s;
+  }
+  .err-btns .primary{background:var(--orange);color:#fff;box-shadow:3px 3px 0 0 var(--orange-dark);}
+  .err-btns .primary:active{background:var(--orange-dark);transform:translate(3px,3px);box-shadow:0 0 0 0;}
+  .err-btns .ghost{
+	background:rgba(255,255,255,.85);color:var(--ink);border:1px solid rgba(0,0,0,.06);
+	box-shadow:3px 3px 0 0 var(--ink-soft);
+  }
+  body.dark-mode .err-btns .ghost{
+	background:rgba(255,255,255,.12);color:var(--ink);border-color:rgba(255,255,255,.12);
+	box-shadow:3px 3px 0 0 #6B4848;
+  }
+  .err-btns .ghost:active{transform:translate(3px,3px);box-shadow:0 0 0 0;}
+	
   .folder{margin-bottom: 16px;}
   .folder-tab{display: inline-block;padding: 5px 16px 7px;background: var(--orange);color: #fff;font-family: var(--font-hand);font-size: 14.5px;font-weight: 500;letter-spacing: .08em;line-height: 1.4;border-radius: 8px 8px 0 0;}
   .folder-strip{height: 5px;background: var(--orange);width: 100%;margin-top: -1px;}
@@ -436,7 +655,7 @@
   .reset-btn:active{ transform: translate(3px,3px); box-shadow: 0 0 0 0; }
   .reset-btn.neutral{background: rgba(92,124,147,.1);color: var(--blue);box-shadow: 3px 3px 0 0 var(--blue-dark);}
   .reset-btn.neutral:hover{background: rgba(92,124,147,.18);}
-  .reset-btn.neutral:active{transform: translate(3px,3px);box-shadow: 0 0 0 0;}
+  .reset-btn.neutral:active{transform: translate(3px,3px);box-shadow:0 0 0 0;}
 
   .settings-about{font-size: 13px;color: var(--ink-soft);line-height: 1.9;padding: 4px 0;}
   .settings-about .row{display: flex;justify-content: space-between;align-items: center;}
@@ -756,7 +975,7 @@
   body.dark-mode .btn-red:active{background:#4A2E2A;transform:translate(3px,3px);box-shadow:0 0 0 0}
 
   body.reduce-motion *,body.reduce-motion *::before,body.reduce-motion *::after {animation-duration: .01ms !important;animation-iteration-count: 1 !important;transition-duration: .01ms !important;}
-  body.reduce-motion .loader-grid > span,body.reduce-motion .boot-dots i,body.reduce-motion .boot-loader-grid > span,body.reduce-motion .boot-loader-orig::before,body.reduce-motion .boot-loader-orig::after,body.reduce-motion .btn-loader::before,body.reduce-motion .btn-loader::after {animation-duration: inherit !important;animation-iteration-count: infinite !important;}
+  body.reduce-motion .loader-grid > span,body.reduce-motion .boot-dots i,body.reduce-motion .boot-loader-orig::before,body.reduce-motion .boot-loader-orig::after,body.reduce-motion .btn-loader::before,body.reduce-motion .btn-loader::after {animation-duration: inherit !important;animation-iteration-count: infinite !important;}
 
   @media (prefers-reduced-motion: reduce){
 		*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -843,7 +1062,7 @@
 <div id="toastWrap"></div>
 
 <script>
-const APP_VERSION = 'v3.3.6-test';
+	const APP_VERSION = 'v3.3.7';
 const APP_DATE = '2026年10月1日';
 
 const BOOT_TEXTS = [
@@ -1448,16 +1667,64 @@ async function loadAllData(silent = false) {
 
   console.error('❌ 加载数据失败:', lastErr);
   if (!silent) {
+	const isDark = document.body.classList.contains('dark-mode');
 	document.getElementById('content').innerHTML = `
-	<div class="card error-card">
-	  <h3>⚠️ 连接云端失败</h3>
-	  <p class="err-detail">${esc(lastErr ? lastErr.message : '未知错误')}</p>
-	  <p class="err-hint">
-		如果这是你今天第一次打开，可能是云端数据库刚从休眠中唤醒。<br>稍等几秒再试一次通常就能成功。
-	  </p>
-	  <div style="display:flex;gap:10px;margin-top:12px;">
-		<button class="btn btn-primary" style="flex:1;" onclick="retryLoad()">立即重试</button>
-		<button class="btn btn-ghost" style="flex:1;" onclick="location.reload()">刷新页面</button>
+	<div class="err-tv-card">
+	  <div class="tv-frame">
+		<div class="main_wrapper tv-themed ${isDark ? 'on-dark' : ''}">
+		  <div class="main">
+			<div class="antenna">
+			  <div class="antenna_shadow"></div>
+			  <div class="a1"></div><div class="a1d"></div>
+			  <div class="a2"></div><div class="a2d"></div>
+			  <div class="a_base"></div>
+			</div>
+			<div class="tv">
+			  <div class="cruve">
+				<svg class="curve_svg" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 189.929 189.929">
+				  <path d="M70.343,70.343c-30.554,30.553-44.806,72.7-39.102,115.635l-29.738,3.951C-5.442,137.659,11.917,86.34,49.129,49.13C86.34,11.918,137.664-5.445,189.928,1.502l-3.95,29.738C143.041,25.54,100.895,39.789,70.343,70.343z"/>
+				</svg>
+			  </div>
+			  <div class="display_div">
+				<div class="screen_out">
+				  <div class="screen_out1">
+					<div class="screen">
+					  <span class="notfound_text">NOT FOUND</span>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			  <div class="lines">
+				<div class="line1"></div><div class="line2"></div><div class="line3"></div>
+			  </div>
+			  <div class="buttons_div">
+				<div class="b1"><div></div></div>
+				<div class="b2"></div>
+				<div class="speakers">
+				  <div class="g1"><div class="g11"></div><div class="g12"></div><div class="g13"></div></div>
+				  <div class="g"></div><div class="g"></div>
+				</div>
+			  </div>
+			</div>
+			<div class="bottom">
+			  <div class="base1"></div><div class="base2"></div><div class="base3"></div>
+			</div>
+		  </div>
+		  <div class="text_404">
+			<div class="text_4041">4</div>
+			<div class="text_4042">0</div>
+			<div class="text_4043">4</div>
+		  </div>
+		</div>
+	  </div>
+	  <div class="err-text">
+		<div class="title">⚠️ 连接云端失败</div>
+		<div class="detail">${esc(lastErr ? lastErr.message : '未知错误')}</div>
+		<div class="hint">如果这是你今天第一次打开，可能是云端数据库刚从休眠中唤醒。<br>稍等几秒再试一次通常就能成功。</div>
+		<div class="err-btns">
+		  <button class="primary" onclick="retryLoad()">立即重试</button>
+		  <button class="ghost" onclick="location.reload()">刷新页面</button>
+		</div>
 	  </div>
 	</div>`;
   }
@@ -1563,7 +1830,7 @@ function animateNums() {
 function openAbout() {
   openModal('关于', `
 	<div class="about-title">${esc(DB.settings.class_name)}</div>
-	<div class="about-sub">班费公示平台（测试版）</div>
+	<div class="about-sub">班费公示平台</div>
 	<div class="about-section">
 	  <div class="about-row"><span class="lbl">版本</span><span class="val">${APP_VERSION}</span></div>
 	  <div class="about-row"><span class="lbl">最近更新</span><span class="val">${APP_DATE}</span></div>
@@ -3143,7 +3410,7 @@ window.onload = async function() {
   const slowTimer = setTimeout(() => {
 	stopBootTicker();
 	const el = document.getElementById('bootTextMsg');
-	if (el) el.textContent = '云端响应较慢，请稍候……';
+	if (el) el.textContent = '云端响应较慢，请稍候';
   }, 3000);
 
   try {
@@ -3168,7 +3435,7 @@ window.onload = async function() {
 	document.body.classList.remove('booting');
 	stopBootTicker();
 	go(state.user ? 'main' : 'home', false);
-	console.log('🚀 测试版启动成功！版本 ' + APP_VERSION);
+	console.log('🚀 班费平台启动成功！版本 ' + APP_VERSION);
   }
 };
 </script>
